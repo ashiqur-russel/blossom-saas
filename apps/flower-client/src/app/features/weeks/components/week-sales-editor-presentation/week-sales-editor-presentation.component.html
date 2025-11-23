@@ -1,0 +1,166 @@
+<div class="form-container">
+  <div class="form-header">
+    <div>
+      <h1>{{ isEditMode ? 'Edit' : 'Add New' }} Week</h1>
+      <p>Track your weekly flower business data</p>
+    </div>
+    <app-button variant="secondary" label="Cancel" (clicked)="onCancel()"></app-button>
+  </div>
+
+  <div *ngIf="loading && !isEditMode" class="loading-state">
+    <div class="spinner"></div>
+    <p>Loading...</p>
+  </div>
+
+  <div *ngIf="error" class="error-banner">
+    <svg fill="currentColor" viewBox="0 0 20 20">
+      <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"></path>
+    </svg>
+    {{ error }}
+  </div>
+
+  <form [formGroup]="form" (ngSubmit)="onSubmit()" class="form">
+    <app-card title="Week Information">
+      <div class="form-grid">
+        <app-input
+          formControlName="weekNumber"
+          label="Week Number"
+          type="number"
+          [required]="true"
+          [min]="1"
+          [max]="53"
+          [error]="form.get('weekNumber')?.hasError('required') ? 'Required' : ''">
+        </app-input>
+
+        <app-input
+          formControlName="year"
+          label="Year"
+          type="number"
+          [required]="true"
+          [min]="2000"
+          [error]="form.get('year')?.hasError('required') ? 'Required' : ''">
+        </app-input>
+
+        <app-input
+          formControlName="startDate"
+          label="Start Date"
+          type="date"
+          [required]="true"
+          [error]="form.get('startDate')?.hasError('required') ? 'Required' : ''">
+        </app-input>
+
+        <app-input
+          formControlName="endDate"
+          label="End Date"
+          type="date"
+          [required]="true"
+          [error]="form.get('endDate')?.hasError('required') ? 'Required' : ''">
+        </app-input>
+      </div>
+    </app-card>
+
+    <app-card title="Purchase Information">
+      <div class="form-grid">
+        <app-input
+          formControlName="totalFlower"
+          label="Total Flowers"
+          type="number"
+          [required]="true"
+          [min]="0"
+          [error]="form.get('totalFlower')?.hasError('required') ? 'Required' : ''">
+        </app-input>
+
+        <app-input
+          formControlName="totalBuyingPrice"
+          label="Total Buying Price (€)"
+          type="number"
+          [required]="true"
+          [min]="0"
+          [step]="0.01"
+          [error]="form.get('totalBuyingPrice')?.hasError('required') ? 'Required' : ''">
+        </app-input>
+      </div>
+    </app-card>
+
+    <app-card title="Sales by Day">
+      <div class="sales-grid">
+        <app-input
+          formControlName="saleThursday"
+          label="Thursday Sales (€)"
+          type="number"
+          [required]="true"
+          [min]="0"
+          [step]="0.01">
+        </app-input>
+
+        <app-input
+          formControlName="saleFriday"
+          label="Friday Sales (€)"
+          type="number"
+          [required]="true"
+          [min]="0"
+          [step]="0.01">
+        </app-input>
+
+        <app-input
+          formControlName="saleSaturday"
+          label="Saturday Sales (€)"
+          type="number"
+          [required]="true"
+          [min]="0"
+          [step]="0.01">
+        </app-input>
+      </div>
+    </app-card>
+
+    <app-card title="Financial Summary">
+      <div class="form-grid">
+        <app-input
+          formControlName="totalSale"
+          label="Total Sale (€)"
+          type="number"
+          [readonly]="true"
+          [error]="''">
+        </app-input>
+
+        <app-input
+          formControlName="profit"
+          label="Profit (€)"
+          type="number"
+          [readonly]="true"
+          [error]="''">
+        </app-input>
+
+        <app-input
+          formControlName="revenue"
+          label="Revenue (€)"
+          type="number"
+          [readonly]="true"
+          [error]="''">
+        </app-input>
+
+        <app-input
+          formControlName="savings"
+          label="Savings (€)"
+          type="number"
+          [required]="true"
+          [min]="0"
+          [step]="0.01"
+          [error]="form.get('savings')?.hasError('required') ? 'Required' : ''">
+        </app-input>
+      </div>
+    </app-card>
+
+    <div class="form-actions">
+      <app-button
+        variant="primary"
+        [label]="loading ? 'Saving...' : (isEditMode ? 'Update Week' : 'Create Week')"
+        [loading]="loading"
+        [disabled]="form.invalid || loading"
+        (clicked)="onSubmit()">
+      </app-button>
+      <app-button variant="secondary" label="Cancel" (clicked)="onCancel()"></app-button>
+    </div>
+  </form>
+</div>
+

@@ -1,0 +1,20 @@
+<div class="input-group">
+  <label *ngIf="label" [class.required]="required" class="input-label">
+    {{ label }}
+  </label>
+  <input
+    [type]="type"
+    [value]="value"
+    [placeholder]="placeholder"
+    [required]="required"
+    [min]="min || undefined"
+    [max]="max || undefined"
+    [step]="step || undefined"
+    [readonly]="readonly"
+    [class.input-error]="error"
+    (input)="onInput($event)"
+    (blur)="onTouched()"
+    class="form-input" />
+  <small *ngIf="error" class="error-text">{{ error }}</small>
+</div>
+

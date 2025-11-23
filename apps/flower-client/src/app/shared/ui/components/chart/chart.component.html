@@ -1,0 +1,17 @@
+<div class="chart-container">
+  <canvas
+    *ngIf="type === 'line'"
+    baseChart
+    [data]="chartData"
+    [options]="chartOptions"
+    type="line">
+  </canvas>
+  <canvas
+    *ngIf="type === 'bar'"
+    baseChart
+    [data]="chartData"
+    [options]="chartOptions"
+    type="bar">
+  </canvas>
+</div>
+

@@ -1,0 +1,129 @@
+<div class="dashboard-container">
+  <div class="header">
+    <div>
+      <h1 class="title">Flower Business Dashboard</h1>
+      <p class="subtitle">Track your weekly flower sales and profits</p>
+    </div>
+    <a routerLink="/weeks/new" class="btn-primary">
+      <svg class="icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
+      </svg>
+      Add New Week
+    </a>
+  </div>
+
+  <div *ngIf="loading" class="loading-container">
+    <div class="spinner"></div>
+    <p>Loading data...</p>
+  </div>
+
+  <div *ngIf="error && !loading" class="error-banner">
+    <svg class="error-icon" fill="currentColor" viewBox="0 0 20 20">
+      <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"></path>
+    </svg>
+    {{ error }}
+  </div>
+
+  <div *ngIf="summary && !loading" class="stats-grid">
+    <app-card variant="default">
+      <div class="stat-card">
+        <div class="stat-icon bg-blue-100">
+          <svg class="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path>
+          </svg>
+        </div>
+        <div class="stat-content">
+          <p class="stat-label">Total Profit</p>
+          <p class="stat-value text-green-600">€{{ summary.totalProfit | number:'1.2-2' }}</p>
+          <p class="stat-change">Avg: €{{ summary.averageProfit | number:'1.2-2' }}/week</p>
+        </div>
+      </div>
+    </app-card>
+
+    <app-card variant="default">
+      <div class="stat-card">
+        <div class="stat-icon bg-purple-100">
+          <svg class="w-6 h-6 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+          </svg>
+        </div>
+        <div class="stat-content">
+          <p class="stat-label">Total Sales</p>
+          <p class="stat-value">€{{ summary.totalSales | number:'1.2-2' }}</p>
+          <p class="stat-change">{{ summary.totalWeeks }} weeks tracked</p>
+        </div>
+      </div>
+    </app-card>
+
+    <app-card variant="default">
+      <div class="stat-card">
+        <div class="stat-icon bg-orange-100">
+          <svg class="w-6 h-6 text-orange-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path>
+          </svg>
+        </div>
+        <div class="stat-content">
+          <p class="stat-label">Total Flowers</p>
+          <p class="stat-value">{{ summary.totalFlowers | number }}</p>
+          <p class="stat-change">Avg: {{ summary.averageFlowers | number:'1.0-0' }}/week</p>
+        </div>
+      </div>
+    </app-card>
+
+    <app-card variant="default">
+      <div class="stat-card">
+        <div class="stat-icon bg-green-100">
+          <svg class="w-6 h-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+          </svg>
+        </div>
+        <div class="stat-content">
+          <p class="stat-label">Total Savings</p>
+          <p class="stat-value text-green-600">€{{ summary.totalSavings | number:'1.2-2' }}</p>
+          <p class="stat-change" *ngIf="summary.bestWeek">Best: W{{ summary.bestWeek.weekNumber }}/{{ summary.bestWeek.year }}</p>
+        </div>
+      </div>
+    </app-card>
+  </div>
+
+  <div *ngIf="weeks.length > 0 && !loading" class="charts-grid">
+    <app-card title="Profit Trend">
+      <app-chart
+        type="line"
+        [data]="profitChartData"
+        [options]="chartService.getLineChartOptions()">
+      </app-chart>
+    </app-card>
+
+    <app-card *ngIf="salesChartData.datasets.length > 0" title="Sales by Day (Last 4 Weeks)">
+      <app-chart
+        type="bar"
+        [data]="salesChartData"
+        [options]="chartService.getBarChartOptions()">
+      </app-chart>
+    </app-card>
+  </div>
+
+  <div *ngIf="!loading" class="weeks-section">
+    <h2 class="section-title">Weekly Records</h2>
+    
+    <div *ngIf="weeks.length === 0" class="empty-state">
+      <svg class="empty-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+      </svg>
+      <p>No weeks recorded yet</p>
+      <a routerLink="/weeks/new" class="btn-primary">Add Your First Week</a>
+    </div>
+
+    <div *ngIf="weeks.length > 0" class="weeks-grid">
+      <app-week-card
+        *ngFor="let week of weeks"
+        [week]="week"
+        [getProfitColor]="getProfitColor"
+        [getProfitBgColor]="getProfitBgColor"
+        (delete)="onDeleteWeek($event)">
+      </app-week-card>
+    </div>
+  </div>
+</div>
+

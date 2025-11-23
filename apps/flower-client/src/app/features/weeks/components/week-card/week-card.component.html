@@ -1,0 +1,60 @@
+<app-card [variant]="getProfitBgColor(week.profit || 0).includes('green') ? 'highlight' : 'default'">
+  <div class="week-card-header">
+    <div>
+      <h3 class="week-title">Week {{ week.weekNumber }}, {{ week.year }}</h3>
+      <p class="week-dates">{{ week.startDate | date:'shortDate' }} - {{ week.endDate | date:'shortDate' }}</p>
+    </div>
+    <div class="week-actions">
+      <a [routerLink]="['/weeks', week.id, 'edit']" class="btn-icon" title="Edit">
+        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
+        </svg>
+      </a>
+      <app-button
+        variant="danger"
+        (clicked)="onDelete()"
+        [icon]="'<svg fill=\'none\' stroke=\'currentColor\' viewBox=\'0 0 24 24\'><path stroke-linecap=\'round\' stroke-linejoin=\'round\' stroke-width=\'2\' d=\'M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16\'></path></svg>'">
+      </app-button>
+    </div>
+  </div>
+
+  <div class="week-stats">
+    <div class="week-stat">
+      <span class="week-stat-label">Flowers</span>
+      <span class="week-stat-value">{{ week.totalFlower || 0 }}</span>
+    </div>
+    <div class="week-stat">
+      <span class="week-stat-label">Buying Price</span>
+      <span class="week-stat-value">€{{ (week.totalBuyingPrice || 0) | number:'1.2-2' }}</span>
+    </div>
+    <div class="week-stat">
+      <span class="week-stat-label">Total Sale</span>
+      <span class="week-stat-value">€{{ (week.totalSale || 0) | number:'1.2-2' }}</span>
+    </div>
+  </div>
+
+  <div class="week-sales">
+    <div class="sales-day">
+      <span class="sales-day-label">Thu</span>
+      <span class="sales-day-value">€{{ (week.sale?.thursday || 0) | number:'1.2-2' }}</span>
+    </div>
+    <div class="sales-day">
+      <span class="sales-day-label">Fri</span>
+      <span class="sales-day-value">€{{ (week.sale?.friday || 0) | number:'1.2-2' }}</span>
+    </div>
+    <div class="sales-day">
+      <span class="sales-day-label">Sat</span>
+      <span class="sales-day-value">€{{ (week.sale?.saturday || 0) | number:'1.2-2' }}</span>
+    </div>
+  </div>
+
+  <div class="week-footer">
+    <div class="profit-badge" [class]="getProfitColor(week.profit || 0)">
+      <span>Profit: €{{ (week.profit || 0) | number:'1.2-2' }}</span>
+    </div>
+    <div class="savings-badge">
+      <span>Savings: €{{ (week.savings || 0) | number:'1.2-2' }}</span>
+    </div>
+  </div>
+</app-card>
+

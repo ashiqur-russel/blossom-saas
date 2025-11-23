@@ -1,0 +1,12 @@
+<app-dashboard-presentation
+  [weeks]="weeks"
+  [summary]="summary"
+  [loading]="loading"
+  [error]="error"
+  [profitChartData]="profitChartData"
+  [salesChartData]="salesChartData"
+  (deleteWeek)="deleteWeek($event)"
+  [getProfitColor]="getProfitColor.bind(this)"
+  [getProfitBgColor]="getProfitBgColor.bind(this)">
+</app-dashboard-presentation>
+
