@@ -1,7 +1,8 @@
-import { Component, Input, Output, EventEmitter } from '@angular/core';
+import { Component, Input, Output, EventEmitter, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule, Router, NavigationEnd } from '@angular/router';
 import { filter } from 'rxjs/operators';
+import { AuthService, User } from '../../../features/auth';
 
 export interface SidebarItem {
   label: string;
@@ -17,11 +18,12 @@ export interface SidebarItem {
   templateUrl: './sidebar.component.html',
   styleUrl: './sidebar.component.scss',
 })
-export class SidebarComponent {
+export class SidebarComponent implements OnInit {
   @Input() isMobileOpen = false;
   @Output() closeMobile = new EventEmitter<void>();
 
   activeRoute = '';
+  currentUser: User | null = null;
 
   sidebarItems: SidebarItem[] = [
     {
@@ -52,13 +54,26 @@ export class SidebarComponent {
     },
   ];
 
-  constructor(private router: Router) {
+  constructor(
+    private router: Router,
+    private authService: AuthService,
+  ) {
     this.router.events
       .pipe(filter((event) => event instanceof NavigationEnd))
       .subscribe((event: any) => {
         this.activeRoute = event.url;
       });
     this.activeRoute = this.router.url;
+  }
+
+  ngOnInit(): void {
+    this.authService.currentUser$.subscribe((user) => {
+      this.currentUser = user;
+    });
+  }
+
+  logout(): void {
+    this.authService.logout();
   }
 
   isActive(route: string): boolean {
