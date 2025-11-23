@@ -5,104 +5,89 @@ import {
 } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
-import {
-  CreateFlowerWeekRequestDTO,
-  FlowerWeekResponseDTO,
-  FlowerWeekSummaryResponseDTO,
-  UpdateFlowerWeekRequestDTO,
-} from './dto/flower-business.dto';
-import { FlowerWeek, FlowerWeekDocument } from './schema/flower-week.schema';
+import { Week, WeekDocument } from './schemas/week.schema';
+import { CreateWeekDto } from './dtos/create-week.dto';
+import { UpdateWeekDto } from './dtos/update-week.dto';
+import { WeekResponseDto } from './dtos/week-response.dto';
+import { WeekSummaryDto } from './dtos/week-summary.dto';
 
 @Injectable()
-export class FlowerBusinessService {
+export class WeeksService {
   constructor(
-    @InjectModel(FlowerWeek.name)
-    private readonly flowerWeekModel: Model<FlowerWeekDocument>,
+    @InjectModel(Week.name)
+    private readonly weekModel: Model<WeekDocument>,
   ) {}
 
-  async create(
-    createFlowerWeekDto: CreateFlowerWeekRequestDTO,
-  ): Promise<FlowerWeekResponseDTO> {
-    const existingWeek = await this.flowerWeekModel
+  async create(createWeekDto: CreateWeekDto): Promise<WeekResponseDto> {
+    // Check if week already exists
+    const existingWeek = await this.weekModel
       .findOne({
-        weekNumber: createFlowerWeekDto.weekNumber,
-        year: createFlowerWeekDto.year,
+        weekNumber: createWeekDto.weekNumber,
+        year: createWeekDto.year,
       })
       .exec();
 
     if (existingWeek) {
       throw new ConflictException(
-        `Week ${createFlowerWeekDto.weekNumber} for year ${createFlowerWeekDto.year} already exists.`,
+        `Week ${createWeekDto.weekNumber} for year ${createWeekDto.year} already exists.`,
       );
     }
 
-    const createdWeek = await this.flowerWeekModel.create(createFlowerWeekDto);
-    return this.mapToDTO(createdWeek);
+    const createdWeek = await this.weekModel.create(createWeekDto);
+    return this.mapToResponseDto(createdWeek);
   }
 
-  async findAll(): Promise<FlowerWeekResponseDTO[]> {
-    const weeks = await this.flowerWeekModel
+  async findAll(): Promise<WeekResponseDto[]> {
+    const weeks = await this.weekModel
       .find()
       .sort({ year: -1, weekNumber: -1 })
       .exec();
-    return weeks.map((week) => this.mapToDTO(week));
+    return weeks.map((week) => this.mapToResponseDto(week));
   }
 
-  async findOne(id: string): Promise<FlowerWeekResponseDTO> {
-    const week = await this.flowerWeekModel.findById(id).exec();
+  async findOne(id: string): Promise<WeekResponseDto> {
+    const week = await this.weekModel.findById(id).exec();
     if (!week) {
-      throw new NotFoundException(`Flower week with ID ${id} not found`);
+      throw new NotFoundException(`Week with ID ${id} not found`);
     }
-    return this.mapToDTO(week);
-  }
-
-  async findByWeekAndYear(
-    weekNumber: number,
-    year: number,
-  ): Promise<FlowerWeekResponseDTO | null> {
-    const week = await this.flowerWeekModel
-      .findOne({ weekNumber, year })
-      .exec();
-    if (!week) {
-      return null;
-    }
-    return this.mapToDTO(week);
+    return this.mapToResponseDto(week);
   }
 
   async update(
     id: string,
-    dto: UpdateFlowerWeekRequestDTO,
-  ): Promise<FlowerWeekResponseDTO> {
-    // Handle partial sale update - merge with existing sale if only partial sale is provided
-    const updateData: any = { ...dto };
-    if (dto.sale) {
-      const existingWeek = await this.flowerWeekModel.findById(id).select('sale').lean().exec();
+    updateWeekDto: UpdateWeekDto,
+  ): Promise<WeekResponseDto> {
+    // Handle partial sale update
+    if (updateWeekDto.sale) {
+      const existingWeek = await this.weekModel.findById(id).select('sale').lean().exec();
       if (existingWeek && existingWeek.sale) {
-        updateData.sale = {
+        updateWeekDto.sale = {
           ...existingWeek.sale,
-          ...dto.sale,
+          ...updateWeekDto.sale,
         };
       }
     }
 
-    const week = await this.flowerWeekModel
-      .findByIdAndUpdate(id, updateData, { new: true, runValidators: true })
+    const week = await this.weekModel
+      .findByIdAndUpdate(id, updateWeekDto, { new: true, runValidators: true })
       .exec();
+
     if (!week) {
-      throw new NotFoundException(`Flower week with ID ${id} not found`);
+      throw new NotFoundException(`Week with ID ${id} not found`);
     }
-    return this.mapToDTO(week);
+
+    return this.mapToResponseDto(week);
   }
 
   async remove(id: string): Promise<void> {
-    const result = await this.flowerWeekModel.findByIdAndDelete(id).exec();
+    const result = await this.weekModel.findByIdAndDelete(id).exec();
     if (!result) {
-      throw new NotFoundException(`Flower week with ID ${id} not found`);
+      throw new NotFoundException(`Week with ID ${id} not found`);
     }
   }
 
-  async getSummary(): Promise<FlowerWeekSummaryResponseDTO> {
-    const weeks = await this.flowerWeekModel.find().exec();
+  async getSummary(): Promise<WeekSummaryDto> {
+    const weeks = await this.weekModel.find().exec();
 
     if (weeks.length === 0) {
       return {
@@ -114,6 +99,7 @@ export class FlowerBusinessService {
         totalRevenue: 0,
         totalSavings: 0,
         averageProfit: 0,
+        averageRevenue: 0,
         averageFlowers: 0,
         bestWeek: null,
       };
@@ -123,16 +109,20 @@ export class FlowerBusinessService {
     const totalFlowers = weeks.reduce((sum, w: any) => {
       return sum + (w.totalFlower || w.quantity || 0);
     }, 0);
+
     const totalBuyingPrice = weeks.reduce((sum, w: any) => {
       return sum + (w.totalBuyingPrice || (w.quantity && w.price ? w.quantity * w.price : 0) || 0);
     }, 0);
+
     const totalSales = weeks.reduce((sum, w: any) => {
       return sum + (w.totalSale || (w.quantity && w.price ? w.quantity * w.price : 0) || 0);
     }, 0);
+
     const totalProfit = weeks.reduce((sum, w: any) => sum + (w.profit || 0), 0);
     const totalRevenue = weeks.reduce((sum, w: any) => {
       return sum + (w.revenue || w.totalSale || (w.quantity && w.price ? w.quantity * w.price : 0) || 0);
     }, 0);
+
     const totalSavings = weeks.reduce((sum, w: any) => sum + (w.savings || 0), 0);
 
     const bestWeek = weeks.reduce((best, week: any) => {
@@ -156,14 +146,15 @@ export class FlowerBusinessService {
       totalRevenue,
       totalSavings,
       averageProfit: totalProfit / weeks.length,
+      averageRevenue: totalRevenue / weeks.length,
       averageFlowers: totalFlowers / weeks.length,
       bestWeek,
     };
   }
 
-  private mapToDTO(week: FlowerWeekDocument): FlowerWeekResponseDTO {
-    const plain: any = week.toObject();
-    
+  private mapToResponseDto(week: WeekDocument): WeekResponseDto {
+    const plain: any = week.toJSON ? week.toJSON() : week.toObject();
+
     // Handle both old and new data formats
     const totalFlower = plain.totalFlower || plain.quantity || 0;
     const totalBuyingPrice = plain.totalBuyingPrice || (plain.quantity && plain.price ? plain.quantity * plain.price : 0) || 0;
@@ -172,12 +163,10 @@ export class FlowerBusinessService {
     const profit = plain.profit || 0;
     const revenue = plain.revenue || totalSale;
     const savings = plain.savings || 0;
-    
-    // Ensure ID is always present - use id from toObject() or _id
     const id = plain.id || (plain._id ? plain._id.toString() : week._id.toString());
-    
+
     return {
-      id: id,
+      id,
       weekNumber: plain.weekNumber,
       year: plain.year,
       startDate: plain.startDate,

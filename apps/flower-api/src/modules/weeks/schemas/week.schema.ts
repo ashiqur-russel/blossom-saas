@@ -28,7 +28,7 @@ export const SaleByDaySchema = SchemaFactory.createForClass(SaleByDay);
     },
   },
 })
-export class FlowerWeek {
+export class Week {
   @Prop({ type: Number, required: true, index: true })
   weekNumber: number;
 
@@ -42,39 +42,35 @@ export class FlowerWeek {
   endDate: Date;
 
   @Prop({ type: Number, required: true, min: 0 })
-  totalFlower: number; // Total flowers bought
+  totalFlower: number;
 
   @Prop({ type: Number, required: true, min: 0 })
-  totalBuyingPrice: number; // Total cost to buy flowers
+  totalBuyingPrice: number;
 
   @Prop({ type: SaleByDaySchema, required: true })
-  sale: SaleByDay; // Sales by day (Thursday, Friday, Saturday)
+  sale: SaleByDay;
 
   @Prop({ type: Number, required: true, min: 0 })
-  totalSale: number; // Total sales amount
+  totalSale: number;
 
   @Prop({ type: Number, required: true })
-  profit: number; // Profit = totalSale - totalBuyingPrice
+  profit: number;
 
   @Prop({ type: Number, required: true, min: 0 })
-  revenue: number; // Revenue (same as totalSale or can be different)
+  revenue: number;
 
   @Prop({ type: Number, required: true, min: 0 })
-  savings: number; // Savings amount
+  savings: number;
 
   createdAt?: Date;
   updatedAt?: Date;
 }
 
-export type FlowerWeekDocument = FlowerWeek & Document;
+export type WeekDocument = Week & Document;
 
-export const FlowerWeekSchema = SchemaFactory.createForClass(FlowerWeek);
+export const WeekSchema = SchemaFactory.createForClass(Week);
 
 // Compound index for unique week/year combination
-FlowerWeekSchema.index({ weekNumber: 1, year: 1 }, { unique: true });
-FlowerWeekSchema.index({ year: 1, weekNumber: -1 });
+WeekSchema.index({ weekNumber: 1, year: 1 }, { unique: true });
+WeekSchema.index({ year: 1, weekNumber: -1 });
 
-// Virtual for calculating profit if not provided
-FlowerWeekSchema.virtual('calculatedProfit').get(function (this: FlowerWeekDocument) {
-  return this.totalSale - this.totalBuyingPrice;
-});
