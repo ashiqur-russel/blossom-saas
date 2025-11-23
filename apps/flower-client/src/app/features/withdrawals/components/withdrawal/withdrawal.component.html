@@ -1,0 +1,159 @@
+<div class="withdrawal-page">
+  <div class="withdrawal-container">
+    <div class="withdrawal-header">
+      <h1>Withdraw from Savings</h1>
+      <p class="subtitle">Manage withdrawals from your accumulated savings</p>
+    </div>
+
+    <div *ngIf="loading && !summary" class="loading-container">
+      <div class="spinner"></div>
+      <p>Loading withdrawal data...</p>
+    </div>
+
+    <div *ngIf="error && !loading" class="error-banner">
+      <svg class="error-icon" fill="currentColor" viewBox="0 0 20 20">
+        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"></path>
+      </svg>
+      {{ error }}
+    </div>
+
+    <div *ngIf="summary" class="summary-card">
+      <app-card variant="highlight">
+        <div class="summary-content">
+          <div class="summary-item">
+            <span class="summary-label">Total Savings</span>
+            <span class="summary-value">€{{ summary.totalSavings | number:'1.2-2' }}</span>
+          </div>
+          <div class="summary-item">
+            <span class="summary-label">Total Withdrawals</span>
+            <span class="summary-value negative">€{{ summary.totalWithdrawals | number:'1.2-2' }}</span>
+          </div>
+          <div class="summary-item highlight">
+            <span class="summary-label">Available Savings</span>
+            <span class="summary-value available">€{{ summary.availableSavings | number:'1.2-2' }}</span>
+          </div>
+        </div>
+      </app-card>
+    </div>
+
+    <div *ngIf="!summary && !loading && !error" class="summary-card">
+      <app-card variant="highlight">
+        <div class="summary-content">
+          <div class="summary-item">
+            <span class="summary-label">Total Savings</span>
+            <span class="summary-value">€0.00</span>
+          </div>
+          <div class="summary-item">
+            <span class="summary-label">Total Withdrawals</span>
+            <span class="summary-value negative">€0.00</span>
+          </div>
+          <div class="summary-item highlight">
+            <span class="summary-label">Available Savings</span>
+            <span class="summary-value available">€0.00</span>
+          </div>
+        </div>
+      </app-card>
+    </div>
+
+    <div class="withdrawal-form-section">
+      <app-card title="Create Withdrawal" subtitle="Withdraw money from your savings">
+        <form [formGroup]="form" (ngSubmit)="onSubmit()" class="withdrawal-form">
+          <div class="form-field">
+            <label for="amount">Withdrawal Amount (€)</label>
+            <input
+              id="amount"
+              type="number"
+              formControlName="amount"
+              class="form-input"
+              min="0.01"
+              step="0.01"
+              required />
+            <small *ngIf="summary" class="hint">
+              Available: €{{ summary.availableSavings | number:'1.2-2' }}
+            </small>
+            <small *ngIf="!summary && !loading" class="hint">
+              Loading available savings...
+            </small>
+          </div>
+
+          <div class="form-field">
+            <label for="date">Withdrawal Date</label>
+            <input
+              id="date"
+              type="date"
+              formControlName="date"
+              class="form-input"
+              required />
+          </div>
+
+          <div class="form-field">
+            <label for="description">Description (Optional)</label>
+            <input
+              id="description"
+              type="text"
+              formControlName="description"
+              class="form-input"
+              placeholder="e.g., Equipment purchase, Emergency fund" />
+          </div>
+
+          <div *ngIf="error" class="error-message">
+            {{ error }}
+          </div>
+
+          <div *ngIf="success" class="success-message">
+            {{ success }}
+          </div>
+
+          <div class="form-actions">
+            <button
+              type="submit"
+              [disabled]="form.invalid || loading || (summary && form.get('amount')?.value > summary.availableSavings)"
+              class="btn btn-primary">
+              <span *ngIf="loading" class="spinner-small"></span>
+              {{ loading ? 'Processing...' : 'Create Withdrawal' }}
+            </button>
+          </div>
+        </form>
+      </app-card>
+    </div>
+
+    <div class="withdrawals-list-section">
+      <app-card title="Withdrawal History" subtitle="All previous withdrawals">
+        <div *ngIf="withdrawals.length === 0" class="empty-state">
+          <p>No withdrawals yet</p>
+        </div>
+
+        <div *ngIf="withdrawals.length > 0" class="withdrawals-table">
+          <table>
+            <thead>
+              <tr>
+                <th>Date</th>
+                <th>Amount</th>
+                <th>Description</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let withdrawal of withdrawals">
+                <td>{{ withdrawal.date | date:'shortDate' }}</td>
+                <td class="amount">€{{ withdrawal.amount | number:'1.2-2' }}</td>
+                <td>{{ withdrawal.description || '-' }}</td>
+                <td>
+                  <button
+                    class="delete-btn"
+                    (click)="onDelete(withdrawal.id)"
+                    title="Delete withdrawal">
+                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
+                    </svg>
+                  </button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </app-card>
+    </div>
+  </div>
+</div>
+

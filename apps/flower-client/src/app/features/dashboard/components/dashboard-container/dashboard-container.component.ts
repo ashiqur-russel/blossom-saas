@@ -5,6 +5,7 @@ import { DashboardService } from '../../services/dashboard.service';
 import { ChartService } from '../../../../shared/ui/services/chart.service';
 import { WeekService } from '../../../weeks/services/week.service';
 import { IWeek, IWeekSummary } from '../../../../shared/models/week.model';
+import { IWithdrawalSummary } from '../../../withdrawals/services/withdrawal.service';
 import { ChartConfiguration } from 'chart.js';
 import { DashboardPresentationComponent } from '../dashboard-presentation/dashboard-presentation.component';
 
@@ -18,6 +19,7 @@ import { DashboardPresentationComponent } from '../dashboard-presentation/dashbo
 export class DashboardContainerComponent implements OnInit {
   weeks: IWeek[] = [];
   summary: IWeekSummary | null = null;
+  withdrawalSummary: IWithdrawalSummary | null = null;
   loading = false;
   error: string | null = null;
 
@@ -45,9 +47,10 @@ export class DashboardContainerComponent implements OnInit {
     this.error = null;
 
     this.dashboardService.loadDashboardData().subscribe({
-      next: ({ weeks, summary }) => {
+      next: ({ weeks, summary, withdrawalSummary }) => {
         this.weeks = weeks;
         this.summary = summary;
+        this.withdrawalSummary = withdrawalSummary;
         this.updateCharts();
         this.loading = false;
       },

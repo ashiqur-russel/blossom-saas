@@ -45,6 +45,13 @@ export const routes: Routes = [
             (m) => m.WeekSalesEditorContainerComponent,
           ),
       },
+      {
+        path: 'withdrawals',
+        loadComponent: () =>
+          import('./features/withdrawals/components/withdrawal/withdrawal.component').then(
+            (m) => m.WithdrawalComponent,
+          ),
+      },
     ],
   },
 ];

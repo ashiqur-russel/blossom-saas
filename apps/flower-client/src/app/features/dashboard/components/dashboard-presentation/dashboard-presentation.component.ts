@@ -4,6 +4,7 @@ import { RouterModule } from '@angular/router';
 import { ReactiveFormsModule } from '@angular/forms';
 import { ChartConfiguration } from 'chart.js';
 import { IWeek, IWeekSummary } from '../../../../shared/models/week.model';
+import { IWithdrawalSummary } from '../../../withdrawals/services/withdrawal.service';
 import { CardComponent } from '../../../../shared/ui/components/card/card.component';
 import { ButtonComponent } from '../../../../shared/ui/components/button/button.component';
 import { ChartComponent } from '../../../../shared/ui/components/chart/chart.component';
@@ -21,6 +22,7 @@ import { SalesFormComponent } from '../sales-form/sales-form.component';
 export class DashboardPresentationComponent {
   @Input() weeks: IWeek[] = [];
   @Input() summary: IWeekSummary | null = null;
+  @Input() withdrawalSummary: IWithdrawalSummary | null = null;
   @Input() loading: boolean = false;
   @Input() error: string | null = null;
   @Input() profitChartData: ChartConfiguration<'line'>['data'] = { labels: [], datasets: [] };
@@ -183,5 +185,11 @@ export class DashboardPresentationComponent {
 
   hasChangeData(change: number | null): boolean {
     return change !== null;
+  }
+
+  getAvailableSavings(): number {
+    if (!this.summary) return 0;
+    if (!this.withdrawalSummary) return this.summary.totalSavings;
+    return this.withdrawalSummary.availableSavings;
   }
 }

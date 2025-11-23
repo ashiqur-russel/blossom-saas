@@ -63,8 +63,8 @@
       <app-card variant="default">
         <div class="kpi-card">
           <div class="kpi-content">
-            <p class="kpi-label">Total Savings</p>
-            <p class="kpi-value">€{{ summary.totalSavings | number:'1.2-2' }}</p>
+            <p class="kpi-label">Available Savings</p>
+            <p class="kpi-value">€{{ getAvailableSavings() | number:'1.2-2' }}</p>
             <div class="kpi-change" [ngClass]="getChangeClass(getSavingsChange())">
               <svg *ngIf="hasChangeData(getSavingsChange()) && getSavingsChange()! >= 0" fill="currentColor" viewBox="0 0 20 20">
                 <path fill-rule="evenodd" d="M5.293 7.707a1 1 0 010-1.414l4-4a1 1 0 011.414 0l4 4a1 1 0 01-1.414 1.414L11 5.414V17a1 1 0 11-2 0V5.414L6.707 7.707a1 1 0 01-1.414 0z" clip-rule="evenodd"></path>
@@ -74,6 +74,9 @@
               </svg>
               <span>{{ formatPercentageChange(getSavingsChange()) }}</span>
             </div>
+            <small *ngIf="withdrawalSummary && withdrawalSummary.totalWithdrawals > 0 && summary" class="withdrawal-hint">
+              Total: €{{ summary.totalSavings | number:'1.2-2' }} - Withdrawn: €{{ withdrawalSummary.totalWithdrawals | number:'1.2-2' }}
+            </small>
           </div>
           <div class="kpi-icon bg-purple-500">
             <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
