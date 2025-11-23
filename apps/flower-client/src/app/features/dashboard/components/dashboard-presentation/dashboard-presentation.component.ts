@@ -1,6 +1,7 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { CommonModule, DatePipe } from '@angular/common';
 import { RouterModule } from '@angular/router';
+import { ReactiveFormsModule } from '@angular/forms';
 import { ChartConfiguration } from 'chart.js';
 import { IWeek, IWeekSummary } from '../../../../shared/models/week.model';
 import { CardComponent } from '../../../../shared/ui/components/card/card.component';
@@ -8,11 +9,12 @@ import { ButtonComponent } from '../../../../shared/ui/components/button/button.
 import { ChartComponent } from '../../../../shared/ui/components/chart/chart.component';
 import { ChartService } from '../../../../shared/ui/services/chart.service';
 import { WeekCardComponent } from '../../../weeks/components/week-card/week-card.component';
+import { SalesFormComponent } from '../sales-form/sales-form.component';
 
 @Component({
   selector: 'app-dashboard-presentation',
   standalone: true,
-  imports: [CommonModule, RouterModule, CardComponent, ChartComponent, DatePipe],
+  imports: [CommonModule, RouterModule, CardComponent, ChartComponent, DatePipe, SalesFormComponent],
   templateUrl: './dashboard-presentation.component.html',
   styleUrl: './dashboard-presentation.component.scss',
 })
@@ -33,6 +35,7 @@ export class DashboardPresentationComponent {
   @Input() getProfitBgColor!: (profit: number) => string;
   @Output() deleteWeek = new EventEmitter<string>();
   @Output() setActiveTab = new EventEmitter<'weekly' | 'trends'>();
+  @Output() weekAdded = new EventEmitter<void>();
 
   chartService = new ChartService();
 

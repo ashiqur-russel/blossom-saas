@@ -2,7 +2,7 @@
   [class]="'btn btn-' + variant"
   [disabled]="disabled || loading"
   (click)="onClick()"
-  type="button">
+  [type]="type">
   <span *ngIf="loading" class="spinner"></span>
   <span *ngIf="icon && !loading" [innerHTML]="icon"></span>
   <span *ngIf="label">{{ label }}</span>

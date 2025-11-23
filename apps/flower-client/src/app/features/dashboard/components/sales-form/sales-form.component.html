@@ -1,0 +1,122 @@
+<app-card title="Add Weekly Sales Data" subtitle="Enter your weekly flower business data">
+  <form [formGroup]="form" (ngSubmit)="onSubmit()" class="sales-form">
+    <div class="form-row">
+      <div class="form-field">
+        <label for="date">Date</label>
+        <input
+          id="date"
+          type="date"
+          formControlName="date"
+          class="form-input"
+          required />
+      </div>
+      <div class="form-field">
+        <label for="weekday">Weekday</label>
+        <input
+          id="weekday"
+          type="text"
+          formControlName="weekday"
+          class="form-input readonly"
+          readonly />
+      </div>
+    </div>
+
+    <div class="form-field">
+      <label for="flowerAmount">Flower Amount (Units)</label>
+      <input
+        id="flowerAmount"
+        type="number"
+        formControlName="flowerAmount"
+        class="form-input"
+        min="0"
+        required />
+    </div>
+
+    <div class="form-field">
+      <label for="buyingAmount">Total Buying Amount ($)</label>
+      <input
+        id="buyingAmount"
+        type="number"
+        formControlName="buyingAmount"
+        class="form-input"
+        min="0"
+        step="0.01"
+        required />
+    </div>
+
+    <div class="weekend-sales-section">
+      <p class="section-label">Weekend Sales</p>
+      
+      <div class="form-field">
+        <label for="salesThursday">Thursday Sales ($)</label>
+        <input
+          id="salesThursday"
+          type="number"
+          formControlName="salesThursday"
+          class="form-input"
+          min="0"
+          step="0.01"
+          required />
+      </div>
+
+      <div class="form-field">
+        <label for="salesFriday">Friday Sales ($)</label>
+        <input
+          id="salesFriday"
+          type="number"
+          formControlName="salesFriday"
+          class="form-input"
+          min="0"
+          step="0.01"
+          required />
+      </div>
+
+      <div class="form-field">
+        <label for="salesSaturday">Saturday Sales ($)</label>
+        <input
+          id="salesSaturday"
+          type="number"
+          formControlName="salesSaturday"
+          class="form-input"
+          min="0"
+          step="0.01"
+          required />
+      </div>
+    </div>
+
+    <div class="form-field">
+      <label>Calculated Profit</label>
+      <div class="profit-display">
+        ${{ calculatedProfit.toFixed(2) }}
+      </div>
+    </div>
+
+    <div class="form-field">
+      <label for="savings">Savings This Week ($)</label>
+      <input
+        id="savings"
+        type="number"
+        formControlName="savings"
+        class="form-input"
+        min="0"
+        step="0.01"
+        required />
+    </div>
+
+    <div *ngIf="error" class="error-message">
+      {{ error }}
+    </div>
+
+    <button
+      type="submit"
+      [disabled]="form.invalid || loading"
+      class="add-entry-btn">
+      <svg *ngIf="!loading" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
+      </svg>
+      <span *ngIf="loading" class="spinner-small"></span>
+      {{ loading ? 'Adding...' : '+ Add Sales Entry' }}
+    </button>
+  </form>
+</app-card>
+

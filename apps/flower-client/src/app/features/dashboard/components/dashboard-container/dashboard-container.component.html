@@ -13,6 +13,7 @@
   [activeTab]="activeTab"
   (deleteWeek)="deleteWeek($event)"
   (setActiveTab)="setActiveTab($event)"
+  (weekAdded)="onWeekAdded()"
   [getProfitColor]="getProfitColor.bind(this)"
   [getProfitBgColor]="getProfitBgColor.bind(this)">
 </app-dashboard-presentation>

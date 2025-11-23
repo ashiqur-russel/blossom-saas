@@ -164,16 +164,7 @@
 
     <div *ngIf="!loading" class="main-grid">
       <div class="left-column">
-        <app-card title="Add Weekly Sales Data" subtitle="Enter your weekly flower business data">
-          <div class="sales-form-link">
-            <a routerLink="/weeks/new" class="add-entry-btn">
-              <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
-              </svg>
-              + Add Sales Entry
-            </a>
-          </div>
-        </app-card>
+        <app-sales-form (weekAdded)="weekAdded.emit()"></app-sales-form>
       </div>
 
       <div class="right-column">

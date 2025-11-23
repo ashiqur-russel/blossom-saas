@@ -92,6 +92,10 @@ export class DashboardContainerComponent implements OnInit {
     }
   }
 
+  onWeekAdded(): void {
+    this.loadData();
+  }
+
   getProfitColor(profit: number): string {
     if (profit > 0) return 'text-green-600';
     if (profit < 0) return 'text-red-600';
