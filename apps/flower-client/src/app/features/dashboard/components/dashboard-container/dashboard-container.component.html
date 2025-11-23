@@ -5,7 +5,14 @@
   [error]="error"
   [profitChartData]="profitChartData"
   [salesChartData]="salesChartData"
+  [revenueProfitTrendsData]="revenueProfitTrendsData"
+  [profitSavingsBarData]="profitSavingsBarData"
+  [salesByDayPieData]="salesByDayPieData"
+  [dailySalesTrendsData]="dailySalesTrendsData"
+  [currentWeek]="currentWeek"
+  [activeTab]="activeTab"
   (deleteWeek)="deleteWeek($event)"
+  (setActiveTab)="setActiveTab($event)"
   [getProfitColor]="getProfitColor.bind(this)"
   [getProfitBgColor]="getProfitBgColor.bind(this)">
 </app-dashboard-presentation>

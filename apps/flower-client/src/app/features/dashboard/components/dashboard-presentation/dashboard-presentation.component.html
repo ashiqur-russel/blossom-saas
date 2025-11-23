@@ -1,129 +1,297 @@
+<div class="dashboard-wrapper">
 <div class="dashboard-container">
   <div class="header">
-    <div>
-      <h1 class="title">Flower Business Dashboard</h1>
-      <p class="subtitle">Track your weekly flower sales and profits</p>
+    <div class="header-left">
+      <div class="header-icon">
+        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path>
+        </svg>
+      </div>
+      <div>
+        <h1 class="title">Blossom Business Dashboard</h1>
+        <p class="date">{{ getFormattedDate() }}</p>
+      </div>
     </div>
-    <a routerLink="/weeks/new" class="btn-primary">
-      <svg class="icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
+    <div class="header-actions">
+      <button class="icon-btn" title="Notifications">
+        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"></path>
+        </svg>
+      </button>
+      <button class="icon-btn" title="Settings">
+        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path>
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+        </svg>
+      </button>
+    </div>
+  </div>
+
+  <main class="main-content">
+    <div *ngIf="loading" class="loading-container">
+      <div class="spinner"></div>
+      <p>Loading data...</p>
+    </div>
+
+    <div *ngIf="error && !loading" class="error-banner">
+      <svg class="error-icon" fill="currentColor" viewBox="0 0 20 20">
+        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"></path>
       </svg>
-      Add New Week
-    </a>
-  </div>
-
-  <div *ngIf="loading" class="loading-container">
-    <div class="spinner"></div>
-    <p>Loading data...</p>
-  </div>
-
-  <div *ngIf="error && !loading" class="error-banner">
-    <svg class="error-icon" fill="currentColor" viewBox="0 0 20 20">
-      <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"></path>
-    </svg>
-    {{ error }}
-  </div>
-
-  <div *ngIf="summary && !loading" class="stats-grid">
-    <app-card variant="default">
-      <div class="stat-card">
-        <div class="stat-icon bg-blue-100">
-          <svg class="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path>
-          </svg>
-        </div>
-        <div class="stat-content">
-          <p class="stat-label">Total Profit</p>
-          <p class="stat-value text-green-600">€{{ summary.totalProfit | number:'1.2-2' }}</p>
-          <p class="stat-change">Avg: €{{ summary.averageProfit | number:'1.2-2' }}/week</p>
-        </div>
-      </div>
-    </app-card>
-
-    <app-card variant="default">
-      <div class="stat-card">
-        <div class="stat-icon bg-purple-100">
-          <svg class="w-6 h-6 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-          </svg>
-        </div>
-        <div class="stat-content">
-          <p class="stat-label">Total Sales</p>
-          <p class="stat-value">€{{ summary.totalSales | number:'1.2-2' }}</p>
-          <p class="stat-change">{{ summary.totalWeeks }} weeks tracked</p>
-        </div>
-      </div>
-    </app-card>
-
-    <app-card variant="default">
-      <div class="stat-card">
-        <div class="stat-icon bg-orange-100">
-          <svg class="w-6 h-6 text-orange-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path>
-          </svg>
-        </div>
-        <div class="stat-content">
-          <p class="stat-label">Total Flowers</p>
-          <p class="stat-value">{{ summary.totalFlowers | number }}</p>
-          <p class="stat-change">Avg: {{ summary.averageFlowers | number:'1.0-0' }}/week</p>
-        </div>
-      </div>
-    </app-card>
-
-    <app-card variant="default">
-      <div class="stat-card">
-        <div class="stat-icon bg-green-100">
-          <svg class="w-6 h-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-          </svg>
-        </div>
-        <div class="stat-content">
-          <p class="stat-label">Total Savings</p>
-          <p class="stat-value text-green-600">€{{ summary.totalSavings | number:'1.2-2' }}</p>
-          <p class="stat-change" *ngIf="summary.bestWeek">Best: W{{ summary.bestWeek.weekNumber }}/{{ summary.bestWeek.year }}</p>
-        </div>
-      </div>
-    </app-card>
-  </div>
-
-  <div *ngIf="weeks.length > 0 && !loading" class="charts-grid">
-    <app-card title="Profit Trend">
-      <app-chart
-        type="line"
-        [data]="profitChartData"
-        [options]="chartService.getLineChartOptions()">
-      </app-chart>
-    </app-card>
-
-    <app-card *ngIf="salesChartData.datasets.length > 0" title="Sales by Day (Last 4 Weeks)">
-      <app-chart
-        type="bar"
-        [data]="salesChartData"
-        [options]="chartService.getBarChartOptions()">
-      </app-chart>
-    </app-card>
-  </div>
-
-  <div *ngIf="!loading" class="weeks-section">
-    <h2 class="section-title">Weekly Records</h2>
-    
-    <div *ngIf="weeks.length === 0" class="empty-state">
-      <svg class="empty-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
-      </svg>
-      <p>No weeks recorded yet</p>
-      <a routerLink="/weeks/new" class="btn-primary">Add Your First Week</a>
+      {{ error }}
     </div>
 
-    <div *ngIf="weeks.length > 0" class="weeks-grid">
-      <app-week-card
-        *ngFor="let week of weeks"
-        [week]="week"
-        [getProfitColor]="getProfitColor"
-        [getProfitBgColor]="getProfitBgColor"
-        (delete)="onDeleteWeek($event)">
-      </app-week-card>
+    <div *ngIf="summary && !loading" class="kpi-grid">
+      <app-card variant="default">
+        <div class="kpi-card">
+          <div class="kpi-content">
+            <p class="kpi-label">Total Revenue</p>
+            <p class="kpi-value">€{{ summary.totalRevenue | number:'1.2-2' }}</p>
+            <div class="kpi-change positive">
+              <svg fill="currentColor" viewBox="0 0 20 20">
+                <path fill-rule="evenodd" d="M5.293 7.707a1 1 0 010-1.414l4-4a1 1 0 011.414 0l4 4a1 1 0 01-1.414 1.414L11 5.414V17a1 1 0 11-2 0V5.414L6.707 7.707a1 1 0 01-1.414 0z" clip-rule="evenodd"></path>
+              </svg>
+              <span>+12.5%</span>
+            </div>
+          </div>
+          <div class="kpi-icon bg-blue-500">
+            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+            </svg>
+          </div>
+        </div>
+      </app-card>
+
+      <app-card variant="default">
+        <div class="kpi-card">
+          <div class="kpi-content">
+            <p class="kpi-label">Total Profit</p>
+            <p class="kpi-value">€{{ summary.totalProfit | number:'1.2-2' }}</p>
+            <div class="kpi-change positive">
+              <svg fill="currentColor" viewBox="0 0 20 20">
+                <path fill-rule="evenodd" d="M5.293 7.707a1 1 0 010-1.414l4-4a1 1 0 011.414 0l4 4a1 1 0 01-1.414 1.414L11 5.414V17a1 1 0 11-2 0V5.414L6.707 7.707a1 1 0 01-1.414 0z" clip-rule="evenodd"></path>
+              </svg>
+              <span>+8.3%</span>
+            </div>
+          </div>
+          <div class="kpi-icon bg-green-500">
+            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"></path>
+            </svg>
+          </div>
+        </div>
+      </app-card>
+
+      <app-card variant="default">
+        <div class="kpi-card">
+          <div class="kpi-content">
+            <p class="kpi-label">Total Savings</p>
+            <p class="kpi-value">€{{ summary.totalSavings | number:'1.2-2' }}</p>
+            <div class="kpi-change positive">
+              <svg fill="currentColor" viewBox="0 0 20 20">
+                <path fill-rule="evenodd" d="M5.293 7.707a1 1 0 010-1.414l4-4a1 1 0 011.414 0l4 4a1 1 0 01-1.414 1.414L11 5.414V17a1 1 0 11-2 0V5.414L6.707 7.707a1 1 0 01-1.414 0z" clip-rule="evenodd"></path>
+              </svg>
+              <span>+15.2%</span>
+            </div>
+          </div>
+          <div class="kpi-icon bg-purple-500">
+            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path>
+            </svg>
+          </div>
+        </div>
+      </app-card>
+
+      <app-card variant="default">
+        <div class="kpi-card">
+          <div class="kpi-content">
+            <p class="kpi-label">Weekly Avg</p>
+            <p class="kpi-value">€{{ summary.averageRevenue | number:'1.2-2' }}</p>
+            <div class="kpi-change positive">
+              <svg fill="currentColor" viewBox="0 0 20 20">
+                <path fill-rule="evenodd" d="M5.293 7.707a1 1 0 010-1.414l4-4a1 1 0 011.414 0l4 4a1 1 0 01-1.414 1.414L11 5.414V17a1 1 0 11-2 0V5.414L6.707 7.707a1 1 0 01-1.414 0z" clip-rule="evenodd"></path>
+              </svg>
+              <span>+5.7%</span>
+            </div>
+          </div>
+          <div class="kpi-icon bg-orange-500">
+            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"></path>
+            </svg>
+          </div>
+        </div>
+      </app-card>
+
+      <app-card variant="default">
+        <div class="kpi-card">
+          <div class="kpi-content">
+            <p class="kpi-label">Total Flowers</p>
+            <p class="kpi-value">{{ summary.totalFlowers | number }}</p>
+            <div class="kpi-change positive">
+              <svg fill="currentColor" viewBox="0 0 20 20">
+                <path fill-rule="evenodd" d="M5.293 7.707a1 1 0 010-1.414l4-4a1 1 0 011.414 0l4 4a1 1 0 01-1.414 1.414L11 5.414V17a1 1 0 11-2 0V5.414L6.707 7.707a1 1 0 01-1.414 0z" clip-rule="evenodd"></path>
+              </svg>
+              <span>+10.1%</span>
+            </div>
+          </div>
+          <div class="kpi-icon bg-pink-500">
+            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path>
+            </svg>
+          </div>
+        </div>
+      </app-card>
+
+      <app-card variant="default">
+        <div class="kpi-card">
+          <div class="kpi-content">
+            <p class="kpi-label">Total Investment</p>
+            <p class="kpi-value">€{{ summary.totalBuyingPrice | number:'1.2-2' }}</p>
+            <div class="kpi-change positive">
+              <svg fill="currentColor" viewBox="0 0 20 20">
+                <path fill-rule="evenodd" d="M5.293 7.707a1 1 0 010-1.414l4-4a1 1 0 011.414 0l4 4a1 1 0 01-1.414 1.414L11 5.414V17a1 1 0 11-2 0V5.414L6.707 7.707a1 1 0 01-1.414 0z" clip-rule="evenodd"></path>
+              </svg>
+              <span>+6.4%</span>
+            </div>
+          </div>
+          <div class="kpi-icon bg-indigo-500">
+            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z"></path>
+            </svg>
+          </div>
+        </div>
+      </app-card>
     </div>
-  </div>
+
+    <div *ngIf="!loading" class="main-grid">
+      <div class="left-column">
+        <app-card title="Add Weekly Sales Data" subtitle="Enter your weekly flower business data">
+          <div class="sales-form-link">
+            <a routerLink="/weeks/new" class="add-entry-btn">
+              <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
+              </svg>
+              + Add Sales Entry
+            </a>
+          </div>
+        </app-card>
+      </div>
+
+      <div class="right-column">
+        <app-card title="Revenue & Profit Trends" subtitle="Weekly performance overview">
+          <app-chart
+            type="line"
+            [data]="revenueProfitTrendsData"
+            [options]="chartService.getLineChartOptions()">
+          </app-chart>
+        </app-card>
+
+        <div class="charts-row">
+          <app-card title="$ Profit & Savings" subtitle="Weekly profit and savings breakdown">
+            <app-chart
+              type="bar"
+              [data]="profitSavingsBarData"
+              [options]="chartService.getBarChartOptions()">
+            </app-chart>
+          </app-card>
+
+          <app-card title="Sales by Day" subtitle="Current week distribution">
+            <app-chart
+              type="pie"
+              [data]="salesByDayPieData"
+              [options]="chartService.getPieChartOptions()">
+            </app-chart>
+          </app-card>
+        </div>
+      </div>
+    </div>
+
+    <div *ngIf="!loading" class="tabs-section">
+      <div class="tabs">
+        <button 
+          [class.active]="activeTab === 'weekly'"
+          (click)="onTabClick('weekly')"
+          class="tab-btn">
+          Weekly Report
+        </button>
+        <button 
+          [class.active]="activeTab === 'trends'"
+          (click)="onTabClick('trends')"
+          class="tab-btn">
+          Trends Analysis
+        </button>
+      </div>
+
+      <div *ngIf="activeTab === 'weekly'" class="tab-content">
+        <app-card title="Weekly Sales Report" subtitle="Complete overview of all weekly sales data">
+          <div class="weeks-table">
+            <table>
+              <thead>
+                <tr>
+                  <th>Date</th>
+                  <th>Week</th>
+                  <th class="text-right">Flowers</th>
+                  <th class="text-right">Buying</th>
+                  <th class="text-right">Thu Sales</th>
+                  <th class="text-right">Fri Sales</th>
+                  <th class="text-right">Sat Sales</th>
+                  <th class="text-right">Total Sales</th>
+                  <th class="text-right">Profit</th>
+                  <th class="text-right">Savings</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let week of weeks">
+                  <td>{{ week.startDate | date:'shortDate' }}</td>
+                  <td>W{{ week.weekNumber }}/{{ week.year }}</td>
+                  <td class="text-right">{{ week.totalFlower }}</td>
+                  <td class="text-right">€{{ week.totalBuyingPrice | number:'1.2-2' }}</td>
+                  <td class="text-right">€{{ (week.sale?.thursday || 0) | number:'1.2-2' }}</td>
+                  <td class="text-right">€{{ (week.sale?.friday || 0) | number:'1.2-2' }}</td>
+                  <td class="text-right">€{{ (week.sale?.saturday || 0) | number:'1.2-2' }}</td>
+                  <td class="text-right text-blue-600">€{{ week.totalSale | number:'1.2-2' }}</td>
+                  <td class="text-right text-green-600">€{{ week.profit | number:'1.2-2' }}</td>
+                  <td class="text-right text-purple-600">€{{ week.savings | number:'1.2-2' }}</td>
+                </tr>
+                <tr *ngIf="weeks.length === 0">
+                  <td colspan="10" class="text-center text-gray-500 py-8">No data available</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </app-card>
+      </div>
+
+      <div *ngIf="activeTab === 'trends'" class="tab-content">
+        <app-card title="Daily Sales Trends Analysis" subtitle="Compare sales performance across different days">
+          <app-chart
+            type="line"
+            [data]="dailySalesTrendsData"
+            [options]="chartService.getLineChartOptions()">
+          </app-chart>
+        </app-card>
+
+        <div class="average-cards">
+          <app-card variant="highlight">
+            <div class="average-card pink">
+              <p class="average-label">Thursday Average</p>
+              <p class="average-value">€{{ getAverageSalesByDay().thursday | number:'1.2-2' }}</p>
+            </div>
+          </app-card>
+          <app-card variant="highlight">
+            <div class="average-card purple">
+              <p class="average-label">Friday Average</p>
+              <p class="average-value">€{{ getAverageSalesByDay().friday | number:'1.2-2' }}</p>
+            </div>
+          </app-card>
+          <app-card variant="highlight">
+            <div class="average-card blue">
+              <p class="average-label">Saturday Average</p>
+              <p class="average-value">€{{ getAverageSalesByDay().saturday | number:'1.2-2' }}</p>
+            </div>
+          </app-card>
+        </div>
+      </div>
+    </div>
+  </main>
 </div>
-
+</div>

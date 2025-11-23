@@ -13,5 +13,11 @@
     [options]="chartOptions"
     type="bar">
   </canvas>
+  <canvas
+    *ngIf="type === 'pie'"
+    baseChart
+    [data]="chartData"
+    [options]="chartOptions"
+    type="pie">
+  </canvas>
 </div>
-

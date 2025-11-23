@@ -39,7 +39,184 @@ export class ChartService {
     };
   }
 
-  createSalesChartData(weeks: IWeek[]): ChartConfiguration<'bar'>['data'] {
+  createRevenueProfitTrendsData(weeks: IWeek[]): ChartConfiguration<'line'>['data'] {
+    if (!weeks || weeks.length === 0) {
+      return {
+        labels: [],
+        datasets: []
+      };
+    }
+
+    const sortedWeeks = [...weeks].sort((a, b) => {
+      if (a.year !== b.year) return a.year - b.year;
+      return a.weekNumber - b.weekNumber;
+    });
+
+    const last3Weeks = sortedWeeks.slice(-3);
+
+    return {
+      labels: last3Weeks.map(w => {
+        const date = new Date(w.startDate);
+        return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+      }),
+      datasets: [
+        {
+          label: 'Buying Cost',
+          data: last3Weeks.map(w => Number(w.totalBuyingPrice) || 0),
+          borderColor: 'rgb(245, 158, 11)',
+          backgroundColor: 'rgba(245, 158, 11, 0.1)',
+          tension: 0.4,
+          fill: false,
+          borderWidth: 3,
+        },
+        {
+          label: 'Profit',
+          data: last3Weeks.map(w => Number(w.profit) || 0),
+          borderColor: 'rgb(16, 185, 129)',
+          backgroundColor: 'rgba(16, 185, 129, 0.1)',
+          tension: 0.4,
+          fill: false,
+          borderWidth: 3,
+        },
+        {
+          label: 'Total Revenue',
+          data: last3Weeks.map(w => Number(w.totalSale) || 0),
+          borderColor: 'rgb(59, 130, 246)',
+          backgroundColor: 'rgba(59, 130, 246, 0.1)',
+          tension: 0.4,
+          fill: false,
+          borderWidth: 3,
+        }
+      ]
+    };
+  }
+
+  createProfitSavingsBarData(weeks: IWeek[]): ChartConfiguration<'bar'>['data'] {
+    if (!weeks || weeks.length === 0) {
+      return {
+        labels: [],
+        datasets: []
+      };
+    }
+
+    const sortedWeeks = [...weeks].sort((a, b) => {
+      if (a.year !== b.year) return a.year - b.year;
+      return a.weekNumber - b.weekNumber;
+    });
+
+    const last3Weeks = sortedWeeks.slice(-3);
+
+    return {
+      labels: last3Weeks.map(w => {
+        const date = new Date(w.startDate);
+        return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+      }),
+      datasets: [
+        {
+          label: 'Profit',
+          data: last3Weeks.map(w => Number(w.profit) || 0),
+          backgroundColor: 'rgb(16, 185, 129)',
+          borderRadius: 8,
+        },
+        {
+          label: 'Savings',
+          data: last3Weeks.map(w => Number(w.savings) || 0),
+          backgroundColor: 'rgb(139, 92, 246)',
+          borderRadius: 8,
+        }
+      ]
+    };
+  }
+
+  createSalesByDayPieData(week: IWeek | null): ChartConfiguration<'pie'>['data'] {
+    if (!week || !week.sale) {
+      return {
+        labels: ['Thursday', 'Friday', 'Saturday'],
+        datasets: [{
+          data: [0, 0, 0],
+          backgroundColor: [
+            'rgba(236, 72, 153, 0.8)',
+            'rgba(168, 85, 247, 0.8)',
+            'rgba(59, 130, 246, 0.8)',
+          ],
+        }]
+      };
+    }
+
+    const sale = week.sale;
+    const total = (sale.thursday || 0) + (sale.friday || 0) + (sale.saturday || 0);
+
+    return {
+      labels: [
+        `Thursday ${total > 0 ? Math.round((sale.thursday / total) * 100) : 0}%`,
+        `Friday ${total > 0 ? Math.round((sale.friday / total) * 100) : 0}%`,
+        `Saturday ${total > 0 ? Math.round((sale.saturday / total) * 100) : 0}%`,
+      ],
+      datasets: [{
+        data: [
+          sale.thursday || 0,
+          sale.friday || 0,
+          sale.saturday || 0,
+        ],
+        backgroundColor: [
+          'rgba(236, 72, 153, 0.8)',
+          'rgba(168, 85, 247, 0.8)',
+          'rgba(59, 130, 246, 0.8)',
+        ],
+      }]
+    };
+  }
+
+  createDailySalesTrendsData(weeks: IWeek[]): ChartConfiguration<'line'>['data'] {
+    if (!weeks || weeks.length === 0) {
+      return {
+        labels: [],
+        datasets: []
+      };
+    }
+
+    const sortedWeeks = [...weeks].sort((a, b) => {
+      if (a.year !== b.year) return a.year - b.year;
+      return a.weekNumber - b.weekNumber;
+    });
+
+    const last3Weeks = sortedWeeks.slice(-3);
+
+    return {
+      labels: last3Weeks.map(w => {
+        const date = new Date(w.startDate);
+        return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+      }),
+      datasets: [
+        {
+          label: 'Thursday Sales',
+          data: last3Weeks.map(w => (w.sale?.thursday || 0)),
+          borderColor: 'rgba(236, 72, 153, 1)',
+          backgroundColor: 'rgba(236, 72, 153, 0.8)',
+          tension: 0.4,
+          fill: true,
+        },
+        {
+          label: 'Friday Sales',
+          data: last3Weeks.map(w => (w.sale?.friday || 0)),
+          borderColor: 'rgba(139, 92, 246, 1)',
+          backgroundColor: 'rgba(139, 92, 246, 0.8)',
+          tension: 0.4,
+          fill: true,
+        },
+        {
+          label: 'Saturday Sales',
+          data: last3Weeks.map(w => (w.sale?.saturday || 0)),
+          borderColor: 'rgba(59, 130, 246, 1)',
+          backgroundColor: 'rgba(59, 130, 246, 0.8)',
+          tension: 0.4,
+          fill: true,
+        }
+      ]
+    };
+  }
+
+  getSalesChartData(weeks: IWeek[]): ChartConfiguration<'bar'>['data'] {
     const weeksWithSales = weeks.filter(w => w.sale);
     const last4Weeks = weeksWithSales.slice(-4);
     
@@ -74,6 +251,7 @@ export class ChartService {
       plugins: {
         legend: {
           display: true,
+          position: 'bottom',
         },
       },
       scales: {
@@ -92,6 +270,7 @@ export class ChartService {
       plugins: {
         legend: {
           display: true,
+          position: 'bottom',
         },
       },
       scales: {
@@ -102,5 +281,17 @@ export class ChartService {
       },
     };
   }
-}
 
+  getPieChartOptions(): ChartOptions<'pie'> {
+    return {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {
+        legend: {
+          display: true,
+          position: 'bottom',
+        },
+      },
+    };
+  }
+}

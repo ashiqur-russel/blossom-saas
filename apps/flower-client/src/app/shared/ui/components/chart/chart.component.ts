@@ -13,12 +13,12 @@ Chart.register(...registerables);
   styleUrl: './chart.component.scss',
 })
 export class ChartComponent implements OnInit, OnChanges {
-  @Input() type: 'line' | 'bar' = 'line';
-  @Input() data: ChartConfiguration<'line'>['data'] | ChartConfiguration<'bar'>['data'] = { labels: [], datasets: [] };
-  @Input() options: ChartOptions<'line'> | ChartOptions<'bar'> = {};
+  @Input() type: 'line' | 'bar' | 'pie' = 'line';
+  @Input() data: any = { labels: [], datasets: [] };
+  @Input() options: any = {};
 
-  chartData: ChartConfiguration<'line'>['data'] | ChartConfiguration<'bar'>['data'] = { labels: [], datasets: [] };
-  chartOptions: ChartOptions<'line'> | ChartOptions<'bar'> = {};
+  chartData: any = { labels: [], datasets: [] };
+  chartOptions: any = {};
 
   ngOnInit(): void {
     this.updateChart();
@@ -39,4 +39,3 @@ export class ChartComponent implements OnInit, OnChanges {
     };
   }
 }
-

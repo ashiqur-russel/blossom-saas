@@ -12,7 +12,7 @@ export interface IWeek {
   endDate: Date;
   totalFlower: number;
   totalBuyingPrice: number;
-  sale: ISaleByDay;
+  sale: ISaleByDay | null;
   totalSale: number;
   profit: number;
   revenue: number;

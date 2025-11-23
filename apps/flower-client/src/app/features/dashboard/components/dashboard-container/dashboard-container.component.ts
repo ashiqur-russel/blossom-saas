@@ -23,6 +23,12 @@ export class DashboardContainerComponent implements OnInit {
 
   profitChartData: ChartConfiguration<'line'>['data'] = { labels: [], datasets: [] };
   salesChartData: ChartConfiguration<'bar'>['data'] = { labels: [], datasets: [] };
+  revenueProfitTrendsData: ChartConfiguration<'line'>['data'] = { labels: [], datasets: [] };
+  profitSavingsBarData: ChartConfiguration<'bar'>['data'] = { labels: [], datasets: [] };
+  salesByDayPieData: ChartConfiguration<'pie'>['data'] = { labels: [], datasets: [] };
+  dailySalesTrendsData: ChartConfiguration<'line'>['data'] = { labels: [], datasets: [] };
+  currentWeek: IWeek | null = null;
+  activeTab: 'weekly' | 'trends' = 'weekly';
 
   constructor(
     private dashboardService: DashboardService,
@@ -55,7 +61,21 @@ export class DashboardContainerComponent implements OnInit {
 
   updateCharts(): void {
     this.profitChartData = this.chartService.createProfitChartData(this.weeks);
-    this.salesChartData = this.chartService.createSalesChartData(this.weeks);
+    this.salesChartData = this.chartService.getSalesChartData(this.weeks);
+    this.revenueProfitTrendsData = this.chartService.createRevenueProfitTrendsData(this.weeks);
+    this.profitSavingsBarData = this.chartService.createProfitSavingsBarData(this.weeks);
+    this.dailySalesTrendsData = this.chartService.createDailySalesTrendsData(this.weeks);
+    
+    const sortedWeeks = [...this.weeks].sort((a, b) => {
+      if (a.year !== b.year) return b.year - a.year;
+      return b.weekNumber - a.weekNumber;
+    });
+    this.currentWeek = sortedWeeks.length > 0 ? sortedWeeks[0] : null;
+    this.salesByDayPieData = this.chartService.createSalesByDayPieData(this.currentWeek);
+  }
+
+  setActiveTab(tab: 'weekly' | 'trends'): void {
+    this.activeTab = tab;
   }
 
   deleteWeek(id: string): void {
