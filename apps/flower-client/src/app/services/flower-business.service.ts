@@ -96,9 +96,17 @@ export class FlowerBusinessService {
     const profit = week.profit || 0;
     const revenue = week.revenue || totalSale;
     const savings = week.savings || 0;
+    
+    // Handle ID - can be id, _id, or ObjectId
+    let weekId = '';
+    if (week.id) {
+      weekId = typeof week.id === 'string' ? week.id : week.id.toString();
+    } else if (week._id) {
+      weekId = typeof week._id === 'string' ? week._id : week._id.toString();
+    }
 
     return {
-      id: week.id || week._id?.toString() || '',
+      id: weekId,
       weekNumber: week.weekNumber,
       year: week.year,
       startDate: new Date(week.startDate),

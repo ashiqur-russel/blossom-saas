@@ -173,8 +173,11 @@ export class FlowerBusinessService {
     const revenue = plain.revenue || totalSale;
     const savings = plain.savings || 0;
     
+    // Ensure ID is always present - use id from toObject() or _id
+    const id = plain.id || (plain._id ? plain._id.toString() : week._id.toString());
+    
     return {
-      id: plain.id,
+      id: id,
       weekNumber: plain.weekNumber,
       year: plain.year,
       startDate: plain.startDate,

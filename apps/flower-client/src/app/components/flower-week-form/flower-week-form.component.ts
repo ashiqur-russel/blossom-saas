@@ -65,9 +65,26 @@ export class FlowerWeekFormComponent implements OnInit {
   }
 
   loadWeek(id: string): void {
+    if (!id) {
+      this.error = 'No week ID provided';
+      this.loading = false;
+      return;
+    }
+    
     this.loading = true;
+    this.error = null;
+    
+    console.log('Loading week with ID:', id);
+    
     this.flowerService.getWeekById(id).subscribe({
       next: (week) => {
+        console.log('Week loaded:', week);
+        if (!week) {
+          this.error = 'Week not found';
+          this.loading = false;
+          return;
+        }
+        
         const sale = week.sale || { thursday: 0, friday: 0, saturday: 0 };
         this.form.patchValue({
           weekNumber: week.weekNumber,
@@ -87,9 +104,13 @@ export class FlowerWeekFormComponent implements OnInit {
         this.loading = false;
       },
       error: (err) => {
-        this.error = 'Failed to load week: ' + (err.error?.message || err.message || 'Unknown error');
+        const errorMsg = err.error?.message || err.message || 'Unknown error';
+        this.error = 'Failed to load week: ' + errorMsg;
         this.loading = false;
         console.error('Load week error:', err);
+        if (err.error) {
+          console.error('Error details:', JSON.stringify(err.error, null, 2));
+        }
       },
     });
   }
