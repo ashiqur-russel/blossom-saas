@@ -14,18 +14,25 @@
     "start:debug": "nest start --debug --watch",
     "start:prod": "node dist/main",
     "lint": "eslint \"{src,apps,libs,test}/**/*.ts\" --fix",
-    "seed": "npx ts-node -r tsconfig-paths/register src/scripts/seed-data.ts"
+    "seed": "npx ts-node -r tsconfig-paths/register src/scripts/seed-data.ts",
+    "seed:admin": "npx ts-node -r tsconfig-paths/register src/scripts/seed-admin.ts"
   },
   "dependencies": {
     "@nestjs/common": "^10.3.0",
     "@nestjs/config": "^3.1.1",
     "@nestjs/core": "^10.0.0",
+    "@nestjs/jwt": "^11.0.1",
     "@nestjs/mongoose": "^10.1.0",
+    "@nestjs/passport": "^11.0.5",
     "@nestjs/platform-express": "^10.0.0",
     "@nestjs/swagger": "^7.3.1",
+    "bcrypt": "^6.0.0",
     "class-transformer": "^0.5.1",
     "class-validator": "^0.14.1",
+    "cookie-parser": "^1.4.7",
     "mongoose": "^8.8.3",
+    "passport": "^0.7.0",
+    "passport-jwt": "^4.0.1",
     "reflect-metadata": "^0.1.13",
     "rxjs": "^7.8.1"
   },
@@ -33,10 +40,14 @@
     "@nestjs/cli": "^10.0.0",
     "@nestjs/schematics": "^10.0.0",
     "@nestjs/testing": "^10.3.10",
+    "@types/bcrypt": "^6.0.0",
+    "@types/cookie-parser": "^1.4.10",
     "@types/express": "^4.17.17",
     "@types/node": "^20.3.1",
+    "@types/passport-jwt": "^4.0.1",
     "@typescript-eslint/eslint-plugin": "^6.0.0",
     "@typescript-eslint/parser": "^6.0.0",
+    "dotenv": "^16.0.0",
     "eslint": "^8.42.0",
     "prettier": "^3.0.0",
     "rimraf": "^5.0.5",
@@ -44,7 +55,6 @@
     "ts-loader": "^9.4.3",
     "ts-node": "^10.9.1",
     "tsconfig-paths": "^4.2.0",
-    "dotenv": "^16.0.0",
     "typescript": "^5.1.3"
   }
 }
