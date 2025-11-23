@@ -33,7 +33,7 @@
     </div>
 
     <div class="form-field">
-      <label for="buyingAmount">Total Buying Amount ($)</label>
+      <label for="buyingAmount">Total Buying Amount (€)</label>
       <input
         id="buyingAmount"
         type="number"
@@ -48,7 +48,7 @@
       <p class="section-label">Weekend Sales</p>
       
       <div class="form-field">
-        <label for="salesThursday">Thursday Sales ($)</label>
+        <label for="salesThursday">Thursday Sales (€)</label>
         <input
           id="salesThursday"
           type="number"
@@ -60,7 +60,7 @@
       </div>
 
       <div class="form-field">
-        <label for="salesFriday">Friday Sales ($)</label>
+        <label for="salesFriday">Friday Sales (€)</label>
         <input
           id="salesFriday"
           type="number"
@@ -72,7 +72,7 @@
       </div>
 
       <div class="form-field">
-        <label for="salesSaturday">Saturday Sales ($)</label>
+        <label for="salesSaturday">Saturday Sales (€)</label>
         <input
           id="salesSaturday"
           type="number"
@@ -92,7 +92,7 @@
     </div>
 
     <div class="form-field">
-      <label for="savings">Savings This Week ($)</label>
+      <label for="savings">Savings This Week (€)</label>
       <input
         id="savings"
         type="number"
@@ -124,7 +124,7 @@
           <path *ngIf="isEditMode" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
         </svg>
         <span *ngIf="loading" class="spinner-small"></span>
-        {{ loading ? (isEditMode ? 'Updating...' : 'Adding...') : (isEditMode ? 'Update Sales Entry' : '+ Add Sales Entry') }}
+        {{ loading ? (isEditMode ? 'Updating...' : 'Adding...') : (isEditMode ? 'Update Sales Entry' : 'Add Sales Entry') }}
       </button>
     </div>
   </form>
