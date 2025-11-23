@@ -100,6 +100,136 @@
     </div>
   </section>
 
+  <!-- How It Works Section -->
+  <section class="how-it-works">
+    <div class="how-it-works-container">
+      <div class="section-header">
+        <h2 class="section-title">How It Works</h2>
+        <p class="section-description">
+          Get started in minutes and start tracking your business performance today.
+        </p>
+      </div>
+      <div class="steps-grid">
+        <div *ngFor="let step of howItWorksSteps; let i = index" class="step-card">
+          <div class="step-number">{{ i + 1 }}</div>
+          <h3 class="step-title">{{ step.title }}</h3>
+          <p class="step-description">{{ step.description }}</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Benefits Section -->
+  <section class="benefits">
+    <div class="benefits-container">
+      <div class="benefits-content">
+        <div class="benefits-text">
+          <h2 class="section-title">Why Choose Blossom?</h2>
+          <p class="section-description">
+            Join thousands of businesses that trust Blossom to manage their weekly operations and drive growth.
+          </p>
+          <div class="benefits-list">
+            <div *ngFor="let benefit of benefits" class="benefit-item">
+              <div class="benefit-icon">✓</div>
+              <div class="benefit-text">
+                <h4 class="benefit-title">{{ benefit.title }}</h4>
+                <p class="benefit-description">{{ benefit.description }}</p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="benefits-visual">
+          <div class="benefits-card">
+            <div class="benefits-stat">
+              <div class="stat-number">€50K+</div>
+              <div class="stat-label">Tracked Revenue</div>
+            </div>
+            <div class="benefits-stat">
+              <div class="stat-number">500+</div>
+              <div class="stat-label">Active Users</div>
+            </div>
+            <div class="benefits-stat">
+              <div class="stat-number">98%</div>
+              <div class="stat-label">Satisfaction Rate</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Testimonials Section -->
+  <section class="testimonials">
+    <div class="testimonials-container">
+      <div class="section-header">
+        <h2 class="section-title">What Our Users Say</h2>
+        <p class="section-description">
+          See how Blossom is helping businesses like yours succeed.
+        </p>
+      </div>
+      <div class="testimonials-grid">
+        <div *ngFor="let testimonial of testimonials" class="testimonial-card">
+          <div class="testimonial-rating">
+            <span *ngFor="let star of [1,2,3,4,5]" class="star">⭐</span>
+          </div>
+          <p class="testimonial-text">"{{ testimonial.text }}"</p>
+          <div class="testimonial-author">
+            <div class="author-avatar">{{ testimonial.avatar }}</div>
+            <div class="author-info">
+              <div class="author-name">{{ testimonial.name }}</div>
+              <div class="author-role">{{ testimonial.role }}</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Statistics Section -->
+  <section class="statistics">
+    <div class="statistics-container">
+      <div class="section-header">
+        <h2 class="section-title">Real Results, Real Impact</h2>
+        <p class="section-description">
+          See the measurable impact Blossom has on business performance.
+        </p>
+      </div>
+      <div class="statistics-grid">
+        <div *ngFor="let stat of statistics" class="statistic-card">
+          <div class="statistic-icon">{{ stat.icon }}</div>
+          <div class="statistic-value">{{ stat.value }}</div>
+          <div class="statistic-label">{{ stat.label }}</div>
+          <div class="statistic-description">{{ stat.description }}</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ Section -->
+  <section class="faq">
+    <div class="faq-container">
+      <div class="section-header">
+        <h2 class="section-title">Frequently Asked Questions</h2>
+        <p class="section-description">
+          Everything you need to know about Blossom.
+        </p>
+      </div>
+      <div class="faq-list">
+        <div *ngFor="let faq of faqs; let i = index" class="faq-item">
+          <button class="faq-question" (click)="toggleFaq(i)" [class.active]="openFaqIndex === i">
+            <span>{{ faq.question }}</span>
+            <svg class="faq-icon" [class.rotated]="openFaqIndex === i" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+            </svg>
+          </button>
+          <div class="faq-answer" [class.open]="openFaqIndex === i">
+            <p>{{ faq.answer }}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
   <!-- CTA Section -->
   <section class="cta">
     <div class="cta-container">
