@@ -1,4 +1,4 @@
-<app-card title="Add Weekly Sales Data" subtitle="Enter your weekly flower business data">
+<app-card [title]="isEditMode ? 'Edit Weekly Sales Data' : 'Add Weekly Sales Data'" [subtitle]="isEditMode ? 'Update your weekly flower business data' : 'Enter your weekly flower business data'">
   <form [formGroup]="form" (ngSubmit)="onSubmit()" class="sales-form">
     <div class="form-row">
       <div class="form-field">
@@ -107,16 +107,26 @@
       {{ error }}
     </div>
 
-    <button
-      type="submit"
-      [disabled]="form.invalid || loading"
-      class="add-entry-btn">
-      <svg *ngIf="!loading" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
-      </svg>
-      <span *ngIf="loading" class="spinner-small"></span>
-      {{ loading ? 'Adding...' : '+ Add Sales Entry' }}
-    </button>
+    <div class="form-actions">
+      <button
+        *ngIf="isEditMode"
+        type="button"
+        (click)="cancelEdit()"
+        class="cancel-btn">
+        Cancel
+      </button>
+      <button
+        type="submit"
+        [disabled]="form.invalid || loading"
+        class="add-entry-btn">
+        <svg *ngIf="!loading" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path *ngIf="!isEditMode" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
+          <path *ngIf="isEditMode" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+        </svg>
+        <span *ngIf="loading" class="spinner-small"></span>
+        {{ loading ? (isEditMode ? 'Updating...' : 'Adding...') : (isEditMode ? 'Update Sales Entry' : '+ Add Sales Entry') }}
+      </button>
+    </div>
   </form>
 </app-card>
 

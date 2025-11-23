@@ -36,6 +36,10 @@ export class DashboardPresentationComponent {
   @Output() deleteWeek = new EventEmitter<string>();
   @Output() setActiveTab = new EventEmitter<'weekly' | 'trends'>();
   @Output() weekAdded = new EventEmitter<void>();
+  @Output() weekUpdated = new EventEmitter<void>();
+  @Output() editCancelled = new EventEmitter<void>();
+
+  selectedWeekForEdit: IWeek | null = null;
 
   chartService = new ChartService();
 
@@ -77,5 +81,24 @@ export class DashboardPresentationComponent {
 
   onTabClick(tab: 'weekly' | 'trends'): void {
     this.setActiveTab.emit(tab);
+  }
+
+  onEditWeek(week: IWeek): void {
+    this.selectedWeekForEdit = week;
+  }
+
+  onWeekAdded(): void {
+    this.selectedWeekForEdit = null;
+    this.weekAdded.emit();
+  }
+
+  onWeekUpdated(): void {
+    this.selectedWeekForEdit = null;
+    this.weekUpdated.emit();
+  }
+
+  onEditCancelled(): void {
+    this.selectedWeekForEdit = null;
+    this.editCancelled.emit();
   }
 }

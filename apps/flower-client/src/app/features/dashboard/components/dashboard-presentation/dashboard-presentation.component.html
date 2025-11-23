@@ -164,7 +164,12 @@
 
     <div *ngIf="!loading" class="main-grid">
       <div class="left-column">
-        <app-sales-form (weekAdded)="weekAdded.emit()"></app-sales-form>
+        <app-sales-form 
+          [weekToEdit]="selectedWeekForEdit"
+          (weekAdded)="onWeekAdded()"
+          (weekUpdated)="onWeekUpdated()"
+          (editCancelled)="onEditCancelled()">
+        </app-sales-form>
       </div>
 
       <div class="right-column">
@@ -228,6 +233,7 @@
                   <th class="text-right">Total Sales</th>
                   <th class="text-right">Profit</th>
                   <th class="text-right">Savings</th>
+                  <th class="text-center">Actions</th>
                 </tr>
               </thead>
               <tbody>
@@ -242,9 +248,19 @@
                   <td class="text-right text-blue-600">€{{ week.totalSale | number:'1.2-2' }}</td>
                   <td class="text-right text-green-600">€{{ week.profit | number:'1.2-2' }}</td>
                   <td class="text-right text-purple-600">€{{ week.savings | number:'1.2-2' }}</td>
+                  <td class="text-center">
+                    <button
+                      (click)="onEditWeek(week)"
+                      class="edit-btn"
+                      title="Edit">
+                      <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
+                      </svg>
+                    </button>
+                  </td>
                 </tr>
                 <tr *ngIf="weeks.length === 0">
-                  <td colspan="10" class="text-center text-gray-500 py-8">No data available</td>
+                  <td colspan="11" class="text-center text-gray-500 py-8">No data available</td>
                 </tr>
               </tbody>
             </table>
