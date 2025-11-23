@@ -80,29 +80,10 @@
     font-size: 0.875rem;
   }
 
-  button {
+  app-button {
     width: 100%;
-    padding: 0.875rem;
-    background: var(--primary);
-    color: var(--primary-foreground);
-    border: none;
-    border-radius: 8px;
-    font-size: 1rem;
-    font-weight: 600;
-    cursor: pointer;
-    transition: all 0.2s;
+    display: block;
     margin-top: 1rem;
-
-    &:hover:not(:disabled) {
-      background: #c2185b;
-      transform: translateY(-1px);
-      box-shadow: 0 4px 12px rgba(233, 30, 99, 0.4);
-    }
-
-    &:disabled {
-      opacity: 0.6;
-      cursor: not-allowed;
-    }
   }
 }
 

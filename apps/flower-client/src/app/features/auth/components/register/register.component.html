@@ -78,10 +78,13 @@
         {{ error }}
       </div>
 
-      <button type="submit" class="btn-primary" [disabled]="!registerForm.valid || loading">
-        <span *ngIf="!loading">Create Account</span>
-        <span *ngIf="loading">Creating account...</span>
-      </button>
+      <app-button
+        type="submit"
+        variant="primary"
+        label="Create Account"
+        [disabled]="!registerForm.valid || loading"
+        [loading]="loading">
+      </app-button>
     </form>
 
     <div class="register-footer">
