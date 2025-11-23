@@ -1,0 +1,141 @@
+<div class="form-container">
+  <div class="form-header">
+    <div>
+      <h1>{{ isEditMode ? 'Edit' : 'Add New' }} Week</h1>
+      <p>Track your weekly flower business data</p>
+    </div>
+    <button (click)="cancel()" class="btn-secondary">
+      <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+      </svg>
+      Cancel
+    </button>
+  </div>
+
+  <div *ngIf="loading && !isEditMode" class="loading-state">
+    <div class="spinner"></div>
+    <p>Loading...</p>
+  </div>
+
+  <div *ngIf="error" class="error-banner">
+    <svg fill="currentColor" viewBox="0 0 20 20">
+      <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"></path>
+    </svg>
+    {{ error }}
+  </div>
+
+  <form [formGroup]="form" (ngSubmit)="onSubmit()" class="form">
+    <!-- Basic Info -->
+    <div class="form-section">
+      <h3 class="section-title">Week Information</h3>
+      <div class="form-grid">
+        <div class="form-group">
+          <label for="weekNumber">Week Number *</label>
+          <input id="weekNumber" type="number" formControlName="weekNumber" min="1" max="53" class="form-input" />
+          <small *ngIf="form.get('weekNumber')?.hasError('required')" class="error-text">Required</small>
+        </div>
+
+        <div class="form-group">
+          <label for="year">Year *</label>
+          <input id="year" type="number" formControlName="year" min="2000" class="form-input" />
+          <small *ngIf="form.get('year')?.hasError('required')" class="error-text">Required</small>
+        </div>
+
+        <div class="form-group">
+          <label for="startDate">Start Date *</label>
+          <input id="startDate" type="date" formControlName="startDate" class="form-input" />
+          <small *ngIf="form.get('startDate')?.hasError('required')" class="error-text">Required</small>
+        </div>
+
+        <div class="form-group">
+          <label for="endDate">End Date *</label>
+          <input id="endDate" type="date" formControlName="endDate" class="form-input" />
+          <small *ngIf="form.get('endDate')?.hasError('required')" class="error-text">Required</small>
+        </div>
+      </div>
+    </div>
+
+    <!-- Purchase Info -->
+    <div class="form-section">
+      <h3 class="section-title">Purchase Information</h3>
+      <div class="form-grid">
+        <div class="form-group">
+          <label for="totalFlower">Total Flowers *</label>
+          <input id="totalFlower" type="number" formControlName="totalFlower" min="0" step="1" class="form-input" />
+          <small *ngIf="form.get('totalFlower')?.hasError('required')" class="error-text">Required</small>
+        </div>
+
+        <div class="form-group">
+          <label for="totalBuyingPrice">Total Buying Price (€) *</label>
+          <input id="totalBuyingPrice" type="number" formControlName="totalBuyingPrice" min="0" step="0.01" class="form-input" />
+          <small *ngIf="form.get('totalBuyingPrice')?.hasError('required')" class="error-text">Required</small>
+        </div>
+      </div>
+    </div>
+
+    <!-- Sales by Day -->
+    <div class="form-section">
+      <h3 class="section-title">Sales by Day</h3>
+      <div class="sales-grid">
+        <div class="form-group sales-day-card">
+          <label for="saleThursday">Thursday Sales (€) *</label>
+          <input id="saleThursday" type="number" formControlName="saleThursday" min="0" step="0.01" class="form-input" />
+          <small *ngIf="form.get('saleThursday')?.hasError('required')" class="error-text">Required</small>
+        </div>
+
+        <div class="form-group sales-day-card">
+          <label for="saleFriday">Friday Sales (€) *</label>
+          <input id="saleFriday" type="number" formControlName="saleFriday" min="0" step="0.01" class="form-input" />
+          <small *ngIf="form.get('saleFriday')?.hasError('required')" class="error-text">Required</small>
+        </div>
+
+        <div class="form-group sales-day-card">
+          <label for="saleSaturday">Saturday Sales (€) *</label>
+          <input id="saleSaturday" type="number" formControlName="saleSaturday" min="0" step="0.01" class="form-input" />
+          <small *ngIf="form.get('saleSaturday')?.hasError('required')" class="error-text">Required</small>
+        </div>
+      </div>
+    </div>
+
+    <!-- Financial Summary -->
+    <div class="form-section">
+      <h3 class="section-title">Financial Summary</h3>
+      <div class="form-grid">
+        <div class="form-group">
+          <label for="totalSale">Total Sale (€) *</label>
+          <input id="totalSale" type="number" formControlName="totalSale" min="0" step="0.01" class="form-input" readonly />
+          <small class="helper-text">Auto-calculated from daily sales</small>
+        </div>
+
+        <div class="form-group">
+          <label for="profit">Profit (€) *</label>
+          <input id="profit" type="number" formControlName="profit" step="0.01" class="form-input" [class.profit-positive]="form.get('profit')?.value > 0" [class.profit-negative]="form.get('profit')?.value < 0" />
+          <small class="helper-text">Auto-calculated: Total Sale - Buying Price</small>
+        </div>
+
+        <div class="form-group">
+          <label for="revenue">Revenue (€) *</label>
+          <input id="revenue" type="number" formControlName="revenue" min="0" step="0.01" class="form-input" readonly />
+          <small class="helper-text">Same as Total Sale</small>
+        </div>
+
+        <div class="form-group">
+          <label for="savings">Savings (€) *</label>
+          <input id="savings" type="number" formControlName="savings" min="0" step="0.01" class="form-input" />
+          <small *ngIf="form.get('savings')?.hasError('required')" class="error-text">Required</small>
+        </div>
+      </div>
+    </div>
+
+    <div class="form-actions">
+      <button type="submit" [disabled]="form.invalid || loading" class="btn-primary">
+        <svg *ngIf="!loading" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+        </svg>
+        <span *ngIf="loading" class="spinner-small"></span>
+        {{ loading ? 'Saving...' : (isEditMode ? 'Update Week' : 'Create Week') }}
+      </button>
+      <button type="button" (click)="cancel()" class="btn-secondary">Cancel</button>
+    </div>
+  </form>
+</div>

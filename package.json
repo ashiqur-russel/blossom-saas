@@ -1,0 +1,23 @@
+{
+  "name": "flower-business",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "dev:api": "cd apps/flower-api && npm run start:dev",
+    "dev:client": "cd apps/flower-client && npm start",
+    "build:api": "cd apps/flower-api && npm run build",
+    "build:client": "cd apps/flower-client && npm run build",
+    "dev:both": "npx concurrently \"npm run dev:api\" \"npm run dev:client\"",
+    "install:all": "npm install && cd apps/flower-api && npm install && cd ../flower-client && npm install && cd ../../packages/shared-types && npm install",
+    "db:dev:up": "docker-compose -f db/docker-compose.dev.yml up -d",
+    "db:dev:down": "docker-compose -f db/docker-compose.dev.yml down",
+    "db:dev:logs": "docker-compose -f db/docker-compose.dev.yml logs -f mongodb",
+    "db:dev:shell": "docker-compose -f db/docker-compose.dev.yml exec mongodb mongosh",
+    "db:dev:reset": "docker-compose -f db/docker-compose.dev.yml down -v && docker-compose -f db/docker-compose.dev.yml up -d",
+    "dev:full": "npm run db:dev:up && npm run dev:both"
+  },
+  "devDependencies": {
+    "concurrently": "^7.6.0"
+  }
+}
+

@@ -1,0 +1,21 @@
+services:
+  mongodb:
+    image: mongo:7.0
+    container_name: flower-business-mongodb
+    restart: unless-stopped
+    ports:
+      - "28018:27017"
+    environment:
+      MONGO_INITDB_DATABASE: flower-business
+    volumes:
+      - mongodb_data:/data/db
+    networks:
+      - flower-business-network
+
+volumes:
+  mongodb_data:
+
+networks:
+  flower-business-network:
+    driver: bridge
+
