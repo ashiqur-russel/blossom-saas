@@ -46,11 +46,14 @@
           <div class="kpi-content">
             <p class="kpi-label">Total Revenue</p>
             <p class="kpi-value">€{{ summary.totalRevenue | number:'1.2-2' }}</p>
-            <div class="kpi-change positive">
-              <svg fill="currentColor" viewBox="0 0 20 20">
+            <div class="kpi-change" [ngClass]="getChangeClass(getRevenueChange())">
+              <svg *ngIf="hasChangeData(getRevenueChange()) && getRevenueChange()! >= 0" fill="currentColor" viewBox="0 0 20 20">
                 <path fill-rule="evenodd" d="M5.293 7.707a1 1 0 010-1.414l4-4a1 1 0 011.414 0l4 4a1 1 0 01-1.414 1.414L11 5.414V17a1 1 0 11-2 0V5.414L6.707 7.707a1 1 0 01-1.414 0z" clip-rule="evenodd"></path>
               </svg>
-              <span>+12.5%</span>
+              <svg *ngIf="hasChangeData(getRevenueChange()) && getRevenueChange()! < 0" fill="currentColor" viewBox="0 0 20 20">
+                <path fill-rule="evenodd" d="M14.707 12.293a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 111.414-1.414L9 14.586V3a1 1 0 012 0v11.586l2.293-2.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+              </svg>
+              <span>{{ formatPercentageChange(getRevenueChange()) }}</span>
             </div>
           </div>
           <div class="kpi-icon bg-blue-500">
@@ -66,11 +69,14 @@
           <div class="kpi-content">
             <p class="kpi-label">Total Profit</p>
             <p class="kpi-value">€{{ summary.totalProfit | number:'1.2-2' }}</p>
-            <div class="kpi-change positive">
-              <svg fill="currentColor" viewBox="0 0 20 20">
+            <div class="kpi-change" [ngClass]="getChangeClass(getProfitChange())">
+              <svg *ngIf="hasChangeData(getProfitChange()) && getProfitChange()! >= 0" fill="currentColor" viewBox="0 0 20 20">
                 <path fill-rule="evenodd" d="M5.293 7.707a1 1 0 010-1.414l4-4a1 1 0 011.414 0l4 4a1 1 0 01-1.414 1.414L11 5.414V17a1 1 0 11-2 0V5.414L6.707 7.707a1 1 0 01-1.414 0z" clip-rule="evenodd"></path>
               </svg>
-              <span>+8.3%</span>
+              <svg *ngIf="hasChangeData(getProfitChange()) && getProfitChange()! < 0" fill="currentColor" viewBox="0 0 20 20">
+                <path fill-rule="evenodd" d="M14.707 12.293a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 111.414-1.414L9 14.586V3a1 1 0 012 0v11.586l2.293-2.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+              </svg>
+              <span>{{ formatPercentageChange(getProfitChange()) }}</span>
             </div>
           </div>
           <div class="kpi-icon bg-green-500">
@@ -86,11 +92,14 @@
           <div class="kpi-content">
             <p class="kpi-label">Total Savings</p>
             <p class="kpi-value">€{{ summary.totalSavings | number:'1.2-2' }}</p>
-            <div class="kpi-change positive">
-              <svg fill="currentColor" viewBox="0 0 20 20">
+            <div class="kpi-change" [ngClass]="getChangeClass(getSavingsChange())">
+              <svg *ngIf="hasChangeData(getSavingsChange()) && getSavingsChange()! >= 0" fill="currentColor" viewBox="0 0 20 20">
                 <path fill-rule="evenodd" d="M5.293 7.707a1 1 0 010-1.414l4-4a1 1 0 011.414 0l4 4a1 1 0 01-1.414 1.414L11 5.414V17a1 1 0 11-2 0V5.414L6.707 7.707a1 1 0 01-1.414 0z" clip-rule="evenodd"></path>
               </svg>
-              <span>+15.2%</span>
+              <svg *ngIf="hasChangeData(getSavingsChange()) && getSavingsChange()! < 0" fill="currentColor" viewBox="0 0 20 20">
+                <path fill-rule="evenodd" d="M14.707 12.293a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 111.414-1.414L9 14.586V3a1 1 0 012 0v11.586l2.293-2.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+              </svg>
+              <span>{{ formatPercentageChange(getSavingsChange()) }}</span>
             </div>
           </div>
           <div class="kpi-icon bg-purple-500">
@@ -106,11 +115,14 @@
           <div class="kpi-content">
             <p class="kpi-label">Weekly Avg</p>
             <p class="kpi-value">€{{ summary.averageRevenue | number:'1.2-2' }}</p>
-            <div class="kpi-change positive">
-              <svg fill="currentColor" viewBox="0 0 20 20">
+            <div class="kpi-change" [ngClass]="getChangeClass(getAverageRevenueChange())">
+              <svg *ngIf="hasChangeData(getAverageRevenueChange()) && getAverageRevenueChange()! >= 0" fill="currentColor" viewBox="0 0 20 20">
                 <path fill-rule="evenodd" d="M5.293 7.707a1 1 0 010-1.414l4-4a1 1 0 011.414 0l4 4a1 1 0 01-1.414 1.414L11 5.414V17a1 1 0 11-2 0V5.414L6.707 7.707a1 1 0 01-1.414 0z" clip-rule="evenodd"></path>
               </svg>
-              <span>+5.7%</span>
+              <svg *ngIf="hasChangeData(getAverageRevenueChange()) && getAverageRevenueChange()! < 0" fill="currentColor" viewBox="0 0 20 20">
+                <path fill-rule="evenodd" d="M14.707 12.293a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 111.414-1.414L9 14.586V3a1 1 0 012 0v11.586l2.293-2.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+              </svg>
+              <span>{{ formatPercentageChange(getAverageRevenueChange()) }}</span>
             </div>
           </div>
           <div class="kpi-icon bg-orange-500">
@@ -126,11 +138,14 @@
           <div class="kpi-content">
             <p class="kpi-label">Total Flowers</p>
             <p class="kpi-value">{{ summary.totalFlowers | number }}</p>
-            <div class="kpi-change positive">
-              <svg fill="currentColor" viewBox="0 0 20 20">
+            <div class="kpi-change" [ngClass]="getChangeClass(getFlowersChange())">
+              <svg *ngIf="hasChangeData(getFlowersChange()) && getFlowersChange()! >= 0" fill="currentColor" viewBox="0 0 20 20">
                 <path fill-rule="evenodd" d="M5.293 7.707a1 1 0 010-1.414l4-4a1 1 0 011.414 0l4 4a1 1 0 01-1.414 1.414L11 5.414V17a1 1 0 11-2 0V5.414L6.707 7.707a1 1 0 01-1.414 0z" clip-rule="evenodd"></path>
               </svg>
-              <span>+10.1%</span>
+              <svg *ngIf="hasChangeData(getFlowersChange()) && getFlowersChange()! < 0" fill="currentColor" viewBox="0 0 20 20">
+                <path fill-rule="evenodd" d="M14.707 12.293a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 111.414-1.414L9 14.586V3a1 1 0 012 0v11.586l2.293-2.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+              </svg>
+              <span>{{ formatPercentageChange(getFlowersChange()) }}</span>
             </div>
           </div>
           <div class="kpi-icon bg-pink-500">
@@ -146,11 +161,14 @@
           <div class="kpi-content">
             <p class="kpi-label">Total Investment</p>
             <p class="kpi-value">€{{ summary.totalBuyingPrice | number:'1.2-2' }}</p>
-            <div class="kpi-change positive">
-              <svg fill="currentColor" viewBox="0 0 20 20">
+            <div class="kpi-change" [ngClass]="getChangeClass(getInvestmentChange())">
+              <svg *ngIf="hasChangeData(getInvestmentChange()) && getInvestmentChange()! >= 0" fill="currentColor" viewBox="0 0 20 20">
                 <path fill-rule="evenodd" d="M5.293 7.707a1 1 0 010-1.414l4-4a1 1 0 011.414 0l4 4a1 1 0 01-1.414 1.414L11 5.414V17a1 1 0 11-2 0V5.414L6.707 7.707a1 1 0 01-1.414 0z" clip-rule="evenodd"></path>
               </svg>
-              <span>+6.4%</span>
+              <svg *ngIf="hasChangeData(getInvestmentChange()) && getInvestmentChange()! < 0" fill="currentColor" viewBox="0 0 20 20">
+                <path fill-rule="evenodd" d="M14.707 12.293a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 111.414-1.414L9 14.586V3a1 1 0 012 0v11.586l2.293-2.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+              </svg>
+              <span>{{ formatPercentageChange(getInvestmentChange()) }}</span>
             </div>
           </div>
           <div class="kpi-icon bg-indigo-500">

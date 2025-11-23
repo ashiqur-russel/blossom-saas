@@ -101,4 +101,98 @@ export class DashboardPresentationComponent {
     this.selectedWeekForEdit = null;
     this.editCancelled.emit();
   }
+
+  calculatePercentageChange(current: number, previous: number): number | null {
+    if (!previous || previous === 0) return null;
+    return ((current - previous) / previous) * 100;
+  }
+
+  getSortedWeeks(): IWeek[] {
+    if (!this.weeks || this.weeks.length === 0) return [];
+    return [...this.weeks].sort((a, b) => {
+      if (a.year !== b.year) return b.year - a.year;
+      return b.weekNumber - a.weekNumber;
+    });
+  }
+
+  getRevenueChange(): number | null {
+    if (!this.summary || !this.weeks || this.weeks.length < 2) return null;
+    const sortedWeeks = this.getSortedWeeks();
+    const currentWeek = sortedWeeks[0];
+    const previousWeek = sortedWeeks[1];
+    const currentRevenue = currentWeek.revenue || 0;
+    const previousRevenue = previousWeek.revenue || 0;
+    return this.calculatePercentageChange(currentRevenue, previousRevenue);
+  }
+
+  getProfitChange(): number | null {
+    if (!this.summary || !this.weeks || this.weeks.length < 2) return null;
+    const sortedWeeks = this.getSortedWeeks();
+    const currentWeek = sortedWeeks[0];
+    const previousWeek = sortedWeeks[1];
+    const currentProfit = currentWeek.profit || 0;
+    const previousProfit = previousWeek.profit || 0;
+    return this.calculatePercentageChange(currentProfit, previousProfit);
+  }
+
+  getSavingsChange(): number | null {
+    if (!this.summary || !this.weeks || this.weeks.length < 2) return null;
+    const sortedWeeks = this.getSortedWeeks();
+    const currentWeek = sortedWeeks[0];
+    const previousWeek = sortedWeeks[1];
+    const currentSavings = currentWeek.savings || 0;
+    const previousSavings = previousWeek.savings || 0;
+    return this.calculatePercentageChange(currentSavings, previousSavings);
+  }
+
+  getAverageRevenueChange(): number | null {
+    if (!this.summary || !this.weeks || this.weeks.length < 8) return null;
+    const sortedWeeks = this.getSortedWeeks();
+    const last4Weeks = sortedWeeks.slice(0, 4);
+    const previous4Weeks = sortedWeeks.slice(4, 8);
+    
+    if (previous4Weeks.length === 0) return null;
+    
+    const currentAvg = last4Weeks.reduce((sum, w) => sum + (w.revenue || 0), 0) / last4Weeks.length;
+    const previousAvg = previous4Weeks.reduce((sum, w) => sum + (w.revenue || 0), 0) / previous4Weeks.length;
+    return this.calculatePercentageChange(currentAvg, previousAvg);
+  }
+
+  getFlowersChange(): number | null {
+    if (!this.summary || !this.weeks || this.weeks.length < 2) return null;
+    const sortedWeeks = this.getSortedWeeks();
+    const currentWeek = sortedWeeks[0];
+    const previousWeek = sortedWeeks[1];
+    const currentFlowers = currentWeek.totalFlower || 0;
+    const previousFlowers = previousWeek.totalFlower || 0;
+    return this.calculatePercentageChange(currentFlowers, previousFlowers);
+  }
+
+  getInvestmentChange(): number | null {
+    if (!this.summary || !this.weeks || this.weeks.length < 2) return null;
+    const sortedWeeks = this.getSortedWeeks();
+    const currentWeek = sortedWeeks[0];
+    const previousWeek = sortedWeeks[1];
+    const currentInvestment = currentWeek.totalBuyingPrice || 0;
+    const previousInvestment = previousWeek.totalBuyingPrice || 0;
+    return this.calculatePercentageChange(currentInvestment, previousInvestment);
+  }
+
+  formatPercentageChange(change: number | null): string {
+    if (change === null) return 'New';
+    if (change === 0) return '0%';
+    const sign = change > 0 ? '+' : '';
+    return `${sign}${change.toFixed(1)}%`;
+  }
+
+  getChangeClass(change: number | null): string {
+    if (change === null) return '';
+    if (change > 0) return 'positive';
+    if (change < 0) return 'negative';
+    return '';
+  }
+
+  hasChangeData(change: number | null): boolean {
+    return change !== null;
+  }
 }

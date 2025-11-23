@@ -184,6 +184,10 @@
   &.negative {
     color: #ef4444;
   }
+
+  &:not(.positive):not(.negative) {
+    color: #6b7280;
+  }
 }
 
 .kpi-icon {
