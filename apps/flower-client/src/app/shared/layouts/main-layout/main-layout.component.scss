@@ -123,8 +123,10 @@
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  padding: 0.5rem 0.75rem;
+  padding: 0.5rem 1rem;
   border-radius: var(--radius);
+  background: transparent;
+  border: 2px solid transparent;
 
   &:hover {
     color: var(--primary);
@@ -155,10 +157,23 @@
     }
   }
 
+  &.nav-link-secondary {
+    color: var(--primary);
+    font-weight: 600;
+    padding: 0.625rem 1.25rem;
+    border: 2px solid transparent;
+    
+    &:hover {
+      color: var(--primary);
+      background: rgba(233, 30, 99, 0.1);
+      border-color: transparent;
+    }
+  }
+
   &.nav-link-primary {
     background: var(--primary);
     color: var(--primary-foreground);
-    padding: 0.625rem 1.25rem;
+    padding: 0.625rem 1.5rem;
     border-radius: calc(var(--radius) + 2px);
     font-weight: 600;
     transition: all 0.2s;
@@ -166,11 +181,17 @@
     border: none;
     cursor: pointer;
     font-size: 0.9375rem;
+    white-space: nowrap;
 
     &:hover {
       transform: translateY(-1px);
       box-shadow: 0 4px 12px rgba(233, 30, 99, 0.3);
       color: var(--primary-foreground);
+      background: var(--primary);
+    }
+
+    &:active {
+      transform: translateY(0);
     }
   }
 }

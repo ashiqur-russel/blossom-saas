@@ -20,7 +20,7 @@
 
         <!-- Not Logged In State -->
         <ng-container *ngIf="!isAuthenticated">
-          <a routerLink="/login" class="nav-link" (click)="closeMobileMenu()">Login</a>
+          <a routerLink="/login" class="nav-link nav-link-secondary" (click)="closeMobileMenu()">Login</a>
           <a routerLink="/register" class="nav-link nav-link-primary" (click)="closeMobileMenu()">Get Started</a>
         </ng-container>
       </div>
