@@ -30,6 +30,8 @@ export class LoginComponent {
 
   onSubmit(): void {
     if (this.loginForm.invalid) {
+      this.loginForm.markAllAsTouched();
+      this.error = 'Please fill in all required fields correctly.';
       return;
     }
 

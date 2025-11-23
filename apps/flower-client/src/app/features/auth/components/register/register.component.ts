@@ -33,6 +33,8 @@ export class RegisterComponent {
 
   onSubmit(): void {
     if (this.registerForm.invalid) {
+      this.registerForm.markAllAsTouched();
+      this.error = 'Please fill in all required fields correctly.';
       return;
     }
 
