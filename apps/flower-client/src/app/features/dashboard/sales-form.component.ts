@@ -1,14 +1,14 @@
 import { CommonModule } from '@angular/common';
 import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { ICreateWeek, IUpdateWeek, IWeek } from '../../../../shared/models/week.model';
-import { ButtonComponent } from '../../../../shared/ui/components/button/button.component';
-import { CardComponent } from '../../../../shared/ui/components/card/card.component';
-import { InputComponent } from '../../../../shared/ui/components/input/input.component';
-import { calculateProfitFromSales } from '../../../../shared/utils/calculation.util';
-import { getWeekDates, getWeekNumber, getWeekdayName } from '../../../../shared/utils/date.util';
-import { formatErrorMessage } from '../../../../shared/utils/error.util';
-import { WeekService } from '../../../weeks/services/week.service';
+import { ICreateWeek, IUpdateWeek, IWeek } from '../../shared/models/week.model';
+import { ButtonComponent } from '../../shared/ui/components/button/button.component';
+import { CardComponent } from '../../shared/ui/components/card/card.component';
+import { InputComponent } from '../../shared/ui/components/input/input.component';
+import { calculateProfitFromSales } from '../../shared/utils/calculation.util';
+import { getWeekDates, getWeekNumber, getWeekdayName } from '../../shared/utils/date.util';
+import { formatErrorMessage } from '../../shared/utils/error.util';
+import { WeekService } from '../weeks';
 
 @Component({
   selector: 'app-sales-form',

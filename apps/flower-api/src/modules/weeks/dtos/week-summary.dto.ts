@@ -50,3 +50,4 @@ export class WeekSummaryDto {
   bestWeek: BestWeekDto | null;
 }
 
+

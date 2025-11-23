@@ -2,16 +2,16 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router, ActivatedRoute } from '@angular/router';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { WeekService } from '../../services/week.service';
-import { IWeek, ICreateWeek, IUpdateWeek } from '../../../../shared/models/week.model';
-import { WeekSalesEditorPresentationComponent } from '../week-sales-editor-presentation/week-sales-editor-presentation.component';
+import { WeekService } from './week.service';
+import { IWeek, ICreateWeek, IUpdateWeek } from '../../shared/models/week.model';
+import { WeekSalesEditorPresentationComponent } from './week-sales-editor.presentation';
 
 @Component({
   selector: 'app-week-sales-editor-container',
   standalone: true,
   imports: [CommonModule, ReactiveFormsModule, WeekSalesEditorPresentationComponent],
-  templateUrl: './week-sales-editor-container.component.html',
-  styleUrl: './week-sales-editor-container.component.scss',
+  templateUrl: './week-sales-editor.container.html',
+  styleUrl: './week-sales-editor.container.scss',
 })
 export class WeekSalesEditorContainerComponent implements OnInit {
   form: FormGroup;

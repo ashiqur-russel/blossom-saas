@@ -1,12 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { WithdrawalService } from '../../services/withdrawal.service';
-import { ICreateWithdrawal, IWithdrawal, IWithdrawalSummary } from '../../../../shared/models/withdrawal.model';
-import { CardComponent } from '../../../../shared/ui/components/card/card.component';
-import { ButtonComponent } from '../../../../shared/ui/components/button/button.component';
-import { InputComponent } from '../../../../shared/ui/components/input/input.component';
-import { formatErrorMessage } from '../../../../shared/utils/error.util';
+import { WithdrawalService } from './withdrawal.service';
+import { ICreateWithdrawal, IWithdrawal, IWithdrawalSummary } from '../../shared/models/withdrawal.model';
+import { CardComponent } from '../../shared/ui/components/card/card.component';
+import { ButtonComponent } from '../../shared/ui/components/button/button.component';
+import { InputComponent } from '../../shared/ui/components/input/input.component';
+import { formatErrorMessage } from '../../shared/utils/error.util';
 
 @Component({
   selector: 'app-withdrawal',

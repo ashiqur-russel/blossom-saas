@@ -14,3 +14,4 @@ export class CardComponent {
   @Input() variant: 'default' | 'highlight' = 'default';
 }
 
+

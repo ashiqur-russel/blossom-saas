@@ -3,21 +3,21 @@ import { CommonModule, DatePipe } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { ReactiveFormsModule } from '@angular/forms';
 import { ChartConfiguration } from 'chart.js';
-import { IWeek, IWeekSummary } from '../../../../shared/models/week.model';
-import { IWithdrawalSummary } from '../../../../shared/models/withdrawal.model';
-import { CardComponent } from '../../../../shared/ui/components/card/card.component';
-import { ButtonComponent } from '../../../../shared/ui/components/button/button.component';
-import { ChartComponent } from '../../../../shared/ui/components/chart/chart.component';
-import { ChartService } from '../../../../shared/ui/services/chart.service';
-import { WeekCardComponent } from '../../../weeks/components/week-card/week-card.component';
-import { SalesFormComponent } from '../sales-form/sales-form.component';
+import { IWeek, IWeekSummary } from '../../shared/models/week.model';
+import { IWithdrawalSummary } from '../../shared/models/withdrawal.model';
+import { CardComponent } from '../../shared/ui/components/card/card.component';
+import { ButtonComponent } from '../../shared/ui/components/button/button.component';
+import { ChartComponent } from '../../shared/ui/components/chart/chart.component';
+import { ChartService } from '../../shared/ui/services/chart.service';
+import { WeekCardComponent } from '../weeks';
+import { SalesFormComponent } from './sales-form.component';
 
 @Component({
   selector: 'app-dashboard-presentation',
   standalone: true,
   imports: [CommonModule, RouterModule, CardComponent, ChartComponent, DatePipe, SalesFormComponent],
-  templateUrl: './dashboard-presentation.component.html',
-  styleUrl: './dashboard-presentation.component.scss',
+  templateUrl: './dashboard.presentation.html',
+  styleUrl: './dashboard.presentation.scss',
 })
 export class DashboardPresentationComponent {
   @Input() weeks: IWeek[] = [];

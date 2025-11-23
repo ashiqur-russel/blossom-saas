@@ -1,16 +1,16 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormGroup, ReactiveFormsModule } from '@angular/forms';
-import { CardComponent } from '../../../../shared/ui/components/card/card.component';
-import { ButtonComponent } from '../../../../shared/ui/components/button/button.component';
-import { InputComponent } from '../../../../shared/ui/components/input/input.component';
+import { CardComponent } from '../../shared/ui/components/card/card.component';
+import { ButtonComponent } from '../../shared/ui/components/button/button.component';
+import { InputComponent } from '../../shared/ui/components/input/input.component';
 
 @Component({
   selector: 'app-week-sales-editor-presentation',
   standalone: true,
   imports: [CommonModule, ReactiveFormsModule, CardComponent, ButtonComponent, InputComponent],
-  templateUrl: './week-sales-editor-presentation.component.html',
-  styleUrl: './week-sales-editor-presentation.component.scss',
+  templateUrl: './week-sales-editor.presentation.html',
+  styleUrl: './week-sales-editor.presentation.scss',
 })
 export class WeekSalesEditorPresentationComponent {
   @Input() form!: FormGroup;

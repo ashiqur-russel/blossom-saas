@@ -78,3 +78,4 @@ export const WeekSchema = SchemaFactory.createForClass(Week);
 WeekSchema.index({ weekNumber: 1, year: 1 }, { unique: true });
 WeekSchema.index({ year: 1, weekNumber: -1 });
 
+

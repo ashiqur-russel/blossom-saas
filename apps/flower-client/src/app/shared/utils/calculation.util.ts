@@ -42,3 +42,4 @@ export function calculateProfitFromSales(
   return calculateProfit(totalSale, buyingPrice);
 }
 
+

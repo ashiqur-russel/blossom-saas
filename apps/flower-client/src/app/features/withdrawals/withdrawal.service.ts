@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { environment } from '../../../../environments/environment';
-import { BaseCrudService } from '../../../shared/services/base-crud.service';
-import { IWithdrawal, ICreateWithdrawal, IWithdrawalSummary } from '../../../shared/models/withdrawal.model';
+import { environment } from '../../../environments/environment';
+import { BaseCrudService } from '../../shared/services/base-crud.service';
+import { IWithdrawal, ICreateWithdrawal, IWithdrawalSummary } from '../../shared/models/withdrawal.model';
 
 @Injectable({
   providedIn: 'root',

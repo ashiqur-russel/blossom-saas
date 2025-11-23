@@ -27,28 +27,28 @@ export const routes: Routes = [
       {
         path: 'dashboard',
         loadComponent: () =>
-          import('./features/dashboard/components/dashboard-container/dashboard-container.component').then(
+          import('./features/dashboard').then(
             (m) => m.DashboardContainerComponent,
           ),
       },
       {
         path: 'weeks/new',
         loadComponent: () =>
-          import('./features/weeks/components/week-sales-editor/week-sales-editor-container.component').then(
+          import('./features/weeks').then(
             (m) => m.WeekSalesEditorContainerComponent,
           ),
       },
       {
         path: 'weeks/:id/edit',
         loadComponent: () =>
-          import('./features/weeks/components/week-sales-editor/week-sales-editor-container.component').then(
+          import('./features/weeks').then(
             (m) => m.WeekSalesEditorContainerComponent,
           ),
       },
       {
         path: 'withdrawals',
         loadComponent: () =>
-          import('./features/withdrawals/components/withdrawal/withdrawal.component').then(
+          import('./features/withdrawals').then(
             (m) => m.WithdrawalComponent,
           ),
       },

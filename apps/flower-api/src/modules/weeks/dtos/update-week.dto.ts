@@ -75,3 +75,4 @@ export class UpdateWeekDto extends PartialType(CreateWeekDto) {
   savings?: number;
 }
 
+

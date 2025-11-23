@@ -1,9 +1,9 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
-import { IWeek } from '../../../../shared/models/week.model';
-import { CardComponent } from '../../../../shared/ui/components/card/card.component';
-import { ButtonComponent } from '../../../../shared/ui/components/button/button.component';
+import { IWeek } from '../../shared/models/week.model';
+import { CardComponent } from '../../shared/ui/components/card/card.component';
+import { ButtonComponent } from '../../shared/ui/components/button/button.component';
 
 @Component({
   selector: 'app-week-card',
