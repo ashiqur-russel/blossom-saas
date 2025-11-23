@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 import { environment } from '../../environments/environment';
 
 // Define types locally
@@ -81,11 +82,43 @@ export class FlowerBusinessService {
   constructor(private http: HttpClient) {}
 
   getAllWeeks(): Observable<FlowerWeekDTO[]> {
-    return this.http.get<FlowerWeekDTO[]>(this.apiUrl);
+    return this.http.get<any[]>(this.apiUrl).pipe(
+      map(weeks => weeks.map(week => this.normalizeWeekData(week)))
+    );
+  }
+
+  private normalizeWeekData(week: any): FlowerWeekDTO {
+    // Handle both old and new data formats
+    const totalFlower = week.totalFlower || week.quantity || 0;
+    const totalBuyingPrice = week.totalBuyingPrice || (week.quantity && week.price ? week.quantity * week.price : 0) || 0;
+    const sale = week.sale || { thursday: 0, friday: 0, saturday: 0 };
+    const totalSale = week.totalSale || (week.quantity && week.price ? week.quantity * week.price : 0) || 0;
+    const profit = week.profit || 0;
+    const revenue = week.revenue || totalSale;
+    const savings = week.savings || 0;
+
+    return {
+      id: week.id || week._id?.toString() || '',
+      weekNumber: week.weekNumber,
+      year: week.year,
+      startDate: new Date(week.startDate),
+      endDate: new Date(week.endDate),
+      totalFlower,
+      totalBuyingPrice,
+      sale,
+      totalSale,
+      profit,
+      revenue,
+      savings,
+      createdAt: week.createdAt ? new Date(week.createdAt) : new Date(),
+      updatedAt: week.updatedAt ? new Date(week.updatedAt) : new Date(),
+    };
   }
 
   getWeekById(id: string): Observable<FlowerWeekDTO> {
-    return this.http.get<FlowerWeekDTO>(`${this.apiUrl}/${id}`);
+    return this.http.get<any>(`${this.apiUrl}/${id}`).pipe(
+      map(week => this.normalizeWeekData(week))
+    );
   }
 
   createWeek(week: CreateFlowerWeekDTO): Observable<FlowerWeekDTO> {
@@ -115,6 +148,19 @@ export class FlowerBusinessService {
   }
 
   getSummary(): Observable<FlowerWeekSummaryDTO> {
-    return this.http.get<FlowerWeekSummaryDTO>(`${this.apiUrl}/summary`);
+    return this.http.get<any>(`${this.apiUrl}/summary`).pipe(
+      map(summary => ({
+        totalWeeks: summary.totalWeeks || 0,
+        totalFlowers: summary.totalFlowers || summary.totalQuantity || 0,
+        totalBuyingPrice: summary.totalBuyingPrice || 0,
+        totalSales: summary.totalSales || summary.totalRevenue || 0,
+        totalProfit: summary.totalProfit || 0,
+        totalRevenue: summary.totalRevenue || summary.totalSales || 0,
+        totalSavings: summary.totalSavings || 0,
+        averageProfit: summary.averageProfit || 0,
+        averageFlowers: summary.averageFlowers || summary.averageQuantity || 0,
+        bestWeek: summary.bestWeek || null,
+      }))
+    );
   }
 }

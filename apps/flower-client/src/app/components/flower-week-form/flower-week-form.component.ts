@@ -162,14 +162,25 @@ export class FlowerWeekFormComponent implements OnInit {
           this.router.navigate(['/']);
         },
         error: (err) => {
-          const errorMsg = err.error?.message || err.message || 'Unknown error';
+          let errorMsg = 'Unknown error';
+          if (err.error) {
+            if (Array.isArray(err.error.message)) {
+              errorMsg = err.error.message.join(', ');
+            } else if (typeof err.error.message === 'string') {
+              errorMsg = err.error.message;
+            } else if (err.error.error) {
+              errorMsg = err.error.error;
+            }
+          } else if (err.message) {
+            errorMsg = err.message;
+          }
           this.error = this.isEditMode
             ? `Failed to update week: ${errorMsg}`
             : `Failed to create week: ${errorMsg}`;
           this.loading = false;
           console.error('Form submission error:', err);
           if (err.error) {
-            console.error('Error details:', err.error);
+            console.error('Error details:', JSON.stringify(err.error, null, 2));
           }
         },
       });
