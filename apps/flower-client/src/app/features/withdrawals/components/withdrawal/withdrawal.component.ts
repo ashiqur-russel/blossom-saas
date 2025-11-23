@@ -1,10 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { WithdrawalService, ICreateWithdrawal, IWithdrawal, IWithdrawalSummary } from '../../services/withdrawal.service';
+import { WithdrawalService } from '../../services/withdrawal.service';
+import { ICreateWithdrawal, IWithdrawal, IWithdrawalSummary } from '../../../../shared/models/withdrawal.model';
 import { CardComponent } from '../../../../shared/ui/components/card/card.component';
 import { ButtonComponent } from '../../../../shared/ui/components/button/button.component';
 import { InputComponent } from '../../../../shared/ui/components/input/input.component';
+import { formatErrorMessage } from '../../../../shared/utils/error.util';
 
 @Component({
   selector: 'app-withdrawal',
@@ -58,7 +60,7 @@ export class WithdrawalComponent implements OnInit {
         checkComplete();
       },
       error: (err) => {
-        this.error = `Failed to load withdrawal summary: ${err.error?.message || err.message || 'Unknown error'}`;
+        this.error = formatErrorMessage('load withdrawal summary', err);
         summaryLoaded = true;
         checkComplete();
         console.error('Withdrawal summary error:', err);
@@ -112,13 +114,7 @@ export class WithdrawalComponent implements OnInit {
         },
         error: (err) => {
           this.loading = false;
-          let errorMsg = 'Failed to create withdrawal';
-          if (err.error?.message) {
-            errorMsg = err.error.message;
-          } else if (err.message) {
-            errorMsg = err.message;
-          }
-          this.error = errorMsg;
+              this.error = formatErrorMessage('create withdrawal', err);
           console.error('Withdrawal creation error:', err);
         },
       });

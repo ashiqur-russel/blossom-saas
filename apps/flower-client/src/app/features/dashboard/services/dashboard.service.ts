@@ -3,8 +3,9 @@ import { Observable, forkJoin, of } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { WeekService } from '../../weeks/services/week.service';
 import { SummaryService } from '../../weeks/services/summary.service';
-import { WithdrawalService, IWithdrawalSummary } from '../../withdrawals/services/withdrawal.service';
+import { WithdrawalService } from '../../withdrawals/services/withdrawal.service';
 import { IWeek, IWeekSummary } from '../../../shared/models/week.model';
+import { IWithdrawalSummary } from '../../../shared/models/withdrawal.model';
 
 @Injectable({
   providedIn: 'root',

@@ -4,7 +4,7 @@ import { RouterModule } from '@angular/router';
 import { ReactiveFormsModule } from '@angular/forms';
 import { ChartConfiguration } from 'chart.js';
 import { IWeek, IWeekSummary } from '../../../../shared/models/week.model';
-import { IWithdrawalSummary } from '../../../withdrawals/services/withdrawal.service';
+import { IWithdrawalSummary } from '../../../../shared/models/withdrawal.model';
 import { CardComponent } from '../../../../shared/ui/components/card/card.component';
 import { ButtonComponent } from '../../../../shared/ui/components/button/button.component';
 import { ChartComponent } from '../../../../shared/ui/components/chart/chart.component';

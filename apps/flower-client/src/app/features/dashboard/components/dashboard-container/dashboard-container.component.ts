@@ -5,7 +5,7 @@ import { DashboardService } from '../../services/dashboard.service';
 import { ChartService } from '../../../../shared/ui/services/chart.service';
 import { WeekService } from '../../../weeks/services/week.service';
 import { IWeek, IWeekSummary } from '../../../../shared/models/week.model';
-import { IWithdrawalSummary } from '../../../withdrawals/services/withdrawal.service';
+import { IWithdrawalSummary } from '../../../../shared/models/withdrawal.model';
 import { ChartConfiguration } from 'chart.js';
 import { DashboardPresentationComponent } from '../dashboard-presentation/dashboard-presentation.component';
 

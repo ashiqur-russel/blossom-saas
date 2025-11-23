@@ -1,11 +1,14 @@
-import { Component, EventEmitter, Input, Output, OnInit, OnChanges, SimpleChanges } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { WeekService } from '../../../weeks/services/week.service';
 import { ICreateWeek, IUpdateWeek, IWeek } from '../../../../shared/models/week.model';
-import { CardComponent } from '../../../../shared/ui/components/card/card.component';
 import { ButtonComponent } from '../../../../shared/ui/components/button/button.component';
+import { CardComponent } from '../../../../shared/ui/components/card/card.component';
 import { InputComponent } from '../../../../shared/ui/components/input/input.component';
+import { calculateProfitFromSales } from '../../../../shared/utils/calculation.util';
+import { getWeekDates, getWeekNumber, getWeekdayName } from '../../../../shared/utils/date.util';
+import { formatErrorMessage } from '../../../../shared/utils/error.util';
+import { WeekService } from '../../../weeks/services/week.service';
 
 @Component({
   selector: 'app-sales-form',
@@ -33,8 +36,7 @@ export class SalesFormComponent implements OnInit, OnChanges {
 
   initializeForm(): void {
     const today = new Date();
-    const dayNames = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
-    this.weekday = dayNames[today.getDay()];
+    this.weekday = getWeekdayName(today);
 
     this.form = this.fb.group({
       date: [today.toISOString().split('T')[0], [Validators.required]],
@@ -47,11 +49,10 @@ export class SalesFormComponent implements OnInit, OnChanges {
       savings: [null, [Validators.required, Validators.min(0)]],
     });
 
-    this.form.get('date')?.valueChanges.subscribe((date) => {
+        this.form.get('date')?.valueChanges.subscribe((date: string) => {
       if (date) {
         const selectedDate = new Date(date);
-        const dayNames = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
-        this.weekday = dayNames[selectedDate.getDay()];
+        this.weekday = getWeekdayName(selectedDate);
         this.form.patchValue({ weekday: this.weekday }, { emitEvent: false });
       }
     });
@@ -67,19 +68,11 @@ export class SalesFormComponent implements OnInit, OnChanges {
     const friday = this.form.get('salesFriday')?.value || 0;
     const saturday = this.form.get('salesSaturday')?.value || 0;
     const buyingAmount = this.form.get('buyingAmount')?.value || 0;
-    return (thursday + friday + saturday) - buyingAmount;
+    return calculateProfitFromSales(thursday, friday, saturday, buyingAmount);
   }
 
   calculateProfit(): void {
     this.form.markAsTouched();
-  }
-
-  getWeekNumber(date: Date): number {
-    const d = new Date(Date.UTC(date.getFullYear(), date.getMonth(), date.getDate()));
-    const dayNum = d.getUTCDay() || 7;
-    d.setUTCDate(d.getUTCDate() + 4 - dayNum);
-    const yearStart = new Date(Date.UTC(d.getUTCFullYear(), 0, 1));
-    return Math.ceil(((d.getTime() - yearStart.getTime()) / 86400000 + 1) / 7);
   }
 
   ngOnInit(): void {
@@ -98,8 +91,7 @@ export class SalesFormComponent implements OnInit, OnChanges {
     this.isEditMode = true;
     const sale = week.sale || { thursday: 0, friday: 0, saturday: 0 };
     const date = new Date(week.startDate);
-    const dayNames = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
-    this.weekday = dayNames[date.getDay()];
+    this.weekday = getWeekdayName(date);
 
     this.form.patchValue({
       date: date.toISOString().split('T')[0],
@@ -116,8 +108,7 @@ export class SalesFormComponent implements OnInit, OnChanges {
   resetForm(): void {
     this.isEditMode = false;
     const today = new Date();
-    const dayNames = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
-    this.weekday = dayNames[today.getDay()];
+    this.weekday = getWeekdayName(today);
 
     this.form.reset({
       date: today.toISOString().split('T')[0],
@@ -225,23 +216,20 @@ export class SalesFormComponent implements OnInit, OnChanges {
       return;
     }
 
-    this.loading = true;
-    this.error = null;
-      const date = new Date(formValue.date);
-      const weekNumber = this.getWeekNumber(date);
-      const year = date.getFullYear();
+        this.loading = true;
+        this.error = null;
+          const date = new Date(formValue.date);
+          const weekNumber = getWeekNumber(date);
+          const year = date.getFullYear();
 
-      const startDate = new Date(date);
-      startDate.setDate(date.getDate() - date.getDay());
-      const endDate = new Date(startDate);
-      endDate.setDate(startDate.getDate() + 6);
+          const { startDate, endDate } = getWeekDates(date);
 
-      const thursday = Number(formValue.salesThursday || 0);
-      const friday = Number(formValue.salesFriday || 0);
-      const saturday = Number(formValue.salesSaturday || 0);
-      const totalSale = thursday + friday + saturday;
-      const buyingAmount = Number(formValue.buyingAmount || 0);
-      const profit = totalSale - buyingAmount;
+          const thursday = Number(formValue.salesThursday || 0);
+          const friday = Number(formValue.salesFriday || 0);
+          const saturday = Number(formValue.salesSaturday || 0);
+          const buyingAmount = Number(formValue.buyingAmount || 0);
+          const totalSale = thursday + friday + saturday;
+          const profit = calculateProfitFromSales(thursday, friday, saturday, buyingAmount);
 
       if (this.isEditMode && this.weekToEdit) {
         const updateData: IUpdateWeek = {
@@ -268,20 +256,8 @@ export class SalesFormComponent implements OnInit, OnChanges {
             this.loading = false;
             this.weekUpdated.emit();
           },
-          error: (err) => {
-            let errorMsg = 'Unknown error';
-            if (err.error) {
-              if (Array.isArray(err.error.message)) {
-                errorMsg = err.error.message.join(', ');
-              } else if (typeof err.error.message === 'string') {
-                errorMsg = err.error.message;
-              } else if (err.error.error) {
-                errorMsg = err.error.error;
-              }
-            } else if (err.message) {
-              errorMsg = err.message;
-            }
-            this.error = `Failed to update sales entry: ${errorMsg}`;
+          error: (err: any) => {
+            this.error = formatErrorMessage('update sales entry', err);
             this.loading = false;
             console.error('Form submission error:', err);
           },
@@ -311,20 +287,8 @@ export class SalesFormComponent implements OnInit, OnChanges {
             this.loading = false;
             this.weekAdded.emit();
           },
-          error: (err) => {
-            let errorMsg = 'Unknown error';
-            if (err.error) {
-              if (Array.isArray(err.error.message)) {
-                errorMsg = err.error.message.join(', ');
-              } else if (typeof err.error.message === 'string') {
-                errorMsg = err.error.message;
-              } else if (err.error.error) {
-                errorMsg = err.error.error;
-              }
-            } else if (err.message) {
-              errorMsg = err.message;
-            }
-            this.error = `Failed to add sales entry: ${errorMsg}`;
+          error: (err: any) => {
+            this.error = formatErrorMessage('add sales entry', err);
             this.loading = false;
             console.error('Form submission error:', err);
           },

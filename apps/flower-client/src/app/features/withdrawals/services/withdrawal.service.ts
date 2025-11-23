@@ -1,77 +1,38 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
 import { environment } from '../../../../environments/environment';
-
-export interface IWithdrawal {
-  id: string;
-  amount: number;
-  date: Date;
-  description?: string;
-  createdAt: Date;
-  updatedAt: Date;
-}
-
-export interface ICreateWithdrawal {
-  amount: number;
-  date: Date;
-  description?: string;
-}
-
-export interface IWithdrawalSummary {
-  totalWithdrawals: number;
-  totalSavings: number;
-  availableSavings: number;
-  totalWithdrawalCount: number;
-}
+import { BaseCrudService } from '../../../shared/services/base-crud.service';
+import { IWithdrawal, ICreateWithdrawal, IWithdrawalSummary } from '../../../shared/models/withdrawal.model';
 
 @Injectable({
   providedIn: 'root',
 })
-export class WithdrawalService {
-  private apiUrl = `${environment.apiUrl}/withdrawals`;
+export class WithdrawalService extends BaseCrudService<IWithdrawal, ICreateWithdrawal, Partial<ICreateWithdrawal>> {
+  protected apiUrl = `${environment.apiUrl}/withdrawals`;
 
-  constructor(private http: HttpClient) {}
-
-  getAll(): Observable<IWithdrawal[]> {
-    return this.http.get<any[]>(this.apiUrl).pipe(
-      map(withdrawals => withdrawals.map(w => this.normalizeWithdrawal(w)))
-    );
+  constructor(http: HttpClient) {
+    super(http);
   }
 
-  getById(id: string): Observable<IWithdrawal> {
-    return this.http.get<any>(`${this.apiUrl}/${id}`).pipe(
-      map(w => this.normalizeWithdrawal(w))
-    );
-  }
-
-  create(withdrawal: ICreateWithdrawal): Observable<IWithdrawal> {
-    const payload = {
-      ...withdrawal,
-      date: withdrawal.date instanceof Date ? withdrawal.date.toISOString() : withdrawal.date,
-    };
-    return this.http.post<any>(this.apiUrl, payload).pipe(
-      map(w => this.normalizeWithdrawal(w))
-    );
-  }
-
-  delete(id: string): Observable<void> {
-    return this.http.delete<void>(`${this.apiUrl}/${id}`);
-  }
-
+  /**
+   * Get withdrawal summary
+   */
   getSummary(): Observable<IWithdrawalSummary> {
     return this.http.get<IWithdrawalSummary>(`${this.apiUrl}/summary`);
   }
 
-  private normalizeWithdrawal(withdrawal: any): IWithdrawal {
+  /**
+   * Normalize withdrawal entity from API response
+   */
+  protected normalizeEntity(withdrawal: any): IWithdrawal {
     return {
-      id: withdrawal.id || withdrawal._id?.toString() || '',
-      amount: Number(withdrawal.amount) || 0,
-      date: new Date(withdrawal.date),
+      id: this.normalizeId(withdrawal),
+      amount: this.normalizeNumber(withdrawal.amount),
+      date: this.normalizeDate(withdrawal.date),
       description: withdrawal.description,
-      createdAt: withdrawal.createdAt ? new Date(withdrawal.createdAt) : new Date(),
-      updatedAt: withdrawal.updatedAt ? new Date(withdrawal.updatedAt) : new Date(),
+      createdAt: this.normalizeDate(withdrawal.createdAt),
+      updatedAt: this.normalizeDate(withdrawal.updatedAt),
     };
   }
 }
