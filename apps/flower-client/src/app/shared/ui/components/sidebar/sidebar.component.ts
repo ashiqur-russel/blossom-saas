@@ -2,7 +2,8 @@ import { Component, Input, Output, EventEmitter, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule, Router, NavigationEnd } from '@angular/router';
 import { filter } from 'rxjs/operators';
-import { AuthService, User } from '../../../features/auth';
+import { AuthService } from '../../../../features/auth/auth.service';
+import type { User } from '../../../../features/auth/auth.service';
 
 export interface SidebarItem {
   label: string;
@@ -67,7 +68,7 @@ export class SidebarComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.authService.currentUser$.subscribe((user) => {
+    this.authService.currentUser$.subscribe((user: User | null) => {
       this.currentUser = user;
     });
   }
