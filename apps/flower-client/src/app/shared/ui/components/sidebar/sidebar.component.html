@@ -1,0 +1,40 @@
+<div class="sidebar-overlay" [class.overlay-open]="isMobileOpen" (click)="closeMobile.emit()"></div>
+<aside class="sidebar" [class.mobile-open]="isMobileOpen">
+  <div class="sidebar-header">
+    <div class="sidebar-brand">
+      <div class="brand-icon">🌸</div>
+      <span class="brand-text">Blossom Business</span>
+    </div>
+  </div>
+
+  <nav class="sidebar-nav">
+    <ul class="nav-list">
+      <li *ngFor="let item of sidebarItems" class="nav-item">
+        <a
+          [routerLink]="item.route"
+          [class.active]="isActive(item.route)"
+          (click)="navigate(item.route)"
+          class="nav-link">
+          <svg class="nav-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" [attr.d]="item.icon"></path>
+          </svg>
+          <span class="nav-label">{{ item.label }}</span>
+          <span *ngIf="item.badge" class="nav-badge">{{ item.badge }}</span>
+        </a>
+      </li>
+    </ul>
+  </nav>
+
+  <div class="sidebar-footer">
+    <div class="user-section">
+      <div class="user-avatar">
+        <span>U</span>
+      </div>
+      <div class="user-info">
+        <span class="user-name">User</span>
+        <span class="user-role">Admin</span>
+      </div>
+    </div>
+  </div>
+</aside>
+

@@ -43,17 +43,6 @@ export class DashboardPresentationComponent {
 
   chartService = new ChartService();
 
-  currentDate = new Date();
-
-  getFormattedDate(): string {
-    return this.currentDate.toLocaleDateString('en-US', { 
-      weekday: 'long', 
-      year: 'numeric', 
-      month: 'long', 
-      day: 'numeric' 
-    });
-  }
-
   getAverageSalesByDay(): { thursday: number; friday: number; saturday: number } {
     if (!this.weeks || this.weeks.length === 0) {
       return { thursday: 0, friday: 0, saturday: 0 };

@@ -14,6 +14,11 @@
     background: linear-gradient(135deg, #667eea15 0%, #764ba215 100%);
     border-color: #667eea;
   }
+
+  @media (max-width: 768px) {
+    padding: 1rem;
+    border-radius: 0.75rem;
+  }
 }
 
 .card-header {

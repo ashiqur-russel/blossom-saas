@@ -1,0 +1,17 @@
+<div class="dashboard-layout">
+  <app-sidebar [isMobileOpen]="sidebarOpen" (closeMobile)="closeSidebar()"></app-sidebar>
+  
+  <div class="dashboard-main">
+    <!-- Mobile Menu Button -->
+    <button class="mobile-menu-btn" (click)="toggleSidebar()" aria-label="Toggle menu">
+      <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+      </svg>
+    </button>
+    
+    <div class="dashboard-content">
+      <router-outlet></router-outlet>
+    </div>
+  </div>
+</div>
+
