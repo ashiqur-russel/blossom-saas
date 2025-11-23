@@ -1,3 +1,7 @@
+/**
+ * Week Summary DTO - Response DTO
+ * Follows NestJS best practices: Separate DTOs for different responses
+ */
 import { ApiProperty } from '@nestjs/swagger';
 
 export class BestWeekDto {

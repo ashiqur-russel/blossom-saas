@@ -1,3 +1,7 @@
+/**
+ * Week Response DTO - Response DTO
+ * Follows NestJS best practices: Separate response DTOs
+ */
 import { ApiProperty } from '@nestjs/swagger';
 
 export class SaleByDayResponseDto {

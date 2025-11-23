@@ -1,3 +1,7 @@
+/**
+ * Weeks Module - Feature Module
+ * Follows NestJS best practices: Feature-based module organization
+ */
 import { Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
 import { WeeksController } from './weeks.controller';

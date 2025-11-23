@@ -23,8 +23,8 @@
   height: 100vh;
   width: 260px;
   max-width: 260px;
-  background: var(--sidebar);
-  border-right: 1px solid var(--sidebar-border);
+  background: var(--card);
+  border-right: 1px solid var(--border);
   display: flex;
   flex-direction: column;
   z-index: 999;
@@ -33,18 +33,24 @@
   overflow-y: auto;
   overflow-x: hidden;
 
-  @media (max-width: 768px) {
+  @media (max-width: 1024px) {
     transform: translateX(-100%);
+    box-shadow: 2px 0 8px rgba(0, 0, 0, 0.15);
 
     &.mobile-open {
       transform: translateX(0);
     }
   }
+
+  @media (min-width: 1025px) {
+    position: fixed;
+    transform: translateX(0);
+  }
 }
 
 .sidebar-header {
   padding: 1.5rem;
-  border-bottom: 1px solid var(--sidebar-border);
+  border-bottom: 1px solid var(--border);
 }
 
 .sidebar-brand {
@@ -60,10 +66,7 @@
 .brand-text {
   font-size: 1.25rem;
   font-weight: 700;
-  background: linear-gradient(135deg, var(--primary) 0%, var(--primary) 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+  color: var(--primary);
 }
 
 .sidebar-nav {
@@ -90,26 +93,26 @@
   align-items: center;
   gap: 0.75rem;
   padding: 0.75rem 1rem;
-  color: var(--sidebar-foreground);
+  color: var(--foreground);
   text-decoration: none;
-  border-radius: 0.5rem;
+  border-radius: var(--radius);
   transition: all 0.2s;
   position: relative;
   font-weight: 500;
   font-size: 0.9375rem;
 
   &:hover {
-    background: var(--sidebar-accent);
-    color: var(--sidebar-accent-foreground);
+    background: var(--muted);
+    color: var(--foreground);
   }
 
   &.active {
-    background: var(--sidebar-accent);
-    color: var(--sidebar-primary);
+    background: var(--muted);
+    color: var(--primary);
     font-weight: 600;
 
     .nav-icon {
-      color: var(--sidebar-primary);
+      color: var(--primary);
     }
 
     &::before {
@@ -120,7 +123,7 @@
       transform: translateY(-50%);
       width: 3px;
       height: 60%;
-      background: var(--sidebar-primary);
+      background: var(--primary);
       border-radius: 0 2px 2px 0;
     }
   }
@@ -130,7 +133,7 @@
   width: 1.25rem;
   height: 1.25rem;
   flex-shrink: 0;
-  color: var(--sidebar-foreground);
+  color: var(--muted-foreground);
   transition: color 0.2s;
 }
 
@@ -139,8 +142,8 @@
 }
 
 .nav-badge {
-  background: var(--sidebar-primary);
-  color: var(--sidebar-primary-foreground);
+  background: var(--destructive);
+  color: var(--destructive-foreground);
   font-size: 0.75rem;
   font-weight: 600;
   padding: 0.125rem 0.5rem;
@@ -151,8 +154,8 @@
 
 .sidebar-footer {
   padding: 1rem;
-  border-top: 1px solid var(--sidebar-border);
-  background: var(--sidebar-accent);
+  border-top: 1px solid var(--border);
+  background: transparent;
 }
 
 .user-section {
@@ -160,11 +163,11 @@
   align-items: center;
   gap: 0.75rem;
   padding: 0.75rem;
-  border-radius: 0.5rem;
+  border-radius: var(--radius);
   transition: background 0.2s;
 
   &:hover {
-    background: var(--sidebar);
+    background: var(--muted);
   }
 }
 
@@ -172,11 +175,11 @@
   width: 2.5rem;
   height: 2.5rem;
   border-radius: 50%;
-  background: var(--sidebar-primary);
+  background: var(--primary);
   display: flex;
   align-items: center;
   justify-content: center;
-  color: var(--sidebar-primary-foreground);
+  color: var(--primary-foreground);
   font-weight: 600;
   font-size: 1rem;
   flex-shrink: 0;
@@ -192,7 +195,7 @@
 
 .user-name {
   font-weight: 600;
-  color: var(--sidebar-foreground);
+  color: var(--foreground);
   font-size: 0.875rem;
 }
 
@@ -201,9 +204,4 @@
   color: var(--muted-foreground);
 }
 
-@media (max-width: 768px) {
-  .sidebar {
-    box-shadow: 2px 0 8px rgba(0, 0, 0, 0.1);
-  }
-}
 

@@ -9,7 +9,7 @@ import { InputComponent } from '../../../../shared/ui/components/input/input.com
 @Component({
   selector: 'app-withdrawal',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, CardComponent],
+  imports: [CommonModule, ReactiveFormsModule, CardComponent, ButtonComponent, InputComponent],
   templateUrl: './withdrawal.component.html',
   styleUrl: './withdrawal.component.scss',
 })

@@ -1,3 +1,7 @@
+/**
+ * Create Week DTO - Request DTO
+ * Follows NestJS best practices: DTOs in dtos folder with validation
+ */
 import { ApiProperty } from '@nestjs/swagger';
 import {
   IsDate,

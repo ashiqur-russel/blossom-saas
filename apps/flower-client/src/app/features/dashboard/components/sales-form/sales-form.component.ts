@@ -4,11 +4,13 @@ import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angula
 import { WeekService } from '../../../weeks/services/week.service';
 import { ICreateWeek, IUpdateWeek, IWeek } from '../../../../shared/models/week.model';
 import { CardComponent } from '../../../../shared/ui/components/card/card.component';
+import { ButtonComponent } from '../../../../shared/ui/components/button/button.component';
+import { InputComponent } from '../../../../shared/ui/components/input/input.component';
 
 @Component({
   selector: 'app-sales-form',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, CardComponent],
+  imports: [CommonModule, ReactiveFormsModule, CardComponent, ButtonComponent, InputComponent],
   templateUrl: './sales-form.component.html',
   styleUrl: './sales-form.component.scss',
 })

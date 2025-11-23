@@ -1,5 +1,27 @@
 .chart-container {
-  height: 300px;
   position: relative;
+  width: 100%;
+  min-height: 250px;
+  height: 300px;
+  
+  @media (max-width: 1024px) {
+    height: 280px;
+    min-height: 220px;
+  }
+  
+  @media (max-width: 768px) {
+    height: 250px;
+    min-height: 200px;
+  }
+  
+  @media (max-width: 480px) {
+    height: 220px;
+    min-height: 180px;
+  }
+  
+  canvas {
+    max-width: 100%;
+    height: auto !important;
+  }
 }
 

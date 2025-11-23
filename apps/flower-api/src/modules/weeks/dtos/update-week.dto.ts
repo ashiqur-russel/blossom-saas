@@ -1,3 +1,7 @@
+/**
+ * Update Week DTO - Request DTO
+ * Follows NestJS best practices: PartialType for updates
+ */
 import { PartialType } from '@nestjs/swagger';
 import { ApiProperty } from '@nestjs/swagger';
 import { IsDate, IsInt, IsNumber, IsOptional, Min, ValidateNested } from 'class-validator';

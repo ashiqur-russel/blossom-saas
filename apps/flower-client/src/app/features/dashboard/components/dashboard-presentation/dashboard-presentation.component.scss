@@ -24,20 +24,13 @@
   min-width: 0;
   box-sizing: border-box;
 
-  // Ensure KPI grid and main-grid align horizontally
   .kpi-grid,
   .main-grid {
     padding-left: 0;
     padding-right: 0;
     margin-left: 0;
     margin-right: 0;
-  }
-
-  // Ensure cards in right column align with KPI cards (same left padding)
-  .right-column {
-    ::ng-deep app-card .card {
-      padding-left: 1rem; // Match KPI card padding
-    }
+    width: 100%;
   }
 
   @media (max-width: 1024px) {
@@ -106,14 +99,13 @@
     grid-template-columns: repeat(3, 1fr);
   }
 
-  // Smaller padding for cards in KPI grid
   ::ng-deep app-card .card {
-    padding: 1rem;
+    padding: 1.5rem !important;
   }
 
   @media (max-width: 768px) {
     ::ng-deep app-card .card {
-      padding: 0.875rem;
+      padding: 1rem !important;
     }
   }
 }
@@ -220,6 +212,7 @@
   padding-left: 0;
   padding-right: 0;
   align-items: start;
+  width: 100%;
 }
 
 .left-column {
@@ -234,6 +227,10 @@
   gap: 2rem;
   margin-left: 0;
   padding-left: 0;
+  
+  ::ng-deep app-card .card {
+    padding: 1.5rem !important;
+  }
 }
 
 .charts-row {

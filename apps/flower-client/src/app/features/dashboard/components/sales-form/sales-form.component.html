@@ -2,85 +2,78 @@
   <form [formGroup]="form" (ngSubmit)="onSubmit()" class="sales-form">
     <div class="form-row">
       <div class="form-field">
-        <label for="date">Date</label>
-        <input
-          id="date"
+        <app-input
+          label="Date"
           type="date"
           formControlName="date"
-          class="form-input"
-          required />
+          [required]="true">
+        </app-input>
       </div>
       <div class="form-field">
-        <label for="weekday">Weekday</label>
-        <input
-          id="weekday"
+        <app-input
+          label="Weekday"
           type="text"
           formControlName="weekday"
-          class="form-input readonly"
-          readonly />
+          [readonly]="true">
+        </app-input>
       </div>
     </div>
 
     <div class="form-field">
-      <label for="flowerAmount">Flower Amount (Units)</label>
-      <input
-        id="flowerAmount"
+      <app-input
+        label="Flower Amount (Units)"
         type="number"
         formControlName="flowerAmount"
-        class="form-input"
-        min="0"
-        required />
+        [min]="0"
+        [required]="true">
+      </app-input>
     </div>
 
     <div class="form-field">
-      <label for="buyingAmount">Total Buying Amount (€)</label>
-      <input
-        id="buyingAmount"
+      <app-input
+        label="Total Buying Amount ($)"
         type="number"
         formControlName="buyingAmount"
-        class="form-input"
-        min="0"
-        step="0.01"
-        required />
+        [min]="0"
+        [step]="0.01"
+        [required]="true">
+      </app-input>
     </div>
 
     <div class="weekend-sales-section">
       <p class="section-label">Weekend Sales</p>
       
       <div class="form-field">
-        <label for="salesThursday">Thursday Sales (€)</label>
-        <input
-          id="salesThursday"
+        <app-input
+          label="Thursday Sales ($)"
           type="number"
           formControlName="salesThursday"
-          class="form-input"
-          min="0"
-          step="0.01"
-          required />
+          [min]="0"
+          [step]="0.01"
+          [required]="true">
+        </app-input>
       </div>
 
       <div class="form-field">
-        <label for="salesFriday">Friday Sales (€)</label>
-        <input
-          id="salesFriday"
+        <app-input
+          label="Friday Sales ($)"
           type="number"
           formControlName="salesFriday"
-          class="form-input"
-          min="0"
-          step="0.01"
-          required />
+          [min]="0"
+          [step]="0.01"
+          [required]="true">
+        </app-input>
       </div>
 
       <div class="form-field">
-        <label for="salesSaturday">Saturday Sales (€)</label>
-        <input
-          id="salesSaturday"
+        <app-input
+          label="Saturday Sales ($)"
           type="number"
           formControlName="salesSaturday"
-          class="form-input"
-          min="0"
-          step="0.01"
-          required />
+          [min]="0"
+          [step]="0.01"
+          [required]="true">
+        </app-input>
       </div>
     </div>
 
@@ -92,15 +85,14 @@
     </div>
 
     <div class="form-field">
-      <label for="savings">Savings This Week (€)</label>
-      <input
-        id="savings"
+      <app-input
+        label="Savings This Week ($)"
         type="number"
         formControlName="savings"
-        class="form-input"
-        min="0"
-        step="0.01"
-        required />
+        [min]="0"
+        [step]="0.01"
+        [required]="true">
+      </app-input>
     </div>
 
     <div *ngIf="error" class="error-message">
@@ -108,24 +100,20 @@
     </div>
 
     <div class="form-actions">
-      <button
+      <app-button
         *ngIf="isEditMode"
+        label="Cancel"
+        variant="secondary"
         type="button"
-        (click)="cancelEdit()"
-        class="cancel-btn">
-        Cancel
-      </button>
-      <button
+        (clicked)="cancelEdit()">
+      </app-button>
+      <app-button
+        [label]="loading ? (isEditMode ? 'Updating...' : 'Adding...') : (isEditMode ? 'Update Sales Entry' : '+ Add Sales Entry')"
+        variant="primary"
         type="submit"
         [disabled]="form.invalid || loading"
-        class="add-entry-btn">
-        <svg *ngIf="!loading" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path *ngIf="!isEditMode" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
-          <path *ngIf="isEditMode" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
-        </svg>
-        <span *ngIf="loading" class="spinner-small"></span>
-        {{ loading ? (isEditMode ? 'Updating...' : 'Adding...') : (isEditMode ? 'Update Sales Entry' : 'Add Sales Entry') }}
-      </button>
+        [loading]="loading">
+      </app-button>
     </div>
   </form>
 </app-card>

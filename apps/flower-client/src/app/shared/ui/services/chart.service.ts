@@ -248,16 +248,36 @@ export class ChartService {
     return {
       responsive: true,
       maintainAspectRatio: false,
+      resizeDelay: 0,
       plugins: {
         legend: {
           display: true,
           position: 'bottom',
+          labels: {
+            boxWidth: 12,
+            padding: 10,
+            font: {
+              size: 12,
+            },
+          },
         },
       },
       scales: {
         y: {
           beginAtZero: true,
           type: 'linear',
+          ticks: {
+            font: {
+              size: 11,
+            },
+          },
+        },
+        x: {
+          ticks: {
+            font: {
+              size: 11,
+            },
+          },
         },
       },
     };
@@ -267,16 +287,36 @@ export class ChartService {
     return {
       responsive: true,
       maintainAspectRatio: false,
+      resizeDelay: 0,
       plugins: {
         legend: {
           display: true,
           position: 'bottom',
+          labels: {
+            boxWidth: 12,
+            padding: 10,
+            font: {
+              size: 12,
+            },
+          },
         },
       },
       scales: {
         y: {
           beginAtZero: true,
           type: 'linear',
+          ticks: {
+            font: {
+              size: 11,
+            },
+          },
+        },
+        x: {
+          ticks: {
+            font: {
+              size: 11,
+            },
+          },
         },
       },
     };
@@ -286,12 +326,24 @@ export class ChartService {
     return {
       responsive: true,
       maintainAspectRatio: false,
+      resizeDelay: 0,
       plugins: {
         legend: {
           display: true,
           position: 'bottom',
+          labels: {
+            boxWidth: 12,
+            padding: 10,
+            font: {
+              size: 12,
+            },
+          },
         },
       },
     };
+  }
+  
+  getAreaChartOptions(): ChartOptions<'line'> {
+    return this.getLineChartOptions();
   }
 }

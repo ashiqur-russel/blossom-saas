@@ -1,11 +1,11 @@
-// Global Component Utilities using @apply
-// Industry standard: Use @apply for reusable component patterns
-// This reduces component-specific SCSS significantly
-
 @layer components {
-  // Button Component Variants
   .btn {
-    @apply inline-flex items-center gap-2 px-6 py-3 rounded-lg font-semibold cursor-pointer transition-all duration-200 text-base;
+    @apply inline-flex items-center justify-center gap-2 rounded-lg font-semibold cursor-pointer transition-all duration-200 text-base;
+    padding: 0.875rem 1.5rem;
+    font-weight: 600;
+    font-size: 1rem;
+    border: none;
+    min-height: 2.75rem;
     
     &:disabled {
       @apply opacity-60 cursor-not-allowed;
@@ -14,35 +14,61 @@
     .spinner {
       @apply w-4 h-4 border-2 border-white/30 border-t-current rounded-full animate-spin;
     }
+    
+    svg {
+      width: 1.25rem;
+      height: 1.25rem;
+      flex-shrink: 0;
+    }
   }
   
   .btn-primary {
-    @apply bg-[var(--primary)] text-[var(--primary-foreground)] shadow-md;
+    @apply shadow-md;
+    background-color: var(--primary);
+    color: var(--primary-foreground);
+    box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
     
     &:hover:not(:disabled) {
-      @apply -translate-y-0.5 shadow-lg opacity-90;
+      opacity: 0.9;
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+      transform: translateY(-1px);
+    }
+    
+    &:active:not(:disabled) {
+      transform: translateY(0);
     }
   }
   
   .btn-secondary {
-    @apply bg-[var(--card)] text-[var(--foreground)] border-2 border-[var(--border)];
+    @apply border-2;
+    background-color: var(--card);
+    color: var(--muted-foreground);
+    border-color: var(--border);
     
     &:hover:not(:disabled) {
-      @apply bg-[var(--muted)] border-[var(--border)];
+      background-color: var(--muted);
+      border-color: var(--border);
+      color: var(--foreground);
     }
   }
   
   .btn-danger {
-    @apply bg-[var(--destructive)] text-[var(--destructive-foreground)];
+    background-color: var(--destructive);
+    color: var(--destructive-foreground);
+    box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
     
     &:hover:not(:disabled) {
-      @apply opacity-90;
+      opacity: 0.9;
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
     }
   }
   
-  // Card Component
   .card {
-    @apply bg-[var(--card)] rounded-[var(--radius)] p-6 shadow-sm border border-[var(--border)] transition-all duration-200;
+    @apply shadow-sm border transition-all duration-200;
+    background-color: var(--card);
+    border-radius: var(--radius);
+    border-color: var(--border);
+    padding: 1.5rem !important;
     
     &:hover {
       @apply shadow-md;
@@ -50,62 +76,133 @@
     
     &.card-highlight {
       background: linear-gradient(135deg, color-mix(in srgb, var(--primary) 8%, transparent) 0%, color-mix(in srgb, var(--primary) 8%, transparent) 100%);
-      @apply border-[var(--primary)];
+      border-color: var(--primary);
     }
     
     @media (max-width: 768px) {
-      @apply p-4 rounded-xl;
+      padding: 1rem !important;
+      border-radius: 0.75rem;
     }
   }
   
   .card-header {
-    @apply mb-4 pb-3 border-b border-[var(--border)];
+    @apply mb-4 pb-3 border-b;
+    border-color: var(--border);
   }
   
   .card-title {
-    @apply text-lg font-semibold text-[var(--card-foreground)] mb-1;
+    @apply text-lg font-semibold mb-1;
+    color: var(--card-foreground);
   }
   
   .card-subtitle {
-    @apply text-sm text-[var(--muted-foreground)];
+    @apply text-sm;
+    color: var(--muted-foreground);
   }
   
   .card-content {
-    @apply text-[var(--foreground)];
+    color: var(--foreground);
   }
   
-  // Input Component
   .input-group {
     @apply flex flex-col;
+    width: 100%;
+    gap: 0.625rem;
+    position: relative;
   }
   
   .input-label {
-    @apply text-sm font-semibold text-[var(--foreground)] mb-2;
+    @apply text-sm font-semibold;
+    color: var(--foreground);
+    font-size: 0.875rem;
+    font-weight: 600;
+    margin: 0;
+    margin-bottom: 0.25rem;
+    letter-spacing: 0.01em;
+    transition: color 0.2s;
+    line-height: 1.4;
     
     &.required::after {
       content: ' *';
-      @apply text-[var(--destructive)];
+      color: var(--destructive);
+      font-weight: 700;
+      margin-left: 0.125rem;
     }
   }
   
   .form-input {
-    @apply px-4 py-3 border-2 border-[var(--input)] rounded-[var(--radius)] text-base transition-all duration-200 bg-[var(--background)] text-[var(--foreground)];
+    @apply text-base transition-all duration-200;
+    padding: 1rem 1.25rem;
+    border: 1.5px solid var(--input);
+    border-radius: calc(var(--radius) + 2px);
+    background-color: var(--card);
+    color: var(--foreground);
+    width: 100%;
+    font-size: 1rem;
+    line-height: 1.5;
+    text-align: center;
+    box-shadow: 0 1px 3px 0 color-mix(in srgb, var(--foreground) 4%, transparent);
+    min-height: 2.75rem;
+    box-sizing: border-box;
+    
+    &[type="number"] {
+      text-align: center;
+      padding-right: 1.25rem;
+    }
+    
+    &[type="date"] {
+      text-align: center;
+      padding-right: 1.25rem;
+    }
+    
+    &:hover:not(:read-only):not(:disabled) {
+      border-color: color-mix(in srgb, var(--ring) 70%, transparent);
+      box-shadow: 0 2px 6px 0 color-mix(in srgb, var(--foreground) 6%, transparent);
+    }
     
     &:focus {
-      @apply outline-none border-[var(--ring)] shadow-[0_0_0_3px_var(--ring)/0.1];
+      @apply outline-none;
+      border-color: var(--ring);
+      background-color: var(--background);
+      box-shadow: 0 0 0 4px color-mix(in srgb, var(--ring) 12%, transparent), 0 4px 12px 0 color-mix(in srgb, var(--foreground) 10%, transparent);
+      transform: translateY(-1px);
     }
     
     &:read-only {
-      @apply bg-[var(--muted)] text-[var(--muted-foreground)] cursor-not-allowed;
+      @apply cursor-not-allowed;
+      background-color: var(--muted);
+      color: var(--muted-foreground);
+      border-color: var(--border);
+      box-shadow: none;
+      text-align: center;
+    }
+    
+    &:disabled {
+      @apply cursor-not-allowed opacity-60;
+      background-color: var(--muted);
+      text-align: center;
     }
     
     &.input-error {
-      @apply border-[var(--destructive)];
+      border-color: var(--destructive);
+      box-shadow: 0 0 0 3px color-mix(in srgb, var(--destructive) 10%, transparent);
+      
+      &:focus {
+        box-shadow: 0 0 0 4px color-mix(in srgb, var(--destructive) 12%, transparent), 0 4px 12px 0 color-mix(in srgb, var(--destructive) 10%, transparent);
+      }
+    }
+    
+    &::placeholder {
+      color: var(--muted-foreground);
+      opacity: 0.5;
+      font-weight: 400;
+      text-align: center;
     }
   }
   
   .error-text {
-    @apply text-[var(--destructive)] text-xs mt-1;
+    @apply text-xs mt-1;
+    color: var(--destructive);
   }
 }
 

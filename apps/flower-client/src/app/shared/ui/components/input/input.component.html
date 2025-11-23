@@ -12,6 +12,7 @@
     [step]="step || undefined"
     [readonly]="readonly"
     [class.input-error]="error"
+    [class.readonly]="readonly"
     (input)="onInput($event)"
     (blur)="onTouched()"
     class="form-input" />

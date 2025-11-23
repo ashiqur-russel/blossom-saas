@@ -59,15 +59,14 @@
       <app-card title="Create Withdrawal" subtitle="Withdraw money from your savings">
         <form [formGroup]="form" (ngSubmit)="onSubmit()" class="withdrawal-form">
           <div class="form-field">
-            <label for="amount">Withdrawal Amount (€)</label>
-            <input
-              id="amount"
+            <app-input
+              label="Withdrawal Amount (€)"
               type="number"
               formControlName="amount"
-              class="form-input"
-              min="0.01"
-              step="0.01"
-              required />
+              [min]="0.01"
+              [step]="0.01"
+              [required]="true">
+            </app-input>
             <small *ngIf="summary" class="hint">
               Available: €{{ summary.availableSavings | number:'1.2-2' }}
             </small>
@@ -77,23 +76,21 @@
           </div>
 
           <div class="form-field">
-            <label for="date">Withdrawal Date</label>
-            <input
-              id="date"
+            <app-input
+              label="Withdrawal Date"
               type="date"
               formControlName="date"
-              class="form-input"
-              required />
+              [required]="true">
+            </app-input>
           </div>
 
           <div class="form-field">
-            <label for="description">Description (Optional)</label>
-            <input
-              id="description"
+            <app-input
+              label="Description (Optional)"
               type="text"
               formControlName="description"
-              class="form-input"
-              placeholder="e.g., Equipment purchase, Emergency fund" />
+              placeholder="e.g., Equipment purchase, Emergency fund">
+            </app-input>
           </div>
 
           <div *ngIf="error" class="error-message">
@@ -105,13 +102,13 @@
           </div>
 
           <div class="form-actions">
-            <button
+            <app-button
+              [label]="loading ? 'Processing...' : 'Create Withdrawal'"
+              variant="primary"
               type="submit"
-              [disabled]="form.invalid || loading || (summary && form.get('amount')?.value > summary.availableSavings)"
-              class="btn btn-primary">
-              <span *ngIf="loading" class="spinner-small"></span>
-              {{ loading ? 'Processing...' : 'Create Withdrawal' }}
-            </button>
+              [disabled]="form.invalid || loading || (summary ? (form.get('amount')?.value ?? 0) > summary.availableSavings : false)"
+              [loading]="loading">
+            </app-button>
           </div>
         </form>
       </app-card>
@@ -139,14 +136,13 @@
                 <td class="amount">€{{ withdrawal.amount | number:'1.2-2' }}</td>
                 <td>{{ withdrawal.description || '-' }}</td>
                 <td>
-                  <button
-                    class="delete-btn"
-                    (click)="onDelete(withdrawal.id)"
-                    title="Delete withdrawal">
-                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
-                    </svg>
-                  </button>
+                  <app-button
+                    variant="danger"
+                    type="button"
+                    (clicked)="onDelete(withdrawal.id)"
+                    [label]="''"
+                    icon='<svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>'>
+                  </app-button>
                 </td>
               </tr>
             </tbody>

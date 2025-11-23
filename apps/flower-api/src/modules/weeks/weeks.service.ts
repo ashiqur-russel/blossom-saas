@@ -1,3 +1,7 @@
+/**
+ * Weeks Service - Business Logic
+ * Follows NestJS best practices: Service contains business logic
+ */
 import {
   ConflictException,
   Injectable,

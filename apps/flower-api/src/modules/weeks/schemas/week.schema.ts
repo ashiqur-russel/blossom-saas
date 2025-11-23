@@ -1,3 +1,7 @@
+/**
+ * Week Schema - MongoDB Schema Definition
+ * Follows NestJS best practices: Schema in schemas folder
+ */
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document } from 'mongoose';
 
