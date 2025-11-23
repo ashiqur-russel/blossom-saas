@@ -37,14 +37,14 @@ export class SalesFormComponent implements OnInit, OnChanges {
     this.weekday = dayNames[today.getDay()];
 
     this.form = this.fb.group({
-      date: [today.toISOString().split('T')[0], Validators.required],
+      date: [today.toISOString().split('T')[0], [Validators.required]],
       weekday: [this.weekday],
-      flowerAmount: [0, [Validators.required, Validators.min(0)]],
-      buyingAmount: [0, [Validators.required, Validators.min(0)]],
-      salesThursday: [0, [Validators.required, Validators.min(0)]],
-      salesFriday: [0, [Validators.required, Validators.min(0)]],
-      salesSaturday: [0, [Validators.required, Validators.min(0)]],
-      savings: [0, [Validators.required, Validators.min(0)]],
+      flowerAmount: [null, [Validators.required, Validators.min(1)]],
+      buyingAmount: [null, [Validators.required, Validators.min(0.01)]],
+      salesThursday: [null, [Validators.required, Validators.min(0.01)]],
+      salesFriday: [null, [Validators.required, Validators.min(0.01)]],
+      salesSaturday: [null, [Validators.required, Validators.min(0.01)]],
+      savings: [null, [Validators.required, Validators.min(0)]],
     });
 
     this.form.get('date')?.valueChanges.subscribe((date) => {
@@ -122,13 +122,14 @@ export class SalesFormComponent implements OnInit, OnChanges {
     this.form.reset({
       date: today.toISOString().split('T')[0],
       weekday: this.weekday,
-      flowerAmount: 0,
-      buyingAmount: 0,
-      salesThursday: 0,
-      salesFriday: 0,
-      salesSaturday: 0,
-      savings: 0,
+      flowerAmount: null,
+      buyingAmount: null,
+      salesThursday: null,
+      salesFriday: null,
+      salesSaturday: null,
+      savings: null,
     });
+    this.form.markAsUntouched();
     this.error = null;
   }
 
@@ -137,12 +138,95 @@ export class SalesFormComponent implements OnInit, OnChanges {
     this.editCancelled.emit();
   }
 
-  onSubmit(): void {
-    if (this.form.valid) {
-      this.loading = true;
-      this.error = null;
+  getFieldError(fieldName: string): string {
+    const field = this.form.get(fieldName);
+    if (!field) {
+      return '';
+    }
 
-      const formValue = this.form.value;
+    // Show errors if field is touched, dirty, or form was submitted
+    const shouldShowError = field.touched || field.dirty || this.form.touched;
+
+    if (!shouldShowError || !field.errors) {
+      return '';
+    }
+
+    if (field.errors['required']) {
+      return 'This field is required';
+    } else if (field.errors['min']) {
+      const min = field.errors['min'].min;
+      if (min === 1) {
+        return 'Must be at least 1';
+      } else if (min === 0.01) {
+        return 'Must be greater than 0';
+      }
+      return `Value must be at least ${min}`;
+    } else if (field.errors['max']) {
+      const max = field.errors['max'].max;
+      return `Value must be at most ${max}`;
+    }
+
+    return '';
+  }
+
+  isFieldInvalid(fieldName: string): boolean {
+    const field = this.form.get(fieldName);
+    if (!field) {
+      return false;
+    }
+    const shouldShowError = field.touched || field.dirty || this.form.touched;
+    return shouldShowError && field.invalid;
+  }
+
+  onSubmit(): void {
+    this.form.markAllAsTouched();
+    
+    if (!this.form.valid) {
+      this.error = 'Please fill in all required fields with valid values.';
+      return;
+    }
+
+    const formValue = this.form.value;
+    
+    // Additional validation to ensure no zero or empty values for required fields
+    if (!formValue.flowerAmount || formValue.flowerAmount <= 0) {
+      this.error = 'Flower Amount must be greater than 0.';
+      this.form.get('flowerAmount')?.setErrors({ min: true });
+      return;
+    }
+    
+    if (!formValue.buyingAmount || formValue.buyingAmount <= 0) {
+      this.error = 'Total Buying Amount must be greater than 0.';
+      this.form.get('buyingAmount')?.setErrors({ min: true });
+      return;
+    }
+    
+    if (!formValue.salesThursday || formValue.salesThursday <= 0) {
+      this.error = 'Thursday Sales must be greater than 0.';
+      this.form.get('salesThursday')?.setErrors({ min: true });
+      return;
+    }
+    
+    if (!formValue.salesFriday || formValue.salesFriday <= 0) {
+      this.error = 'Friday Sales must be greater than 0.';
+      this.form.get('salesFriday')?.setErrors({ min: true });
+      return;
+    }
+    
+    if (!formValue.salesSaturday || formValue.salesSaturday <= 0) {
+      this.error = 'Saturday Sales must be greater than 0.';
+      this.form.get('salesSaturday')?.setErrors({ min: true });
+      return;
+    }
+    
+    if (formValue.savings === null || formValue.savings < 0) {
+      this.error = 'Savings must be 0 or greater.';
+      this.form.get('savings')?.setErrors({ min: true });
+      return;
+    }
+
+    this.loading = true;
+    this.error = null;
       const date = new Date(formValue.date);
       const weekNumber = this.getWeekNumber(date);
       const year = date.getFullYear();
@@ -246,7 +330,6 @@ export class SalesFormComponent implements OnInit, OnChanges {
           },
         });
       }
-    }
   }
 }
 

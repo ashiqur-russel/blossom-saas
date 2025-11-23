@@ -14,7 +14,7 @@
     [class.input-error]="error"
     [class.readonly]="readonly"
     (input)="onInput($event)"
-    (blur)="onTouched()"
+    (blur)="onBlur()"
     class="form-input" />
   <small *ngIf="error" class="error-text">{{ error }}</small>
 </div>
