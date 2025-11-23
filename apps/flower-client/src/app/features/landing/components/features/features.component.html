@@ -1,0 +1,18 @@
+<section id="features" class="features">
+  <div class="features-container">
+    <div class="section-header">
+      <h2 class="section-title">Everything You Need</h2>
+      <p class="section-description">
+        Powerful features to help you manage and grow our business effectively.
+      </p>
+    </div>
+    <div class="features-grid">
+      <div *ngFor="let feature of features" class="feature-card">
+        <div class="feature-icon">{{ feature.icon }}</div>
+        <h3 class="feature-title">{{ feature.title }}</h3>
+        <p class="feature-description">{{ feature.description }}</p>
+      </div>
+    </div>
+  </div>
+</section>
+

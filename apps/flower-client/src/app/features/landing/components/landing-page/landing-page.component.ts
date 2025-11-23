@@ -1,18 +1,45 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterModule } from '@angular/router';
+import { HeroComponent } from '../hero/hero.component';
+import { FeaturesComponent } from '../features/features.component';
+import { HowItWorksComponent } from '../how-it-works/how-it-works.component';
+import { BenefitsComponent } from '../benefits/benefits.component';
+import { TestimonialsComponent } from '../testimonials/testimonials.component';
+import { StatisticsComponent } from '../statistics/statistics.component';
+import { FaqComponent } from '../faq/faq.component';
+import { CtaComponent } from '../cta/cta.component';
+import { FooterComponent } from '../footer/footer.component';
+import {
+  IHeroStat,
+  IFeature,
+  IHowItWorksStep,
+  IBenefit,
+  ITestimonial,
+  IStatistic,
+  IFaq,
+} from '../../models/landing.models';
 
 @Component({
   selector: 'app-landing-page',
   standalone: true,
-  imports: [CommonModule, RouterModule],
+  imports: [
+    CommonModule,
+    HeroComponent,
+    FeaturesComponent,
+    HowItWorksComponent,
+    BenefitsComponent,
+    TestimonialsComponent,
+    StatisticsComponent,
+    FaqComponent,
+    CtaComponent,
+    FooterComponent,
+  ],
   templateUrl: './landing-page.component.html',
   styleUrl: './landing-page.component.scss',
 })
 export class LandingPageComponent {
-  openFaqIndex: number | null = null;
 
-  features = [
+  features: IFeature[] = [
     {
       icon: '📊',
       title: 'Track Weekly Sales',
@@ -35,14 +62,14 @@ export class LandingPageComponent {
     },
   ];
 
-  stats = [
+  stats: IHeroStat[] = [
     { value: '100%', label: 'Data Accuracy' },
     { value: '24/7', label: 'Access' },
     { value: 'Easy', label: 'To Use' },
     { value: 'Free', label: 'Forever' },
   ];
 
-  howItWorksSteps = [
+  howItWorksSteps: IHowItWorksStep[] = [
     {
       title: 'Sign Up Free',
       description: 'Create your account in seconds. No credit card required, completely free forever.',
@@ -61,7 +88,7 @@ export class LandingPageComponent {
     },
   ];
 
-  benefits = [
+  benefits: IBenefit[] = [
     {
       title: 'Save Time',
       description: 'Automate your weekly tracking and spend less time on manual calculations.',
@@ -88,7 +115,7 @@ export class LandingPageComponent {
     },
   ];
 
-  testimonials = [
+  testimonials: ITestimonial[] = [
     {
       text: 'Blossom has completely transformed how I track my business. The analytics are incredible and help me make better decisions every week.',
       name: 'Sarah Johnson',
@@ -109,7 +136,7 @@ export class LandingPageComponent {
     },
   ];
 
-  statistics = [
+  statistics: IStatistic[] = [
     {
       icon: '📈',
       value: '35%',
@@ -136,7 +163,7 @@ export class LandingPageComponent {
     },
   ];
 
-  faqs = [
+  faqs: IFaq[] = [
     {
       question: 'Is Blossom really free?',
       answer: 'Yes! Blossom is completely free forever. No credit card required, no hidden fees, no subscriptions. We believe in providing powerful business tools to everyone.',
@@ -163,8 +190,5 @@ export class LandingPageComponent {
     },
   ];
 
-  toggleFaq(index: number): void {
-    this.openFaqIndex = this.openFaqIndex === index ? null : index;
-  }
 }
 

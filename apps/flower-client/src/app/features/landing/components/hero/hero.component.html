@@ -1,0 +1,81 @@
+<section class="hero">
+  <div class="hero-container">
+    <div class="hero-content">
+      <div class="hero-badge">
+        <span class="badge-text">✨ Manage Your Business</span>
+      </div>
+      <h1 class="hero-title">
+        Grow Your Business
+        <span class="title-highlight">with Smart Analytics</span>
+      </h1>
+      <p class="hero-description">
+        Track your weekly sales, analyze profits, and make data-driven decisions to grow our business.
+        Everything you need in one beautiful dashboard.
+      </p>
+      <div class="hero-actions">
+        <a routerLink="/dashboard" class="btn btn-primary">
+          <span>Start Tracking</span>
+          <svg class="btn-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"></path>
+          </svg>
+        </a>
+        <a href="#features" class="btn btn-secondary">
+          <span>Learn More</span>
+        </a>
+      </div>
+      <div class="hero-stats">
+        <div *ngFor="let stat of stats" class="stat-item">
+          <div class="stat-value">{{ stat.value }}</div>
+          <div class="stat-label">{{ stat.label }}</div>
+        </div>
+      </div>
+    </div>
+    <div class="hero-visual">
+      <div class="visual-card card-1">
+        <div class="card-header">
+          <div class="card-dots">
+            <span class="dot"></span>
+            <span class="dot"></span>
+            <span class="dot"></span>
+          </div>
+        </div>
+        <div class="card-content">
+          <div class="card-chart">
+            <div class="chart-bar" style="height: 60%"></div>
+            <div class="chart-bar" style="height: 80%"></div>
+            <div class="chart-bar" style="height: 45%"></div>
+            <div class="chart-bar" style="height: 90%"></div>
+            <div class="chart-bar" style="height: 70%"></div>
+          </div>
+          <div class="card-footer">
+            <span class="card-label">Weekly Sales</span>
+            <span class="card-value">€2,450</span>
+          </div>
+        </div>
+      </div>
+      <div class="visual-card card-2">
+        <div class="card-header">
+          <div class="card-dots">
+            <span class="dot"></span>
+            <span class="dot"></span>
+            <span class="dot"></span>
+          </div>
+        </div>
+        <div class="card-content">
+          <div class="card-metric">
+            <div class="metric-icon">📊</div>
+            <div class="metric-info">
+              <span class="metric-label">Total Profit</span>
+              <span class="metric-value">€1,250</span>
+            </div>
+          </div>
+          <div class="metric-trend">
+            <span class="trend-arrow">↑</span>
+            <span class="trend-text">+12.5%</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+

@@ -1,0 +1,19 @@
+<section class="statistics">
+  <div class="statistics-container">
+    <div class="section-header">
+      <h2 class="section-title">Real Results, Real Impact</h2>
+      <p class="section-description">
+        See the measurable impact Blossom has on business performance.
+      </p>
+    </div>
+    <div class="statistics-grid">
+      <div *ngFor="let stat of statistics" class="statistic-card">
+        <div class="statistic-icon">{{ stat.icon }}</div>
+        <div class="statistic-value">{{ stat.value }}</div>
+        <div class="statistic-label">{{ stat.label }}</div>
+        <div class="statistic-description">{{ stat.description }}</div>
+      </div>
+    </div>
+  </div>
+</section>
+

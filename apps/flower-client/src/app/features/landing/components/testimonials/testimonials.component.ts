@@ -1,0 +1,15 @@
+import { Component, Input } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { ITestimonial } from '../../models/landing.models';
+
+@Component({
+  selector: 'app-testimonials',
+  standalone: true,
+  imports: [CommonModule],
+  templateUrl: './testimonials.component.html',
+  styleUrl: './testimonials.component.scss',
+})
+export class TestimonialsComponent {
+  @Input() testimonials: ITestimonial[] = [];
+}
+

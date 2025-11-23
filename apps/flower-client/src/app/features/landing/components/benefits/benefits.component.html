@@ -1,0 +1,38 @@
+<section class="benefits">
+  <div class="benefits-container">
+    <div class="benefits-content">
+      <div class="benefits-text">
+        <h2 class="section-title">Why Choose Blossom?</h2>
+        <p class="section-description">
+          Join thousands of businesses that trust Blossom to manage their weekly operations and drive growth.
+        </p>
+        <div class="benefits-list">
+          <div *ngFor="let benefit of benefits" class="benefit-item">
+            <div class="benefit-icon">✓</div>
+            <div class="benefit-text">
+              <h4 class="benefit-title">{{ benefit.title }}</h4>
+              <p class="benefit-description">{{ benefit.description }}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="benefits-visual">
+        <div class="benefits-card">
+          <div class="benefits-stat">
+            <div class="stat-number">€50K+</div>
+            <div class="stat-label">Tracked Revenue</div>
+          </div>
+          <div class="benefits-stat">
+            <div class="stat-number">500+</div>
+            <div class="stat-label">Active Users</div>
+          </div>
+          <div class="benefits-stat">
+            <div class="stat-number">98%</div>
+            <div class="stat-label">Satisfaction Rate</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
