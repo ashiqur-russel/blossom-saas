@@ -1,9 +1,9 @@
 .card {
-  background: white;
-  border-radius: 1rem;
+  background: var(--card);
+  border-radius: var(--radius);
   padding: 1.5rem;
   box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
-  border: 1px solid #e5e7eb;
+  border: 1px solid var(--border);
   transition: all 0.2s;
 
   &:hover {
@@ -11,8 +11,8 @@
   }
 
   &.card-highlight {
-    background: linear-gradient(135deg, #667eea15 0%, #764ba215 100%);
-    border-color: #667eea;
+    background: linear-gradient(135deg, color-mix(in srgb, var(--primary) 8%, transparent) 0%, color-mix(in srgb, var(--primary) 8%, transparent) 100%);
+    border-color: var(--primary);
   }
 
   @media (max-width: 768px) {
@@ -24,23 +24,23 @@
 .card-header {
   margin-bottom: 1rem;
   padding-bottom: 0.75rem;
-  border-bottom: 1px solid #e5e7eb;
+  border-bottom: 1px solid var(--border);
 }
 
 .card-title {
   font-size: 1.125rem;
   font-weight: 600;
-  color: #111827;
+  color: var(--card-foreground);
   margin: 0 0 0.25rem 0;
 }
 
 .card-subtitle {
   font-size: 0.875rem;
-  color: #6b7280;
+  color: var(--muted-foreground);
   margin: 0;
 }
 
 .card-content {
-  color: #374151;
+  color: var(--foreground);
 }
 

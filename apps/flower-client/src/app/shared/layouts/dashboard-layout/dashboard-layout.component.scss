@@ -3,7 +3,7 @@
   min-height: 100vh;
   width: 100%;
   overflow-x: hidden;
-  background: linear-gradient(to bottom right, #fdf2f8, #faf5ff, #eff6ff);
+  background: linear-gradient(to bottom right, var(--dashboard-gradient-start), var(--dashboard-gradient-middle), var(--dashboard-gradient-end));
   padding-top: env(safe-area-inset-top, 0px);
   padding-bottom: env(safe-area-inset-bottom, 0px);
 }
@@ -29,22 +29,22 @@
   top: calc(0.75rem + env(safe-area-inset-top, 0px));
   left: 0.75rem;
   z-index: 997;
-  background: white;
-  border: 1px solid #e5e7eb;
-  border-radius: 0.5rem;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
   padding: 0.625rem;
   cursor: pointer;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
   transition: all 0.2s;
-  color: #6b7280;
+  color: var(--muted-foreground);
   width: 2.5rem;
   height: 2.5rem;
   align-items: center;
   justify-content: center;
 
   &:active {
-    background: #f9fafb;
-    color: #111827;
+    background: var(--muted);
+    color: var(--foreground);
     transform: scale(0.95);
   }
 

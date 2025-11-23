@@ -1,0 +1,146 @@
+// Change these hex color values to update colors across the entire project
+// Format: #RRGGBB
+
+@layer base {
+  :root {
+    --background: #fefefe;
+    --foreground: #3f2741;             
+    
+    --card: #ffffff;
+    --card-foreground: #2d1b2e;
+    
+    --popover: #ffffff;
+    --popover-foreground: #2d1b2e;
+    
+    --primary: #e91e63;                
+    --primary-foreground: #ffffff;
+    
+    --secondary: #f3e8ff;               
+    --secondary-foreground: #6b21a8;
+    
+    --muted: #fce7f3;                   
+    --muted-foreground: #9f1239;       
+    
+    --accent: #d1fae5;               
+    --accent-foreground: #065f46;    
+    
+    --destructive: #ef4444;
+    --destructive-foreground: #ffffff;
+    
+    --success: #10b981;                
+    --success-foreground: #ffffff;
+    
+    // Border & Input Colors
+    --border: #fce7f3;                 
+    --input: #fce7f3;
+    --ring: #e91e63;                     
+    
+    // Border Radius
+    --radius: 0.75rem;                   
+    
+    // Chart Colors - Flower-inspired palette
+    --chart-1: #e91e63;                  
+    --chart-2: #10b981;                  
+    --chart-3: #a855f7;                 
+    --chart-4: #f59e0b;              
+    --chart-5: #ec4899;                
+    
+    // Sidebar Colors
+    --sidebar: #fef7ff;                  
+    --sidebar-foreground: #2d1b2e;
+    --sidebar-primary: #e91e63;
+    --sidebar-primary-foreground: #ffffff;
+    --sidebar-accent: #fce7f3;
+    --sidebar-accent-foreground: #9f1239;
+    --sidebar-border: #fce7f3;
+    --sidebar-ring: #e91e63;
+    
+    // Custom Dashboard Colors (for gradients) - Soft flower gradients
+    --dashboard-gradient-start: #fef7ff;  
+    --dashboard-gradient-middle: #f3e8ff; 
+    --dashboard-gradient-end: #ecfdf5;   
+    
+    // KPI Colors - Vibrant but harmonious
+    --kpi-blue: #3b82f6;                
+    --kpi-green: #10b981;            
+    --kpi-purple: #a855f7;               
+    --kpi-orange: #f97316;           
+    --kpi-pink: #ec4899;    
+    --kpi-indigo: #6366f1;        
+    
+    // Light versions for cards
+    --kpi-pink-light: #fdf2f8;
+    --kpi-purple-light: #faf5ff;
+    --kpi-blue-light: #eff6ff;
+  }
+
+  .dark {
+    --background: #1a0f1c;             
+    --foreground: #fef7ff;
+    
+    --card: #2d1b2e;
+    --card-foreground: #fef7ff;
+    
+    --popover: #2d1b2e;
+    --popover-foreground: #fef7ff;
+    
+    --primary: #f472b6;               
+    --primary-foreground: #1a0f1c;
+    
+    --secondary: #4c1d95;
+    --secondary-foreground: #fef7ff;
+    
+    --muted: #4c1d95;
+    --muted-foreground: #c084fc;
+    
+    --accent: #065f46;
+    --accent-foreground: #d1fae5;
+    
+    --destructive: #dc2626;
+    --destructive-foreground: #fef2f2;
+    
+    --border: #4c1d95;
+    --input: #4c1d95;
+    --ring: #f472b6;
+    
+    --chart-1: #f472b6;
+    --chart-2: #10b981;
+    --chart-3: #a855f7;
+    --chart-4: #f59e0b;
+    --chart-5: #ec4899;
+    
+    --sidebar: #2d1b2e;
+    --sidebar-foreground: #fef7ff;
+    --sidebar-primary: #f472b6;
+    --sidebar-primary-foreground: #1a0f1c;
+    --sidebar-accent: #4c1d95;
+    --sidebar-accent-foreground: #fef7ff;
+    --sidebar-border: #4c1d95;
+    --sidebar-ring: #f472b6;
+  }
+}
+
+// Utility classes for easy usage
+.bg-background { background-color: var(--background); }
+.bg-foreground { background-color: var(--foreground); }
+.bg-card { background-color: var(--card); }
+.bg-primary { background-color: var(--primary); }
+.bg-secondary { background-color: var(--secondary); }
+.bg-muted { background-color: var(--muted); }
+.bg-accent { background-color: var(--accent); }
+.bg-destructive { background-color: var(--destructive); }
+.bg-success { background-color: var(--success); }
+
+.text-foreground { color: var(--foreground); }
+.text-card-foreground { color: var(--card-foreground); }
+.text-primary-foreground { color: var(--primary-foreground); }
+.text-secondary-foreground { color: var(--secondary-foreground); }
+.text-muted-foreground { color: var(--muted-foreground); }
+.text-accent-foreground { color: var(--accent-foreground); }
+.text-destructive-foreground { color: var(--destructive-foreground); }
+.text-success-foreground { color: var(--success-foreground); }
+
+.border-border { border-color: var(--border); }
+.border-input { border-color: var(--input); }
+.border-ring { border-color: var(--ring); }
+

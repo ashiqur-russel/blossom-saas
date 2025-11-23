@@ -1,3 +1,6 @@
+/* Import Theme Variables - Must be first */
+@use './styles/_theme';
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -32,8 +35,25 @@ body {
 
 body {
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
-  background: linear-gradient(to bottom, #f8fafc, #ffffff);
-  color: #111827;
+  background: var(--background);
+  color: var(--foreground);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
+
+// Global utility classes for theme colors
+.bg-primary { background-color: var(--primary); }
+.bg-secondary { background-color: var(--secondary); }
+.bg-muted { background-color: var(--muted); }
+.bg-card { background-color: var(--card); }
+.bg-destructive { background-color: var(--destructive); }
+.bg-success { background-color: var(--success); }
+
+.text-primary { color: var(--primary); }
+.text-foreground { color: var(--foreground); }
+.text-muted { color: var(--muted-foreground); }
+.text-destructive { color: var(--destructive); }
+.text-success { color: var(--success); }
+
+.border-primary { border-color: var(--primary); }
+.border-border { border-color: var(--border); }
