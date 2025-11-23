@@ -14,7 +14,7 @@ export class LandingPageComponent {
     {
       icon: '📊',
       title: 'Track Weekly Sales',
-      description: 'Monitor your flower business performance with detailed weekly analytics and insights.',
+      description: 'Monitor our business performance with detailed weekly analytics and insights.',
     },
     {
       icon: '💰',
@@ -29,7 +29,7 @@ export class LandingPageComponent {
     {
       icon: '💾',
       title: 'Save & Plan',
-      description: 'Track your savings and plan for future investments in your flower business.',
+      description: 'Track your savings and plan for future investments in our business.',
     },
   ];
 
