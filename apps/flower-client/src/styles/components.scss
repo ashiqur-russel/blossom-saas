@@ -1,0 +1,111 @@
+// Global Component Utilities using @apply
+// Industry standard: Use @apply for reusable component patterns
+// This reduces component-specific SCSS significantly
+
+@layer components {
+  // Button Component Variants
+  .btn {
+    @apply inline-flex items-center gap-2 px-6 py-3 rounded-lg font-semibold cursor-pointer transition-all duration-200 text-base;
+    
+    &:disabled {
+      @apply opacity-60 cursor-not-allowed;
+    }
+    
+    .spinner {
+      @apply w-4 h-4 border-2 border-white/30 border-t-current rounded-full animate-spin;
+    }
+  }
+  
+  .btn-primary {
+    @apply bg-[var(--primary)] text-[var(--primary-foreground)] shadow-md;
+    
+    &:hover:not(:disabled) {
+      @apply -translate-y-0.5 shadow-lg opacity-90;
+    }
+  }
+  
+  .btn-secondary {
+    @apply bg-[var(--card)] text-[var(--foreground)] border-2 border-[var(--border)];
+    
+    &:hover:not(:disabled) {
+      @apply bg-[var(--muted)] border-[var(--border)];
+    }
+  }
+  
+  .btn-danger {
+    @apply bg-[var(--destructive)] text-[var(--destructive-foreground)];
+    
+    &:hover:not(:disabled) {
+      @apply opacity-90;
+    }
+  }
+  
+  // Card Component
+  .card {
+    @apply bg-[var(--card)] rounded-[var(--radius)] p-6 shadow-sm border border-[var(--border)] transition-all duration-200;
+    
+    &:hover {
+      @apply shadow-md;
+    }
+    
+    &.card-highlight {
+      background: linear-gradient(135deg, color-mix(in srgb, var(--primary) 8%, transparent) 0%, color-mix(in srgb, var(--primary) 8%, transparent) 100%);
+      @apply border-[var(--primary)];
+    }
+    
+    @media (max-width: 768px) {
+      @apply p-4 rounded-xl;
+    }
+  }
+  
+  .card-header {
+    @apply mb-4 pb-3 border-b border-[var(--border)];
+  }
+  
+  .card-title {
+    @apply text-lg font-semibold text-[var(--card-foreground)] mb-1;
+  }
+  
+  .card-subtitle {
+    @apply text-sm text-[var(--muted-foreground)];
+  }
+  
+  .card-content {
+    @apply text-[var(--foreground)];
+  }
+  
+  // Input Component
+  .input-group {
+    @apply flex flex-col;
+  }
+  
+  .input-label {
+    @apply text-sm font-semibold text-[var(--foreground)] mb-2;
+    
+    &.required::after {
+      content: ' *';
+      @apply text-[var(--destructive)];
+    }
+  }
+  
+  .form-input {
+    @apply px-4 py-3 border-2 border-[var(--input)] rounded-[var(--radius)] text-base transition-all duration-200 bg-[var(--background)] text-[var(--foreground)];
+    
+    &:focus {
+      @apply outline-none border-[var(--ring)] shadow-[0_0_0_3px_var(--ring)/0.1];
+    }
+    
+    &:read-only {
+      @apply bg-[var(--muted)] text-[var(--muted-foreground)] cursor-not-allowed;
+    }
+    
+    &.input-error {
+      @apply border-[var(--destructive)];
+    }
+  }
+  
+  .error-text {
+    @apply text-[var(--destructive)] text-xs mt-1;
+  }
+}
+

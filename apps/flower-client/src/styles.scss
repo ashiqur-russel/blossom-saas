@@ -1,5 +1,6 @@
-/* Import Theme Variables - Must be first */
+/* Import Theme Variables and Components - Must be first (before @tailwind) */
 @use './styles/_theme';
+@use './styles/components';
 
 @tailwind base;
 @tailwind components;
