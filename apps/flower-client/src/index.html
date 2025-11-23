@@ -2,10 +2,21 @@
 <html lang="en">
 <head>
   <meta charset="utf-8">
-  <title>FlowerClient</title>
+  <title>Blossom</title>
   <base href="/">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
   <link rel="icon" type="image/x-icon" href="favicon.ico">
+  <style>
+    /* Safe area fallback for older browsers */
+    :root {
+      --safe-area-inset-top: env(safe-area-inset-top, 0px);
+      --safe-area-inset-bottom: env(safe-area-inset-bottom, 0px);
+      --safe-area-inset-left: env(safe-area-inset-left, 0px);
+      --safe-area-inset-right: env(safe-area-inset-right, 0px);
+    }
+  </style>
 </head>
 <body>
   <app-root></app-root>

@@ -4,6 +4,13 @@ export const routes: Routes = [
   {
     path: '',
     loadComponent: () =>
+      import('./features/landing/components/landing-page/landing-page.component').then(
+        (m) => m.LandingPageComponent,
+      ),
+  },
+  {
+    path: 'dashboard',
+    loadComponent: () =>
       import('./features/dashboard/components/dashboard-container/dashboard-container.component').then(
         (m) => m.DashboardContainerComponent,
       ),
