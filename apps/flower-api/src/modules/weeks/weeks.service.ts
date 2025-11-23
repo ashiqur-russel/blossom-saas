@@ -22,10 +22,11 @@ export class WeeksService {
     private readonly weekModel: Model<WeekDocument>,
   ) {}
 
-  async create(createWeekDto: CreateWeekDto): Promise<WeekResponseDto> {
-    // Check if week already exists
+  async create(createWeekDto: CreateWeekDto, userId: string): Promise<WeekResponseDto> {
+    // Check if week already exists for this user
     const existingWeek = await this.weekModel
       .findOne({
+        userId,
         weekNumber: createWeekDto.weekNumber,
         year: createWeekDto.year,
       })
@@ -37,20 +38,23 @@ export class WeeksService {
       );
     }
 
-    const createdWeek = await this.weekModel.create(createWeekDto);
+    const createdWeek = await this.weekModel.create({
+      ...createWeekDto,
+      userId,
+    });
     return this.mapToResponseDto(createdWeek);
   }
 
-  async findAll(): Promise<WeekResponseDto[]> {
+  async findAll(userId: string): Promise<WeekResponseDto[]> {
     const weeks = await this.weekModel
-      .find()
+      .find({ userId })
       .sort({ year: -1, weekNumber: -1 })
       .exec();
     return weeks.map((week) => this.mapToResponseDto(week));
   }
 
-  async findOne(id: string): Promise<WeekResponseDto> {
-    const week = await this.weekModel.findById(id).exec();
+  async findOne(id: string, userId: string): Promise<WeekResponseDto> {
+    const week = await this.weekModel.findOne({ _id: id, userId }).exec();
     if (!week) {
       throw new NotFoundException(`Week with ID ${id} not found`);
     }
@@ -60,10 +64,11 @@ export class WeeksService {
   async update(
     id: string,
     updateWeekDto: UpdateWeekDto,
+    userId: string,
   ): Promise<WeekResponseDto> {
     // Handle partial sale update
     if (updateWeekDto.sale) {
-      const existingWeek = await this.weekModel.findById(id).select('sale').lean().exec();
+      const existingWeek = await this.weekModel.findOne({ _id: id, userId }).select('sale').lean().exec();
       if (existingWeek && existingWeek.sale) {
         updateWeekDto.sale = {
           ...existingWeek.sale,
@@ -73,7 +78,7 @@ export class WeeksService {
     }
 
     const week = await this.weekModel
-      .findByIdAndUpdate(id, updateWeekDto, { new: true, runValidators: true })
+      .findOneAndUpdate({ _id: id, userId }, updateWeekDto, { new: true, runValidators: true })
       .exec();
 
     if (!week) {
@@ -83,15 +88,15 @@ export class WeeksService {
     return this.mapToResponseDto(week);
   }
 
-  async remove(id: string): Promise<void> {
-    const result = await this.weekModel.findByIdAndDelete(id).exec();
+  async remove(id: string, userId: string): Promise<void> {
+    const result = await this.weekModel.findOneAndDelete({ _id: id, userId }).exec();
     if (!result) {
       throw new NotFoundException(`Week with ID ${id} not found`);
     }
   }
 
-  async getSummary(): Promise<WeekSummaryDto> {
-    const weeks = await this.weekModel.find().exec();
+  async getSummary(userId: string): Promise<WeekSummaryDto> {
+    const weeks = await this.weekModel.find({ userId }).exec();
 
     if (weeks.length === 0) {
       return {

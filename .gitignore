@@ -31,3 +31,7 @@ Thumbs.db
 # TypeScript
 *.tsbuildinfo
 
+# Temporary scripts
+post-week-data.sh
+*.sh
+

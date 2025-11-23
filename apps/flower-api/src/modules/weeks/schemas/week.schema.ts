@@ -33,6 +33,9 @@ export const SaleByDaySchema = SchemaFactory.createForClass(SaleByDay);
   },
 })
 export class Week {
+  @Prop({ type: String, required: true, ref: 'User', index: true })
+  userId: string;
+
   @Prop({ type: Number, required: true, index: true })
   weekNumber: number;
 
@@ -74,8 +77,9 @@ export type WeekDocument = Week & Document;
 
 export const WeekSchema = SchemaFactory.createForClass(Week);
 
-// Compound index for unique week/year combination
-WeekSchema.index({ weekNumber: 1, year: 1 }, { unique: true });
-WeekSchema.index({ year: 1, weekNumber: -1 });
+// Compound index for unique week/year/userId combination
+WeekSchema.index({ userId: 1, weekNumber: 1, year: 1 }, { unique: true });
+WeekSchema.index({ userId: 1, year: 1, weekNumber: -1 });
+WeekSchema.index({ userId: 1 });
 
 
