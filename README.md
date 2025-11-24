@@ -33,27 +33,21 @@
 See your business health at a glance. Revenue, profit, trends - all in one place.
 
 ### 💰 **Sales Tracking**
-**Location for Screenshot:** `[Screenshot: Sales Management]`
 Track every sale. Automatic calculations. Zero errors.
 
 ### 👥 **Customer Management**
-**Location for Screenshot:** `[Screenshot: Customer Database]`
 All your customers in one place. Purchase history. Contact management.
 
 ### 📄 **Invoice Generator**
-**Location for Screenshot:** `[Screenshot: Invoice Creation]`
 Professional invoices in seconds. Auto-generated. Branded. Track payments.
 
 ### 📈 **Advanced Analytics**
-**Location for Screenshot:** `[Screenshot: Analytics Charts]`
 Beautiful charts. Profit trends. Revenue patterns. Make data-driven decisions.
 
 ### 💳 **Financial Management**
-**Location for Screenshot:** `[Screenshot: Financial Overview]`
 Track withdrawals. Monitor cash flow. Understand your finances.
 
 ### 🧮 **Smart Calculations**
-**Location for Screenshot:** `[Screenshot: Calculations]`
 Automatic profit, margin, ROI calculations. No math needed.
 
 ---
@@ -114,8 +108,6 @@ Stop doing paperwork. Start growing your business.
 
 ## 🎬 Quick Demo
 
-**Location for Screenshot:** `[Screenshot: Getting Started]`
-
 1. **Sign Up** - 2 minutes
 2. **Add Your Data** - Start tracking immediately  
 3. **See Insights** - Instant analytics
@@ -165,8 +157,6 @@ Stop doing paperwork. Start growing your business.
 ## 🎯 Get Started Today
 
 ### Try It Free. No Credit Card Required.
-
-**Location for Screenshot:** `[Screenshot: Sign Up Page]`
 
 [**Start Free Trial**] [**Schedule Demo**] [**Contact Sales**]
 
