@@ -86,7 +86,7 @@ Stop doing paperwork. Start growing your business.
 
 <div align="center">
 
-![Blossom Analytics](docs/images/Macbook-Air-localhost%20(1).png)
+![Blossom Analytics](docs/images/Macbook-Air-localhost-1.png)
 
 *Advanced analytics and interactive charts*
 
@@ -94,7 +94,7 @@ Stop doing paperwork. Start growing your business.
 
 <div align="center">
 
-![Blossom Features](docs/images/Macbook-Air-localhost%20(2).png)
+![Blossom Features](docs/images/Macbook-Air-localhost-2.png)
 
 *Additional platform features and capabilities*
 
