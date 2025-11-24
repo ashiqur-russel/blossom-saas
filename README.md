@@ -27,7 +27,7 @@
 ### 📊 **Real-Time Dashboard**
 <div align="center">
 
-![Dashboard Preview](docs/images/Macbook-Air-localhost.png)
+<img src="assets/images/Macbook-Air-localhost.png" alt="Dashboard Preview" width="800"/>
 
 </div>
 See your business health at a glance. Revenue, profit, trends - all in one place.
@@ -78,7 +78,7 @@ Stop doing paperwork. Start growing your business.
 
 <div align="center">
 
-![Blossom Platform Dashboard](docs/images/Macbook-Air-localhost.png)
+<img src="assets/images/Macbook-Air-localhost.png" alt="Blossom Platform Dashboard" width="900"/>
 
 *Complete platform overview - Dashboard with all features*
 
@@ -86,7 +86,7 @@ Stop doing paperwork. Start growing your business.
 
 <div align="center">
 
-![Blossom Analytics](docs/images/Macbook-Air-localhost-1.png)
+<img src="assets/images/Macbook-Air-localhost-1.png" alt="Blossom Analytics" width="900"/>
 
 *Advanced analytics and interactive charts*
 
@@ -94,7 +94,7 @@ Stop doing paperwork. Start growing your business.
 
 <div align="center">
 
-![Blossom Features](docs/images/Macbook-Air-localhost-2.png)
+<img src="assets/images/Macbook-Air-localhost-2.png" alt="Blossom Features" width="900"/>
 
 *Additional platform features and capabilities*
 
