@@ -84,17 +84,21 @@ Stop doing paperwork. Start growing your business.
 
 </div>
 
-**Location for Screenshot:** `[Screenshot: Mobile View]`
-*Works perfectly on mobile, tablet, desktop*
+<div align="center">
 
-**Location for Screenshot:** `[Screenshot: Invoice Example]`
-*Professional invoice example*
+![Blossom Analytics](docs/images/Macbook-Air-localhost%20(1).png)
 
-**Location for Screenshot:** `[Screenshot: Customer View]`
-*Customer management interface*
+*Advanced analytics and interactive charts*
 
-**Location for Screenshot:** `[Screenshot: Analytics Dashboard]`
-*Interactive charts and visualizations*
+</div>
+
+<div align="center">
+
+![Blossom Features](docs/images/Macbook-Air-localhost%20(2).png)
+
+*Additional platform features and capabilities*
+
+</div>
 
 ---
 
