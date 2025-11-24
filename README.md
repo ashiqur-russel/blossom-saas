@@ -25,7 +25,11 @@
 ## ⚡ What You Get
 
 ### 📊 **Real-Time Dashboard**
-**Location for Screenshot:** `[Screenshot: Dashboard]`
+<div align="center">
+
+![Dashboard Preview](docs/images/Macbook-Air-localhost.png)
+
+</div>
 See your business health at a glance. Revenue, profit, trends - all in one place.
 
 ### 💰 **Sales Tracking**
@@ -72,8 +76,13 @@ Stop doing paperwork. Start growing your business.
 
 ## 📸 See It In Action
 
-**Location for Screenshot:** `[Screenshot: Complete Platform Overview]`
-*Full platform view showing all features*
+<div align="center">
+
+![Blossom Platform Dashboard](docs/images/Macbook-Air-localhost.png)
+
+*Complete platform overview - Dashboard with all features*
+
+</div>
 
 **Location for Screenshot:** `[Screenshot: Mobile View]`
 *Works perfectly on mobile, tablet, desktop*
