@@ -57,20 +57,20 @@ export class AuthService {
       userData.businessName = businessName.trim();
     }
 
-    const createdUser: any = await this.userModel.create(userData);
-    const user = createdUser as UserDocument;
+            const createdUser: any = await this.userModel.create(userData);
+            const user = createdUser as UserDocument;
 
-    const accessToken = this.generateToken(user);
-    const refreshToken = this.generateRefreshToken(user);
+            const accessToken = this.generateToken(user);
+            const refreshToken = this.generateRefreshToken(user);
 
-    user.refreshToken = refreshToken;
-    await user.save();
+            user.refreshToken = refreshToken;
+            await user.save();
 
-    return {
-      accessToken,
-      refreshToken,
-      user: this.sanitizeUser(user),
-    } as AuthResponse;
+            return {
+              accessToken,
+              refreshToken,
+              user: this.sanitizeUser(user),
+            } as AuthResponse;
   }
 
   async login(loginDto: LoginDto) {
@@ -91,20 +91,20 @@ export class AuthService {
       throw new UnauthorizedException('Invalid email or password');
     }
 
-    user.lastLoginAt = new Date();
+            user.lastLoginAt = new Date();
 
-    const userDoc = user;
-    const accessToken = this.generateToken(userDoc);
-    const refreshToken = this.generateRefreshToken(userDoc);
+            const userDoc = user;
+            const accessToken = this.generateToken(userDoc);
+            const refreshToken = this.generateRefreshToken(userDoc);
 
-    user.refreshToken = refreshToken;
-    await user.save();
+            user.refreshToken = refreshToken;
+            await user.save();
 
-    return {
-      accessToken,
-      refreshToken,
-      user: this.sanitizeUser(user),
-    } as AuthResponse;
+            return {
+              accessToken,
+              refreshToken,
+              user: this.sanitizeUser(user),
+            } as AuthResponse;
   }
 
   async changePassword(userId: string, changePasswordDto: ChangePasswordDto) {
