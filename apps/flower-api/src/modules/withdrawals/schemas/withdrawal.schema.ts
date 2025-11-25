@@ -24,3 +24,4 @@ export class Withdrawal {
 export const WithdrawalSchema = SchemaFactory.createForClass(Withdrawal);
 
 
+

@@ -45,3 +45,4 @@ echo "📝 Generated secrets have been added to .env file"
 echo ""
 echo "⚠️  IMPORTANT: Keep your .env file secure and never commit it to version control!"
 
+

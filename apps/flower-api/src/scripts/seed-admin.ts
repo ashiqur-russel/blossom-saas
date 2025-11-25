@@ -14,8 +14,8 @@ async function seedAdmin() {
   const app = await NestFactory.createApplicationContext(AppModule);
   const userModel = app.get<Model<UserDocument>>(getModelToken(User.name));
 
-  const adminEmail = process.env.ADMIN_EMAIL || 'admin@admin.de';
-  const adminPassword = process.env.ADMIN_PASSWORD || 'admin123!';
+  const adminEmail = process.env.ADMIN_EMAIL || 'admin@blossom.com';
+  const adminPassword = process.env.ADMIN_PASSWORD || 'Admin123!';
   const adminFirstName = process.env.ADMIN_FIRST_NAME || 'Admin';
   const adminLastName = process.env.ADMIN_LAST_NAME || 'User';
 
@@ -66,4 +66,5 @@ async function seedAdmin() {
 }
 
 seedAdmin();
+
 

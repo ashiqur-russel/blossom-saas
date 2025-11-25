@@ -1,0 +1,30 @@
+# Vercel Configuration Example
+# This file shows the structure but actual configuration is done in Vercel dashboard
+
+# For API Project (apps/flower-api):
+# - Root Directory: apps/flower-api
+# - Framework: Other
+# - Build Command: (leave empty or npm run build)
+# - Output Directory: (leave empty)
+# - Install Command: npm install
+
+# For Client Project (apps/flower-client):
+# - Root Directory: apps/flower-client
+# - Framework: Other
+# - Build Command: npm run build
+# - Output Directory: dist/flower-client/browser
+# - Install Command: npm install
+
+# Environment Variables to set in Vercel Dashboard:
+
+# API Project:
+# MONGODB_URL=your-mongodb-connection-string
+# JWT_SECRET=your-jwt-secret-key
+# JWT_REFRESH_SECRET=your-refresh-token-secret
+# ALLOWED_ORIGINS=https://your-angular-app.vercel.app
+# NODE_ENV=production
+# ENABLE_SWAGGER=false
+
+# Client Project:
+# API_URL=https://your-api-domain.vercel.app
+
