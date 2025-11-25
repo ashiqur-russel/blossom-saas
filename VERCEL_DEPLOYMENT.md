@@ -22,13 +22,13 @@ You need **two separate Vercel projects** - one for the API and one for the Angu
    - Name it something like `flower-api` or `flower-business-api`
 
 2. **Configure the project:**
-   - **Framework Preset:** Other
+   - **Framework Preset:** Other (Vercel will auto-detect NestJS and use `@vercel/nestjs` builder)
    - **Root Directory:** `apps/flower-api`
-   - **Build Command:** Leave empty (Vercel will use the `vercel-build` script from package.json, which skips the build)
-   - **Output Directory:** Leave empty (not used for serverless)
+   - **Build Command:** Leave empty or set to `npm run vercel-build` (the `vercel-build` script uses `npx nest build` which works even if nest CLI is in devDependencies)
+   - **Output Directory:** Leave empty (Vercel handles this automatically)
    - **Install Command:** `npm install` (Vercel installs all dependencies including devDependencies by default)
    
-   **Note:** The `vercel-build` script in package.json tells Vercel to skip the NestJS build process. Vercel will compile the TypeScript in `api/index.ts` directly.
+   **Note:** Vercel will auto-detect NestJS and use the `@vercel/nestjs` builder. The `vercel-build` script in package.json uses `npx nest build` which ensures the NestJS CLI is available during the build process.
 
 3. **Set Environment Variables:**
    Go to Project Settings → Environment Variables and add:
