@@ -8,7 +8,7 @@
   "scripts": {
     "prebuild": "npx rimraf dist || rm -rf dist",
     "build": "nest build --webpack=false",
-    "vercel-build": "rm -rf dist && tsc -p tsconfig.json",
+    "vercel-build": "rm -rf dist && npx tsc -p tsconfig.json",
     "format": "prettier --write \"src/**/*.ts\"",
     "start": "nest start",
     "start:dev": "ts-node-dev --respawn --transpile-only src/main.ts",
