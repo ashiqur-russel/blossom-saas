@@ -2,13 +2,13 @@ import { NestFactory } from '@nestjs/core';
 import { ExpressAdapter } from '@nestjs/platform-express';
 import { ValidationPipe } from '@nestjs/common';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
-import * as cookieParser from 'cookie-parser';
-import * as express from 'express';
+import cookieParser from 'cookie-parser';
+import express, { Express, Request, Response } from 'express';
 import { AppModule } from '../src/app.module';
 
-let cachedApp: express.Express;
+let cachedApp: Express;
 
-async function createApp(): Promise<express.Express> {
+async function createApp(): Promise<Express> {
   if (cachedApp) {
     return cachedApp;
   }
@@ -75,7 +75,7 @@ async function createApp(): Promise<express.Express> {
   return expressApp;
 }
 
-export default async function handler(req: express.Request, res: express.Response) {
+export default async function handler(req: Request, res: Response) {
   const app = await createApp();
   app(req, res);
 }
