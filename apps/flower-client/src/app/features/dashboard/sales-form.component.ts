@@ -43,9 +43,9 @@ export class SalesFormComponent implements OnInit, OnChanges {
       weekday: [this.weekday],
       flowerAmount: [null, [Validators.required, Validators.min(1)]],
       buyingAmount: [null, [Validators.required, Validators.min(0.01)]],
-      salesThursday: [null, [Validators.required, Validators.min(0.01)]],
-      salesFriday: [null, [Validators.required, Validators.min(0.01)]],
-      salesSaturday: [null, [Validators.required, Validators.min(0.01)]],
+      salesThursday: [null, [Validators.min(0)]],
+      salesFriday: [null, [Validators.min(0)]],
+      salesSaturday: [null, [Validators.min(0)]],
       savings: [null, [Validators.required, Validators.min(0)]],
     });
 
@@ -189,24 +189,6 @@ export class SalesFormComponent implements OnInit, OnChanges {
     if (!formValue.buyingAmount || formValue.buyingAmount <= 0) {
       this.error = 'Total Buying Amount must be greater than 0.';
       this.form.get('buyingAmount')?.setErrors({ min: true });
-      return;
-    }
-    
-    if (!formValue.salesThursday || formValue.salesThursday <= 0) {
-      this.error = 'Thursday Sales must be greater than 0.';
-      this.form.get('salesThursday')?.setErrors({ min: true });
-      return;
-    }
-    
-    if (!formValue.salesFriday || formValue.salesFriday <= 0) {
-      this.error = 'Friday Sales must be greater than 0.';
-      this.form.get('salesFriday')?.setErrors({ min: true });
-      return;
-    }
-    
-    if (!formValue.salesSaturday || formValue.salesSaturday <= 0) {
-      this.error = 'Saturday Sales must be greater than 0.';
-      this.form.get('salesSaturday')?.setErrors({ min: true });
       return;
     }
     

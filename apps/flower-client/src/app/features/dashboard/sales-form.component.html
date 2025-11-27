@@ -51,9 +51,8 @@
           label="Thursday Sales ($)"
           type="number"
           formControlName="salesThursday"
-          [min]="0.01"
+          [min]="0"
           [step]="0.01"
-          [required]="true"
           [error]="getFieldError('salesThursday')">
         </app-input>
       </div>
@@ -63,9 +62,8 @@
           label="Friday Sales ($)"
           type="number"
           formControlName="salesFriday"
-          [min]="0.01"
+          [min]="0"
           [step]="0.01"
-          [required]="true"
           [error]="getFieldError('salesFriday')">
         </app-input>
       </div>
@@ -75,9 +73,8 @@
           label="Saturday Sales ($)"
           type="number"
           formControlName="salesSaturday"
-          [min]="0.01"
+          [min]="0"
           [step]="0.01"
-          [required]="true"
           [error]="getFieldError('salesSaturday')">
         </app-input>
       </div>
