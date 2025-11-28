@@ -28,6 +28,7 @@ import { CreateWeekDto } from './dtos/create-week.dto';
 import { UpdateWeekDto } from './dtos/update-week.dto';
 import { WeekResponseDto } from './dtos/week-response.dto';
 import { WeekSummaryDto } from './dtos/week-summary.dto';
+import { DashboardResponseDto } from './dtos/dashboard-response.dto';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { CurrentUser } from '../auth/decorators/current-user.decorator';
 import { UserDocument } from '../auth/schemas/user.schema';
@@ -62,6 +63,16 @@ export class WeeksController {
   })
   findAll(@CurrentUser() user: UserDocument): Promise<WeekResponseDto[]> {
     return this.weeksService.findAll(user._id.toString());
+  }
+
+  @Get('dashboard')
+  @ApiOperation({ summary: 'Get all dashboard data in a single request (optimized)' })
+  @ApiOkResponse({
+    type: DashboardResponseDto,
+    description: 'Complete dashboard data including weeks, summary, and withdrawal summary',
+  })
+  getDashboard(@CurrentUser() user: UserDocument): Promise<DashboardResponseDto> {
+    return this.weeksService.getDashboardData(user._id.toString(), user.organizationId);
   }
 
   @Get('summary')

@@ -14,12 +14,17 @@ import { CreateWeekDto } from './dtos/create-week.dto';
 import { UpdateWeekDto } from './dtos/update-week.dto';
 import { WeekResponseDto } from './dtos/week-response.dto';
 import { WeekSummaryDto } from './dtos/week-summary.dto';
+import { DashboardResponseDto } from './dtos/dashboard-response.dto';
+import { WithdrawalSummaryDto } from '../withdrawals/dtos/withdrawal-summary.dto';
+import { Withdrawal, WithdrawalDocument } from '../withdrawals/schemas/withdrawal.schema';
 
 @Injectable()
 export class WeeksService {
   constructor(
     @InjectModel(Week.name)
     private readonly weekModel: Model<WeekDocument>,
+    @InjectModel(Withdrawal.name)
+    private readonly withdrawalModel: Model<WithdrawalDocument>,
   ) {}
 
   async create(createWeekDto: CreateWeekDto, userId: string, organizationId?: string): Promise<WeekResponseDto> {
@@ -159,6 +164,109 @@ export class WeeksService {
   async getSummary(userId: string): Promise<WeekSummaryDto> {
     const weeks = await this.weekModel.find({ userId }).exec();
 
+    if (weeks.length === 0) {
+      return {
+        totalWeeks: 0,
+        totalFlowers: 0,
+        totalBuyingPrice: 0,
+        totalSales: 0,
+        totalProfit: 0,
+        totalRevenue: 0,
+        totalSavings: 0,
+        averageProfit: 0,
+        averageRevenue: 0,
+        averageFlowers: 0,
+        bestWeek: null,
+      };
+    }
+
+    // Handle both old and new data formats
+    const totalFlowers = weeks.reduce((sum, w: any) => {
+      return sum + (w.totalFlower || w.quantity || 0);
+    }, 0);
+
+    const totalBuyingPrice = weeks.reduce((sum, w: any) => {
+      return sum + (w.totalBuyingPrice || (w.quantity && w.price ? w.quantity * w.price : 0) || 0);
+    }, 0);
+
+    const totalSales = weeks.reduce((sum, w: any) => {
+      return sum + (w.totalSale || (w.quantity && w.price ? w.quantity * w.price : 0) || 0);
+    }, 0);
+
+    const totalProfit = weeks.reduce((sum, w: any) => sum + (w.profit || 0), 0);
+    const totalRevenue = weeks.reduce((sum, w: any) => {
+      return sum + (w.revenue || w.totalSale || (w.quantity && w.price ? w.quantity * w.price : 0) || 0);
+    }, 0);
+
+    const totalSavings = weeks.reduce((sum, w: any) => sum + (w.savings || 0), 0);
+
+    const bestWeek = weeks.reduce((best, week: any) => {
+      const profit = week.profit || 0;
+      if (!best || profit > best.profit) {
+        return {
+          weekNumber: week.weekNumber,
+          year: week.year,
+          profit: profit,
+        };
+      }
+      return best;
+    }, null as { weekNumber: number; year: number; profit: number } | null);
+
+    return {
+      totalWeeks: weeks.length,
+      totalFlowers,
+      totalBuyingPrice,
+      totalSales,
+      totalProfit,
+      totalRevenue,
+      totalSavings,
+      averageProfit: totalProfit / weeks.length,
+      averageRevenue: totalRevenue / weeks.length,
+      averageFlowers: totalFlowers / weeks.length,
+      bestWeek,
+    };
+  }
+
+  async getDashboardData(userId: string, organizationId?: string): Promise<DashboardResponseDto> {
+    // Fetch weeks once - use .lean() for better performance
+    const weeks = await this.weekModel
+      .find({ userId, ...(organizationId ? { organizationId } : {}) })
+      .sort({ year: -1, weekNumber: -1 })
+      .lean()
+      .exec();
+
+    // Map weeks to DTOs
+    const weeksDto: WeekResponseDto[] = weeks.map((week) => this.mapToResponseDto(week as any as WeekDocument));
+
+    // Calculate summary from fetched weeks (no additional DB query)
+    const summary = this.calculateSummaryFromWeeks(weeks);
+
+    // Fetch withdrawals once
+    const withdrawals = await this.withdrawalModel
+      .find({ userId })
+      .lean()
+      .exec();
+
+    // Calculate withdrawal summary from weeks and withdrawals
+    const totalSavings = weeks.reduce((sum, w: any) => sum + (w.savings || 0), 0);
+    const totalWithdrawals = withdrawals.reduce((sum, w: any) => sum + (w.amount || 0), 0);
+    const availableSavings = Math.max(0, totalSavings - totalWithdrawals);
+
+    const withdrawalSummary: WithdrawalSummaryDto = {
+      totalWithdrawals,
+      totalSavings,
+      availableSavings,
+      totalWithdrawalCount: withdrawals.length,
+    };
+
+    return {
+      weeks: weeksDto,
+      summary,
+      withdrawalSummary,
+    };
+  }
+
+  private calculateSummaryFromWeeks(weeks: any[]): WeekSummaryDto {
     if (weeks.length === 0) {
       return {
         totalWeeks: 0,
