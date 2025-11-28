@@ -222,8 +222,9 @@ export class WeeksService {
     };
   }
 
-  private mapToResponseDto(week: WeekDocument): WeekResponseDto {
-    const plain: any = (week.toJSON ? week.toJSON() : week.toObject()) as any;
+  private mapToResponseDto(week: WeekDocument | any): WeekResponseDto {
+    // Handle both Mongoose documents and plain objects (from .lean())
+    const plain: any = week.toJSON ? week.toJSON() : (week.toObject ? week.toObject() : week);
 
     // Handle both old and new data formats
     const totalFlower = plain.totalFlower || plain.quantity || 0;
@@ -233,7 +234,7 @@ export class WeeksService {
     const profit = plain.profit || 0;
     const revenue = plain.revenue || totalSale;
     const savings = plain.savings || 0;
-    const id = plain.id || (plain._id ? plain._id.toString() : week._id.toString());
+    const id = plain.id || (plain._id ? plain._id.toString() : (week && week._id ? week._id.toString() : ''));
 
     let avgBuyingPrice = totalFlower > 0 ? totalBuyingPrice / totalFlower : 0;
     let avgSalesPrice = totalFlower > 0 ? totalSale / totalFlower : 0;
