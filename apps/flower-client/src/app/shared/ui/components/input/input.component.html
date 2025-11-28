@@ -1,21 +1,26 @@
 <div class="input-group">
-  <label *ngIf="label" [class.required]="required" class="input-label">
-    {{ label }}
-  </label>
+  @if (label()) {
+    <label [class.required]="required()" class="input-label">
+      {{ label() }}
+    </label>
+  }
   <input
-    [type]="type"
-    [value]="value"
-    [placeholder]="placeholder"
-    [required]="required"
-    [min]="min || undefined"
-    [max]="max || undefined"
-    [step]="step || undefined"
-    [readonly]="readonly"
-    [class.input-error]="error"
-    [class.readonly]="readonly"
+    [type]="inputType()"
+    [attr.inputmode]="inputMode()"
+    [value]="displayValue()"
+    [placeholder]="placeholder()"
+    [required]="required()"
+    [attr.min]="type() === 'number' ? (min() || undefined) : undefined"
+    [attr.max]="type() === 'number' ? (max() || undefined) : undefined"
+    [attr.step]="type() === 'number' ? (step() || undefined) : undefined"
+    [readonly]="readonly()"
+    [class.input-error]="error()"
+    [class.readonly]="readonly()"
     (input)="onInput($event)"
     (blur)="onBlur()"
     class="form-input" />
-  <small *ngIf="error" class="error-text">{{ error }}</small>
+  @if (error()) {
+    <small class="error-text">{{ error() }}</small>
+  }
 </div>
 
