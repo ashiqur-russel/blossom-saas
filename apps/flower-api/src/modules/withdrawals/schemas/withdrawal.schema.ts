@@ -5,6 +5,9 @@ export type WithdrawalDocument = Withdrawal & Document;
 
 @Schema({ timestamps: true })
 export class Withdrawal {
+  @Prop({ type: String, required: true, ref: 'User', index: true })
+  userId: string;
+
   @Prop({ required: true })
   amount: number;
 
@@ -22,6 +25,10 @@ export class Withdrawal {
 }
 
 export const WithdrawalSchema = SchemaFactory.createForClass(Withdrawal);
+
+// Index for efficient user-based queries
+WithdrawalSchema.index({ userId: 1 });
+WithdrawalSchema.index({ userId: 1, date: -1 });
 
 
 

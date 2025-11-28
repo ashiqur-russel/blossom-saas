@@ -16,9 +16,9 @@ export class WithdrawalsService {
     private readonly weekModel: Model<WeekDocument>,
   ) {}
 
-  async create(createWithdrawalDto: CreateWithdrawalDto): Promise<WithdrawalResponseDto> {
+  async create(createWithdrawalDto: CreateWithdrawalDto, userId: string): Promise<WithdrawalResponseDto> {
     // Check available savings before allowing withdrawal
-    const summary = await this.getSummary();
+    const summary = await this.getSummary(userId);
     
     if (createWithdrawalDto.amount > summary.availableSavings) {
       throw new BadRequestException(
@@ -29,6 +29,7 @@ export class WithdrawalsService {
     // Convert date string to Date object
     const withdrawalData = {
       ...createWithdrawalDto,
+      userId,
       date: new Date(createWithdrawalDto.date),
     };
 
@@ -36,36 +37,36 @@ export class WithdrawalsService {
     return this.mapToResponseDto(withdrawal);
   }
 
-  async findAll(): Promise<WithdrawalResponseDto[]> {
+  async findAll(userId: string): Promise<WithdrawalResponseDto[]> {
     const withdrawals = await this.withdrawalModel
-      .find()
+      .find({ userId })
       .sort({ date: -1, createdAt: -1 })
       .exec();
     return withdrawals.map((w) => this.mapToResponseDto(w));
   }
 
-  async findOne(id: string): Promise<WithdrawalResponseDto> {
-    const withdrawal = await this.withdrawalModel.findById(id).exec();
+  async findOne(id: string, userId: string): Promise<WithdrawalResponseDto> {
+    const withdrawal = await this.withdrawalModel.findOne({ _id: id, userId }).exec();
     if (!withdrawal) {
       throw new NotFoundException(`Withdrawal with ID ${id} not found`);
     }
     return this.mapToResponseDto(withdrawal);
   }
 
-  async remove(id: string): Promise<void> {
-    const result = await this.withdrawalModel.findByIdAndDelete(id).exec();
+  async remove(id: string, userId: string): Promise<void> {
+    const result = await this.withdrawalModel.findOneAndDelete({ _id: id, userId }).exec();
     if (!result) {
       throw new NotFoundException(`Withdrawal with ID ${id} not found`);
     }
   }
 
-  async getSummary(): Promise<WithdrawalSummaryDto> {
-    // Get total savings from all weeks
-    const weeks = await this.weekModel.find().exec();
+  async getSummary(userId: string): Promise<WithdrawalSummaryDto> {
+    // Get total savings from user's weeks only
+    const weeks = await this.weekModel.find({ userId }).exec();
     const totalSavings = weeks.reduce((sum, week) => sum + (week.savings || 0), 0);
 
-    // Get total withdrawals
-    const withdrawals = await this.withdrawalModel.find().exec();
+    // Get total withdrawals for this user only
+    const withdrawals = await this.withdrawalModel.find({ userId }).exec();
     const totalWithdrawals = withdrawals.reduce((sum, w) => sum + (w.amount || 0), 0);
 
     // Calculate available savings
