@@ -51,7 +51,7 @@ export class WeeksController {
     @Body() createWeekDto: CreateWeekDto,
     @CurrentUser() user: UserDocument,
   ): Promise<WeekResponseDto> {
-    return this.weeksService.create(createWeekDto, user._id.toString());
+    return this.weeksService.create(createWeekDto, user._id.toString(), user.organizationId);
   }
 
   @Get()

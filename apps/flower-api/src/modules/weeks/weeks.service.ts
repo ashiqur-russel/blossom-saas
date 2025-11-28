@@ -22,7 +22,11 @@ export class WeeksService {
     private readonly weekModel: Model<WeekDocument>,
   ) {}
 
-  async create(createWeekDto: CreateWeekDto, userId: string): Promise<WeekResponseDto> {
+  async create(createWeekDto: CreateWeekDto, userId: string, organizationId?: string): Promise<WeekResponseDto> {
+    if (!organizationId) {
+      throw new ConflictException('Organization ID is required. Please ensure your user account is associated with an organization.');
+    }
+
     // Check if week already exists for this user
     const existingWeek = await this.weekModel
       .findOne({
@@ -51,6 +55,7 @@ export class WeeksService {
     const createdWeek = await this.weekModel.create({
       ...createWeekDto,
       userId,
+      organizationId,
       avgBuyingPrice,
       avgSalesPrice,
       savings: createWeekDto.savings ?? 0,
