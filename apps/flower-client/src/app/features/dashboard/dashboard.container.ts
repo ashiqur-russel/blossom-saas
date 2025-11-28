@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, signal, computed } from '@angular/core';
+import { toSignal } from '@angular/core/rxjs-interop';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { DashboardService } from './dashboard.service';
@@ -9,6 +10,8 @@ import { IWithdrawalSummary } from '../../shared/models/withdrawal.model';
 import { ChartConfiguration } from 'chart.js';
 import { DashboardPresentationComponent } from './dashboard.presentation';
 import { extractErrorMessage } from '../../shared/utils/error.util';
+import { catchError, map, startWith } from 'rxjs/operators';
+import { of } from 'rxjs';
 
 @Component({
   selector: 'app-dashboard-container',
@@ -17,94 +20,87 @@ import { extractErrorMessage } from '../../shared/utils/error.util';
   templateUrl: './dashboard.container.html',
   styleUrl: './dashboard.container.scss',
 })
-export class DashboardContainerComponent implements OnInit {
-  weeks: IWeek[] = [];
-  summary: IWeekSummary | null = null;
-  withdrawalSummary: IWithdrawalSummary | null = null;
-  loading = false;
-  error: string | null = null;
+export class DashboardContainerComponent {
+  private refreshTrigger = signal(0);
+  activeTab = signal<'weekly' | 'trends'>('weekly');
 
-  profitChartData: ChartConfiguration<'line'>['data'] = { labels: [], datasets: [] };
-  salesChartData: ChartConfiguration<'bar'>['data'] = { labels: [], datasets: [] };
-  revenueProfitTrendsData: ChartConfiguration<'line'>['data'] = { labels: [], datasets: [] };
-  profitSavingsBarData: ChartConfiguration<'bar'>['data'] = { labels: [], datasets: [] };
-  salesByDayPieData: ChartConfiguration<'pie'>['data'] = { labels: [], datasets: [] };
-  dailySalesTrendsData: ChartConfiguration<'line'>['data'] = { labels: [], datasets: [] };
-  currentWeek: IWeek | null = null;
-  activeTab: 'weekly' | 'trends' = 'weekly';
+  // Use toSignal for reactive data fetching
+  private dashboardData$ = computed(() => {
+    this.refreshTrigger(); // Track refresh trigger
+    return this.dashboardService.loadDashboardData().pipe(
+      catchError((err: any) => {
+        const errorMsg = extractErrorMessage(err, 'Failed to load dashboard data');
+        if (err?.isCritical !== false && !errorMsg.toLowerCase().includes('withdrawal')) {
+          throw { ...err, message: errorMsg };
+        }
+        return of({ weeks: [], summary: null, withdrawalSummary: null });
+      })
+    );
+  });
+
+  dashboardData = toSignal(this.dashboardData$(), { 
+    initialValue: { weeks: [], summary: null, withdrawalSummary: null } 
+  });
+
+  loading = signal(false);
+  error = signal<string | null>(null);
+
+  weeks = computed(() => this.dashboardData()?.weeks || []);
+  summary = computed(() => this.dashboardData()?.summary || null);
+  withdrawalSummary = computed(() => this.dashboardData()?.withdrawalSummary || null);
+
+  profitChartData = computed<ChartConfiguration<'line'>['data']>(() => 
+    this.chartService.createProfitChartData(this.weeks())
+  );
+  salesChartData = computed<ChartConfiguration<'bar'>['data']>(() => 
+    this.chartService.getSalesChartData(this.weeks())
+  );
+  revenueProfitTrendsData = computed<ChartConfiguration<'line'>['data']>(() => 
+    this.chartService.createRevenueProfitTrendsData(this.weeks())
+  );
+  profitSavingsBarData = computed<ChartConfiguration<'bar'>['data']>(() => 
+    this.chartService.createProfitSavingsBarData(this.weeks())
+  );
+  dailySalesTrendsData = computed<ChartConfiguration<'line'>['data']>(() => 
+    this.chartService.createDailySalesTrendsData(this.weeks())
+  );
+  
+  currentWeek = computed<IWeek | null>(() => {
+    const sortedWeeks = [...this.weeks()].sort((a, b) => {
+      if (a.year !== b.year) return b.year - a.year;
+      return b.weekNumber - a.weekNumber;
+    });
+    return sortedWeeks.length > 0 ? sortedWeeks[0] : null;
+  });
+
+  salesByDayPieData = computed<ChartConfiguration<'pie'>['data']>(() => 
+    this.chartService.createSalesByDayPieData(this.currentWeek())
+  );
+
+  refreshing = signal(false);
 
   constructor(
     private dashboardService: DashboardService,
     private chartService: ChartService,
     private weekService: WeekService,
-  ) {}
-
-  ngOnInit(): void {
-    this.loadData();
-  }
-
-  loadData(): void {
-    this.loading = true;
-    this.error = null;
-
-    this.dashboardService.loadDashboardData().subscribe({
-      next: ({ weeks, summary, withdrawalSummary }) => {
-        this.weeks = weeks;
-        this.summary = summary;
-        this.withdrawalSummary = withdrawalSummary;
-        this.updateCharts();
-        this.loading = false;
-      },
-      error: (err) => {
-        // Only show error for critical failures (weeks or summary)
-        // Withdrawal summary is optional and already handled in the service
-        const errorMsg = extractErrorMessage(err, 'Failed to load dashboard data');
-        
-        // Only show error if it's a critical failure (not withdrawal-related)
-        // Withdrawal summary errors are handled silently in the service
-        if (err?.isCritical !== false && !errorMsg.toLowerCase().includes('withdrawal')) {
-          this.error = errorMsg;
-        } else {
-          // Silently handle non-critical errors (like withdrawal summary)
-          this.error = null;
-        }
-        
-        this.loading = false;
-        // Only log critical errors to console
-        if (err?.isCritical !== false && (!err || err.status !== 0)) {
-          console.error('Dashboard load error:', err);
-        }
-      },
-    });
-  }
-
-  updateCharts(): void {
-    this.profitChartData = this.chartService.createProfitChartData(this.weeks);
-    this.salesChartData = this.chartService.getSalesChartData(this.weeks);
-    this.revenueProfitTrendsData = this.chartService.createRevenueProfitTrendsData(this.weeks);
-    this.profitSavingsBarData = this.chartService.createProfitSavingsBarData(this.weeks);
-    this.dailySalesTrendsData = this.chartService.createDailySalesTrendsData(this.weeks);
-    
-    const sortedWeeks = [...this.weeks].sort((a, b) => {
-      if (a.year !== b.year) return b.year - a.year;
-      return b.weekNumber - a.weekNumber;
-    });
-    this.currentWeek = sortedWeeks.length > 0 ? sortedWeeks[0] : null;
-    this.salesByDayPieData = this.chartService.createSalesByDayPieData(this.currentWeek);
+  ) {
+    // Trigger initial load
+    this.refreshTrigger.set(1);
   }
 
   setActiveTab(tab: 'weekly' | 'trends'): void {
-    this.activeTab = tab;
+    this.activeTab.set(tab);
   }
 
   deleteWeek(id: string): void {
     if (confirm('Are you sure you want to delete this week?')) {
+      this.refreshing.set(true);
       this.weekService.delete(id).subscribe({
         next: () => {
-          this.loadData();
+          this.refreshData();
         },
         error: (err: any) => {
-          this.error = 'Failed to delete week';
+          this.refreshing.set(false);
           console.error(err);
         },
       });
@@ -112,11 +108,25 @@ export class DashboardContainerComponent implements OnInit {
   }
 
   onWeekAdded(): void {
-    this.loadData();
+    this.refreshData();
   }
 
   onWeekUpdated(): void {
-    this.loadData();
+    this.refreshData();
+  }
+
+  refreshData(): void {
+    // Only refresh data without showing full-page loading
+    this.refreshing.set(true);
+    this.refreshTrigger.update((v: number) => v + 1);
+    
+    // Reset refreshing after data loads - check loading state periodically
+    const checkLoading = setInterval(() => {
+      if (!this.loading()) {
+        this.refreshing.set(false);
+        clearInterval(checkLoading);
+      }
+    }, 50);
   }
 
   onEditCancelled(): void {

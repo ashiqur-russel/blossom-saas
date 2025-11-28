@@ -1,32 +1,29 @@
 <div class="dashboard-wrapper">
 <div class="dashboard-container">
   <main class="main-content">
-    <div *ngIf="loading" class="loading-container">
-      <div class="spinner"></div>
-      <p>Loading data...</p>
-    </div>
+    <app-loading *ngIf="loading()" message="Loading data..." size="lg"></app-loading>
 
-    <div *ngIf="error && !loading" class="error-banner">
+    <div *ngIf="error() && !loading()" class="error-banner">
       <svg class="error-icon" fill="currentColor" viewBox="0 0 20 20">
         <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"></path>
       </svg>
-      {{ error }}
+      {{ error() }}
     </div>
 
-    <div *ngIf="summary && !loading" class="kpi-grid">
+    <div *ngIf="summary() && !loading()" class="kpi-grid" [class.refreshing]="refreshing()">
       <app-card variant="default">
         <div class="kpi-card">
           <div class="kpi-content">
             <p class="kpi-label">Total Revenue</p>
-            <p class="kpi-value">€{{ summary.totalRevenue | number:'1.2-2' }}</p>
-            <div class="kpi-change" [ngClass]="getChangeClass(getRevenueChange())">
-              <svg *ngIf="hasChangeData(getRevenueChange()) && getRevenueChange()! >= 0" fill="currentColor" viewBox="0 0 20 20">
+            <p class="kpi-value">€{{ summary()?.totalRevenue | number:'1.2-2' }}</p>
+            <div class="kpi-change" [ngClass]="getChangeClass(revenueChange())">
+              <svg *ngIf="hasChangeData(revenueChange()) && revenueChange()! >= 0" fill="currentColor" viewBox="0 0 20 20">
                 <path fill-rule="evenodd" d="M5.293 7.707a1 1 0 010-1.414l4-4a1 1 0 011.414 0l4 4a1 1 0 01-1.414 1.414L11 5.414V17a1 1 0 11-2 0V5.414L6.707 7.707a1 1 0 01-1.414 0z" clip-rule="evenodd"></path>
               </svg>
-              <svg *ngIf="hasChangeData(getRevenueChange()) && getRevenueChange()! < 0" fill="currentColor" viewBox="0 0 20 20">
+              <svg *ngIf="hasChangeData(revenueChange()) && revenueChange()! < 0" fill="currentColor" viewBox="0 0 20 20">
                 <path fill-rule="evenodd" d="M14.707 12.293a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 111.414-1.414L9 14.586V3a1 1 0 012 0v11.586l2.293-2.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
               </svg>
-              <span>{{ formatPercentageChange(getRevenueChange()) }}</span>
+              <span>{{ formatPercentageChange(revenueChange()) }}</span>
             </div>
           </div>
           <div class="kpi-icon bg-blue-500">
@@ -41,15 +38,15 @@
         <div class="kpi-card">
           <div class="kpi-content">
             <p class="kpi-label">Total Profit</p>
-            <p class="kpi-value">€{{ summary.totalProfit | number:'1.2-2' }}</p>
-            <div class="kpi-change" [ngClass]="getChangeClass(getProfitChange())">
-              <svg *ngIf="hasChangeData(getProfitChange()) && getProfitChange()! >= 0" fill="currentColor" viewBox="0 0 20 20">
+            <p class="kpi-value">€{{ summary()?.totalProfit | number:'1.2-2' }}</p>
+            <div class="kpi-change" [ngClass]="getChangeClass(profitChange())">
+              <svg *ngIf="hasChangeData(profitChange()) && profitChange()! >= 0" fill="currentColor" viewBox="0 0 20 20">
                 <path fill-rule="evenodd" d="M5.293 7.707a1 1 0 010-1.414l4-4a1 1 0 011.414 0l4 4a1 1 0 01-1.414 1.414L11 5.414V17a1 1 0 11-2 0V5.414L6.707 7.707a1 1 0 01-1.414 0z" clip-rule="evenodd"></path>
               </svg>
-              <svg *ngIf="hasChangeData(getProfitChange()) && getProfitChange()! < 0" fill="currentColor" viewBox="0 0 20 20">
+              <svg *ngIf="hasChangeData(profitChange()) && profitChange()! < 0" fill="currentColor" viewBox="0 0 20 20">
                 <path fill-rule="evenodd" d="M14.707 12.293a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 111.414-1.414L9 14.586V3a1 1 0 012 0v11.586l2.293-2.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
               </svg>
-              <span>{{ formatPercentageChange(getProfitChange()) }}</span>
+              <span>{{ formatPercentageChange(profitChange()) }}</span>
             </div>
           </div>
           <div class="kpi-icon bg-green-500">
@@ -64,18 +61,18 @@
         <div class="kpi-card">
           <div class="kpi-content">
             <p class="kpi-label">Available Savings</p>
-            <p class="kpi-value">€{{ getAvailableSavings() | number:'1.2-2' }}</p>
-            <div class="kpi-change" [ngClass]="getChangeClass(getSavingsChange())">
-              <svg *ngIf="hasChangeData(getSavingsChange()) && getSavingsChange()! >= 0" fill="currentColor" viewBox="0 0 20 20">
+            <p class="kpi-value">€{{ availableSavings() | number:'1.2-2' }}</p>
+            <div class="kpi-change" [ngClass]="getChangeClass(savingsChange())">
+              <svg *ngIf="hasChangeData(savingsChange()) && savingsChange()! >= 0" fill="currentColor" viewBox="0 0 20 20">
                 <path fill-rule="evenodd" d="M5.293 7.707a1 1 0 010-1.414l4-4a1 1 0 011.414 0l4 4a1 1 0 01-1.414 1.414L11 5.414V17a1 1 0 11-2 0V5.414L6.707 7.707a1 1 0 01-1.414 0z" clip-rule="evenodd"></path>
               </svg>
-              <svg *ngIf="hasChangeData(getSavingsChange()) && getSavingsChange()! < 0" fill="currentColor" viewBox="0 0 20 20">
+              <svg *ngIf="hasChangeData(savingsChange()) && savingsChange()! < 0" fill="currentColor" viewBox="0 0 20 20">
                 <path fill-rule="evenodd" d="M14.707 12.293a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 111.414-1.414L9 14.586V3a1 1 0 012 0v11.586l2.293-2.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
               </svg>
-              <span>{{ formatPercentageChange(getSavingsChange()) }}</span>
+              <span>{{ formatPercentageChange(savingsChange()) }}</span>
             </div>
-            <small *ngIf="withdrawalSummary && withdrawalSummary.totalWithdrawals > 0 && summary" class="withdrawal-hint">
-              Total: €{{ summary.totalSavings | number:'1.2-2' }} - Withdrawn: €{{ withdrawalSummary.totalWithdrawals | number:'1.2-2' }}
+            <small *ngIf="withdrawalSummary() && withdrawalSummary()!.totalWithdrawals > 0 && summary()" class="withdrawal-hint">
+              Total: €{{ summary()!.totalSavings | number:'1.2-2' }} - Withdrawn: €{{ withdrawalSummary()!.totalWithdrawals | number:'1.2-2' }}
             </small>
           </div>
           <div class="kpi-icon bg-purple-500">
@@ -90,15 +87,15 @@
         <div class="kpi-card">
           <div class="kpi-content">
             <p class="kpi-label">Weekly Avg</p>
-            <p class="kpi-value">€{{ summary.averageRevenue | number:'1.2-2' }}</p>
-            <div class="kpi-change" [ngClass]="getChangeClass(getAverageRevenueChange())">
-              <svg *ngIf="hasChangeData(getAverageRevenueChange()) && getAverageRevenueChange()! >= 0" fill="currentColor" viewBox="0 0 20 20">
+            <p class="kpi-value">€{{ summary()?.averageRevenue | number:'1.2-2' }}</p>
+            <div class="kpi-change" [ngClass]="getChangeClass(averageRevenueChange())">
+              <svg *ngIf="hasChangeData(averageRevenueChange()) && averageRevenueChange()! >= 0" fill="currentColor" viewBox="0 0 20 20">
                 <path fill-rule="evenodd" d="M5.293 7.707a1 1 0 010-1.414l4-4a1 1 0 011.414 0l4 4a1 1 0 01-1.414 1.414L11 5.414V17a1 1 0 11-2 0V5.414L6.707 7.707a1 1 0 01-1.414 0z" clip-rule="evenodd"></path>
               </svg>
-              <svg *ngIf="hasChangeData(getAverageRevenueChange()) && getAverageRevenueChange()! < 0" fill="currentColor" viewBox="0 0 20 20">
+              <svg *ngIf="hasChangeData(averageRevenueChange()) && averageRevenueChange()! < 0" fill="currentColor" viewBox="0 0 20 20">
                 <path fill-rule="evenodd" d="M14.707 12.293a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 111.414-1.414L9 14.586V3a1 1 0 012 0v11.586l2.293-2.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
               </svg>
-              <span>{{ formatPercentageChange(getAverageRevenueChange()) }}</span>
+              <span>{{ formatPercentageChange(averageRevenueChange()) }}</span>
             </div>
           </div>
           <div class="kpi-icon bg-orange-500">
@@ -113,15 +110,15 @@
         <div class="kpi-card">
           <div class="kpi-content">
             <p class="kpi-label">Total Flowers</p>
-            <p class="kpi-value">{{ summary.totalFlowers | number }}</p>
-            <div class="kpi-change" [ngClass]="getChangeClass(getFlowersChange())">
-              <svg *ngIf="hasChangeData(getFlowersChange()) && getFlowersChange()! >= 0" fill="currentColor" viewBox="0 0 20 20">
+            <p class="kpi-value">{{ summary()?.totalFlowers | number }}</p>
+            <div class="kpi-change" [ngClass]="getChangeClass(flowersChange())">
+              <svg *ngIf="hasChangeData(flowersChange()) && flowersChange()! >= 0" fill="currentColor" viewBox="0 0 20 20">
                 <path fill-rule="evenodd" d="M5.293 7.707a1 1 0 010-1.414l4-4a1 1 0 011.414 0l4 4a1 1 0 01-1.414 1.414L11 5.414V17a1 1 0 11-2 0V5.414L6.707 7.707a1 1 0 01-1.414 0z" clip-rule="evenodd"></path>
               </svg>
-              <svg *ngIf="hasChangeData(getFlowersChange()) && getFlowersChange()! < 0" fill="currentColor" viewBox="0 0 20 20">
+              <svg *ngIf="hasChangeData(flowersChange()) && flowersChange()! < 0" fill="currentColor" viewBox="0 0 20 20">
                 <path fill-rule="evenodd" d="M14.707 12.293a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 111.414-1.414L9 14.586V3a1 1 0 012 0v11.586l2.293-2.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
               </svg>
-              <span>{{ formatPercentageChange(getFlowersChange()) }}</span>
+              <span>{{ formatPercentageChange(flowersChange()) }}</span>
             </div>
           </div>
           <div class="kpi-icon bg-pink-500">
@@ -136,15 +133,15 @@
         <div class="kpi-card">
           <div class="kpi-content">
             <p class="kpi-label">Total Investment</p>
-            <p class="kpi-value">€{{ summary.totalBuyingPrice | number:'1.2-2' }}</p>
-            <div class="kpi-change" [ngClass]="getChangeClass(getInvestmentChange())">
-              <svg *ngIf="hasChangeData(getInvestmentChange()) && getInvestmentChange()! >= 0" fill="currentColor" viewBox="0 0 20 20">
+            <p class="kpi-value">€{{ summary()?.totalBuyingPrice | number:'1.2-2' }}</p>
+            <div class="kpi-change" [ngClass]="getChangeClass(investmentChange())">
+              <svg *ngIf="hasChangeData(investmentChange()) && investmentChange()! >= 0" fill="currentColor" viewBox="0 0 20 20">
                 <path fill-rule="evenodd" d="M5.293 7.707a1 1 0 010-1.414l4-4a1 1 0 011.414 0l4 4a1 1 0 01-1.414 1.414L11 5.414V17a1 1 0 11-2 0V5.414L6.707 7.707a1 1 0 01-1.414 0z" clip-rule="evenodd"></path>
               </svg>
-              <svg *ngIf="hasChangeData(getInvestmentChange()) && getInvestmentChange()! < 0" fill="currentColor" viewBox="0 0 20 20">
+              <svg *ngIf="hasChangeData(investmentChange()) && investmentChange()! < 0" fill="currentColor" viewBox="0 0 20 20">
                 <path fill-rule="evenodd" d="M14.707 12.293a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 111.414-1.414L9 14.586V3a1 1 0 012 0v11.586l2.293-2.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
               </svg>
-              <span>{{ formatPercentageChange(getInvestmentChange()) }}</span>
+              <span>{{ formatPercentageChange(investmentChange()) }}</span>
             </div>
           </div>
           <div class="kpi-icon bg-indigo-500">
@@ -156,62 +153,71 @@
       </app-card>
     </div>
 
-    <div *ngIf="!loading" class="main-grid">
+    <div *ngIf="!loading()" class="main-grid">
       <div class="left-column">
         <app-sales-form 
-          [weekToEdit]="selectedWeekForEdit"
+          [weekToEdit]="selectedWeekForEdit()"
           (weekAdded)="onWeekAdded()"
           (weekUpdated)="onWeekUpdated()"
           (editCancelled)="onEditCancelled()">
         </app-sales-form>
       </div>
 
-      <div class="right-column">
+      <div class="right-column" [class.refreshing]="refreshing()">
         <app-card title="Revenue & Profit Trends" subtitle="Weekly performance overview">
-          <app-chart
-            type="line"
-            [data]="revenueProfitTrendsData"
-            [options]="chartService.getLineChartOptions()">
-          </app-chart>
+          <div class="chart-wrapper">
+            <app-loading *ngIf="refreshing()" message="Updating charts..." size="sm" [overlay]="true"></app-loading>
+            <app-chart
+              type="line"
+              [data]="revenueProfitTrendsData()"
+              [options]="chartService.getLineChartOptions()">
+            </app-chart>
+          </div>
         </app-card>
 
         <div class="charts-row">
           <app-card title="$ Profit & Savings" subtitle="Weekly profit and savings breakdown">
-            <app-chart
-              type="bar"
-              [data]="profitSavingsBarData"
-              [options]="chartService.getBarChartOptions()">
-            </app-chart>
+            <div class="chart-wrapper">
+              <app-loading *ngIf="refreshing()" message="Updating charts..." size="sm" [overlay]="true"></app-loading>
+              <app-chart
+                type="bar"
+                [data]="profitSavingsBarData()"
+                [options]="chartService.getBarChartOptions()">
+              </app-chart>
+            </div>
           </app-card>
 
           <app-card title="Sales by Day" subtitle="Current week distribution">
-            <app-chart
-              type="pie"
-              [data]="salesByDayPieData"
-              [options]="chartService.getPieChartOptions()">
-            </app-chart>
+            <div class="chart-wrapper">
+              <app-loading *ngIf="refreshing()" message="Updating charts..." size="sm" [overlay]="true"></app-loading>
+              <app-chart
+                type="pie"
+                [data]="salesByDayPieData()"
+                [options]="chartService.getPieChartOptions()">
+              </app-chart>
+            </div>
           </app-card>
         </div>
       </div>
     </div>
 
-    <div *ngIf="!loading" class="tabs-section">
+    <div *ngIf="!loading()" class="tabs-section">
       <div class="tabs">
         <button 
-          [class.active]="activeTab === 'weekly'"
+          [class.active]="activeTab() === 'weekly'"
           (click)="onTabClick('weekly')"
           class="tab-btn">
           Weekly Report
         </button>
         <button 
-          [class.active]="activeTab === 'trends'"
+          [class.active]="activeTab() === 'trends'"
           (click)="onTabClick('trends')"
           class="tab-btn">
           Trends Analysis
         </button>
       </div>
 
-      <div *ngIf="activeTab === 'weekly'" class="tab-content">
+      <div *ngIf="activeTab() === 'weekly'" class="tab-content">
         <app-card title="Weekly Sales Report" subtitle="Complete overview of all weekly sales data">
           <div class="weeks-table">
             <table>
@@ -231,7 +237,7 @@
                 </tr>
               </thead>
               <tbody>
-                <tr *ngFor="let week of weeks">
+                <tr *ngFor="let week of weeks()">
                   <td>{{ week.startDate | date:'shortDate' }}</td>
                   <td>W{{ week.weekNumber }}/{{ week.year }}</td>
                   <td class="text-right">{{ week.totalFlower }}</td>
@@ -253,7 +259,7 @@
                     </button>
                   </td>
                 </tr>
-                <tr *ngIf="weeks.length === 0">
+                <tr *ngIf="weeks().length === 0">
                   <td colspan="11" class="text-center text-gray-500 py-8">No data available</td>
                 </tr>
               </tbody>
@@ -262,11 +268,11 @@
         </app-card>
       </div>
 
-      <div *ngIf="activeTab === 'trends'" class="tab-content">
+      <div *ngIf="activeTab() === 'trends'" class="tab-content">
         <app-card title="Daily Sales Trends Analysis" subtitle="Compare sales performance across different days">
           <app-chart
             type="line"
-            [data]="dailySalesTrendsData"
+            [data]="dailySalesTrendsData()"
             [options]="chartService.getLineChartOptions()">
           </app-chart>
         </app-card>
@@ -275,19 +281,19 @@
           <app-card variant="highlight">
             <div class="average-card pink">
               <p class="average-label">Thursday Average</p>
-              <p class="average-value">€{{ getAverageSalesByDay().thursday | number:'1.2-2' }}</p>
+              <p class="average-value">€{{ averageSalesByDay().thursday | number:'1.2-2' }}</p>
             </div>
           </app-card>
           <app-card variant="highlight">
             <div class="average-card purple">
               <p class="average-label">Friday Average</p>
-              <p class="average-value">€{{ getAverageSalesByDay().friday | number:'1.2-2' }}</p>
+              <p class="average-value">€{{ averageSalesByDay().friday | number:'1.2-2' }}</p>
             </div>
           </app-card>
           <app-card variant="highlight">
             <div class="average-card blue">
               <p class="average-label">Saturday Average</p>
-              <p class="average-value">€{{ getAverageSalesByDay().saturday | number:'1.2-2' }}</p>
+              <p class="average-value">€{{ averageSalesByDay().saturday | number:'1.2-2' }}</p>
             </div>
           </app-card>
         </div>

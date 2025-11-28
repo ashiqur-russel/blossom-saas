@@ -19,10 +19,7 @@
 
       <!-- Loading State -->
       @if (loading) {
-        <div class="loading-container">
-          <div class="spinner"></div>
-          <p>Loading analytics data...</p>
-        </div>
+        <app-loading message="Loading analytics data..." size="lg"></app-loading>
       }
 
       <!-- Error State -->

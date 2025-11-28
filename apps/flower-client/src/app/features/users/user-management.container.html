@@ -9,10 +9,7 @@
 
       <!-- Loading State -->
       @if (loading && users.length === 0) {
-        <div class="loading-state">
-          <div class="spinner"></div>
-          <p>Loading users...</p>
-        </div>
+        <app-loading message="Loading users..." size="lg"></app-loading>
       }
 
       <!-- Error State -->

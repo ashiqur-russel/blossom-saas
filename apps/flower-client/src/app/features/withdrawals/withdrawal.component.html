@@ -5,10 +5,7 @@
       <p class="subtitle">Manage withdrawals from your accumulated savings</p>
     </div>
 
-    <div *ngIf="loading && !summary" class="loading-container">
-      <div class="spinner"></div>
-      <p>Loading withdrawal data...</p>
-    </div>
+    <app-loading *ngIf="loading && !summary" message="Loading withdrawal data..." size="lg"></app-loading>
 
     <div *ngIf="error && !loading" class="error-banner">
       <svg class="error-icon" fill="currentColor" viewBox="0 0 20 20">

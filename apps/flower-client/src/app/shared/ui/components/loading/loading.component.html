@@ -1,0 +1,18 @@
+@if (overlay === true || overlay === 'true') {
+  <div class="loading-overlay">
+    <div class="loading-content">
+      <div class="spinner" [ngClass]="'spinner-' + size"></div>
+      @if (message) {
+        <p class="loading-message">{{ message }}</p>
+      }
+    </div>
+  </div>
+} @else {
+  <div class="loading-container" [ngClass]="{ inline: inline }">
+    <div class="spinner" [ngClass]="'spinner-' + size"></div>
+    @if (message) {
+      <p class="loading-message">{{ message }}</p>
+    }
+  </div>
+}
+

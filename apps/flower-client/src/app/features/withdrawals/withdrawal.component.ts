@@ -6,12 +6,13 @@ import { ICreateWithdrawal, IWithdrawal, IWithdrawalSummary } from '../../shared
 import { CardComponent } from '../../shared/ui/components/card/card.component';
 import { ButtonComponent } from '../../shared/ui/components/button/button.component';
 import { InputComponent } from '../../shared/ui/components/input/input.component';
+import { LoadingComponent } from '../../shared/ui/components/loading/loading.component';
 import { formatErrorMessage } from '../../shared/utils/error.util';
 
 @Component({
   selector: 'app-withdrawal',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, CardComponent, ButtonComponent, InputComponent],
+  imports: [CommonModule, ReactiveFormsModule, CardComponent, ButtonComponent, InputComponent, LoadingComponent],
   templateUrl: './withdrawal.component.html',
   styleUrl: './withdrawal.component.scss',
 })

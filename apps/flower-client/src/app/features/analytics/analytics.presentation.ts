@@ -2,6 +2,7 @@ import { Component, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { CardComponent } from '../../shared/ui/components/card/card.component';
 import { ChartComponent } from '../../shared/ui/components/chart/chart.component';
+import { LoadingComponent } from '../../shared/ui/components/loading/loading.component';
 import { ChartService } from '../../shared/ui/services/chart.service';
 import { ChartConfiguration, ChartOptions } from 'chart.js';
 import { IWeek, IWeekSummary } from '../../shared/models/week.model';
@@ -9,7 +10,7 @@ import { IWeek, IWeekSummary } from '../../shared/models/week.model';
 @Component({
   selector: 'app-analytics-presentation',
   standalone: true,
-  imports: [CommonModule, CardComponent, ChartComponent],
+  imports: [CommonModule, CardComponent, ChartComponent, LoadingComponent],
   templateUrl: './analytics.presentation.html',
   styleUrl: './analytics.presentation.scss',
 })

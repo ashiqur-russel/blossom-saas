@@ -6,11 +6,12 @@ import { IUser, OrgRole, OrgRoleLabels } from '../../shared/models/user.model';
 import { extractErrorMessage } from '../../shared/utils/error.util';
 import { UserManagementPresentationComponent } from './user-management.presentation';
 import { AuthService } from '../../features/auth/auth.service';
+import { LoadingComponent } from '../../shared/ui/components/loading/loading.component';
 
 @Component({
   selector: 'app-user-management-container',
   standalone: true,
-  imports: [CommonModule, UserManagementPresentationComponent],
+  imports: [CommonModule, UserManagementPresentationComponent, LoadingComponent],
   templateUrl: './user-management.container.html',
   styleUrl: './user-management.container.scss',
 })
