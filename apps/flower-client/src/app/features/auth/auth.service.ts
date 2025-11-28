@@ -26,6 +26,8 @@ export interface AuthResponse {
     lastName: string;
     businessName?: string;
     role: string;
+    organizationId?: string;
+    orgRole: string;
     isActive: boolean;
   };
 }
@@ -37,6 +39,8 @@ export interface User {
   lastName: string;
   businessName?: string;
   role: string;
+  organizationId?: string;
+  orgRole: string;
   isActive: boolean;
 }
 
@@ -110,6 +114,15 @@ export class AuthService {
     return this.http.post<{ accessToken: string }>(`${this.apiUrl}/refresh`, {}).pipe(
       tap((response) => {
         this.setToken(response.accessToken);
+      }),
+    );
+  }
+
+  refreshUserProfile(): Observable<User> {
+    return this.http.get<User>(`${this.apiUrl}/profile`).pipe(
+      tap((user) => {
+        this.setUser(user);
+        this.currentUserSubject.next(user);
       }),
     );
   }

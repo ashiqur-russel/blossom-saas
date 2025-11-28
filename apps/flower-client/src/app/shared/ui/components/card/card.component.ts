@@ -15,7 +15,7 @@ export class CardComponent {
   @Input() title: string = '';
   @Input() subtitle: string = '';
   @Input() variant: CardVariant = 'default';
-  @Input() padding: CardPadding = 'md';
+  @Input() padding: CardPadding = 'none';
   @Input() interactive: boolean = false;
 
   get cardClasses(): string {

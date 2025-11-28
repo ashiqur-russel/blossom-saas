@@ -18,7 +18,8 @@
         "seed": "npx ts-node -r tsconfig-paths/register src/scripts/seed-data.ts",
         "seed:admin": "npx ts-node -r tsconfig-paths/register src/scripts/seed-admin.ts",
         "seed:user": "npx ts-node -r tsconfig-paths/register src/scripts/seed-user-data.ts",
-        "fix:indexes": "npx ts-node -r tsconfig-paths/register src/scripts/fix-week-indexes.ts"
+        "fix:indexes": "npx ts-node -r tsconfig-paths/register src/scripts/fix-week-indexes.ts",
+        "migrate:users": "npx ts-node -r tsconfig-paths/register src/scripts/migrate-users-to-organizations.ts"
   },
   "dependencies": {
     "@nestjs/common": "^10.3.0",

@@ -4,6 +4,7 @@
  */
 import { ApiProperty } from '@nestjs/swagger';
 import { UserRole } from '../schemas/user.schema';
+import { OrgRole } from '../../organizations/enums/org-role.enum';
 
 export class AuthResponseDto {
   @ApiProperty({
@@ -21,6 +22,8 @@ export class AuthResponseDto {
       lastName: 'Doe',
       businessName: 'Blossom Flowers',
       role: 'user',
+      organizationId: 'org_1',
+      orgRole: 'org_admin',
     },
   })
   user: {
@@ -30,6 +33,8 @@ export class AuthResponseDto {
     lastName: string;
     businessName?: string;
     role: UserRole;
+    organizationId?: string;
+    orgRole: OrgRole;
   };
 }
 

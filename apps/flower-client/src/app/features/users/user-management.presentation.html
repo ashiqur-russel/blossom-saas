@@ -1,0 +1,228 @@
+<div class="user-management">
+  <!-- Actions Bar: Search and Create Button -->
+  <div class="actions-bar">
+    <div class="search-container">
+      <svg class="search-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+      </svg>
+      <input
+        type="search"
+        class="search-input"
+        placeholder="Search users by name or email..."
+        [value]="searchQuery()"
+        (input)="onSearchChange($event)">
+      @if (searchQuery()) {
+        <button
+          type="button"
+          class="search-clear"
+          (click)="clearSearch()"
+          aria-label="Clear search">
+          <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+          </svg>
+        </button>
+      }
+    </div>
+
+    <app-button
+      label="Create New User"
+      variant="primary"
+      size="md"
+      (clicked)="toggleCreateDialog()"
+      [icon]="'<svg fill=\'none\' stroke=\'currentColor\' viewBox=\'0 0 24 24\'><path stroke-linecap=\'round\' stroke-linejoin=\'round\' stroke-width=\'2\' d=\'M12 4v16m8-8H4\'></path></svg>'">
+    </app-button>
+  </div>
+
+  <!-- Users Grid -->
+  @if (filteredUsers().length > 0) {
+    <div class="users-grid">
+      @for (user of filteredUsers(); track user.id) {
+        <app-card variant="default" padding="lg" class="user-card">
+          <div class="user-card-content">
+            <div class="user-card-header">
+              <div class="user-card-info">
+                <div class="user-avatar">
+                  {{ user.firstName.charAt(0) }}{{ user.lastName.charAt(0) }}
+                </div>
+                <div class="user-details">
+                  <div class="user-name-row">
+                    <h3 class="user-name">{{ getFullName(user) }}</h3>
+                    @if (isCurrentUser(user)) {
+                      <span class="user-badge-you">You</span>
+                    }
+                  </div>
+                  <div class="user-email-row">
+                    <svg class="email-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
+                    </svg>
+                    <span class="user-email">{{ user.email }}</span>
+                  </div>
+                </div>
+              </div>
+              <app-menu [items]="getUserMenuItems(user)"></app-menu>
+            </div>
+
+            <div class="user-role-section">
+              <div class="role-label-row">
+                <svg class="role-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path>
+                </svg>
+                <span class="role-label-text">Role:</span>
+              </div>
+              @if (canEditUser(user)) {
+                <app-dropdown
+                  [options]="getRoleOptions()"
+                  [value]="user.orgRole"
+                  (valueChange)="onUpdateRole(user, $event)"
+                  [disabled]="updatingRole[user.id]">
+                </app-dropdown>
+              } @else {
+                <span class="role-badge" [ngClass]="getRoleBadgeClass(user.orgRole)">
+                  {{ orgRoleLabels[user.orgRole] }}
+                </span>
+              }
+            </div>
+          </div>
+        </app-card>
+      }
+    </div>
+  }
+
+  <!-- Empty State -->
+  @if (filteredUsers().length === 0 && !loading) {
+    <app-card variant="default" padding="lg" class="empty-state-card">
+      <div class="empty-state-content">
+        <div class="empty-state-icon-wrapper">
+          <svg class="empty-state-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+          </svg>
+        </div>
+        <h3 class="empty-state-title">No users found</h3>
+        <p class="empty-state-subtitle">
+          @if (searchQuery()) {
+            We couldn't find any users matching your search. Try adjusting your search terms.
+          } @else {
+            No users yet. Create your first user to get started.
+          }
+        </p>
+        @if (searchQuery()) {
+          <app-button
+            label="Clear Search"
+            variant="secondary"
+            (clicked)="clearSearch()">
+          </app-button>
+        }
+      </div>
+    </app-card>
+  }
+
+  <!-- Stats Cards -->
+  @if (users.length > 0) {
+    <div class="stats-grid">
+      <app-card variant="default" padding="md" class="stat-card stat-card-blue">
+        <div class="stat-content">
+          <p class="stat-label">Total Users</p>
+          <p class="stat-value">{{ totalUsers() }}</p>
+        </div>
+      </app-card>
+
+      <app-card variant="default" padding="md" class="stat-card stat-card-pink">
+        <div class="stat-content">
+          <p class="stat-label">Admins</p>
+          <p class="stat-value">{{ totalAdmins() }}</p>
+        </div>
+      </app-card>
+
+      <app-card variant="default" padding="md" class="stat-card stat-card-purple">
+        <div class="stat-content">
+          <p class="stat-label">Managers</p>
+          <p class="stat-value">{{ totalManagers() }}</p>
+        </div>
+      </app-card>
+    </div>
+  }
+
+  <!-- Create User Dialog -->
+  <app-dialog
+    [open]="showCreateDialog()"
+    title="Create New User"
+    description="Add a new user to your organization and assign their role."
+    (openChange)="showCreateDialog.set($event)">
+    
+    <form [formGroup]="createUserForm" (ngSubmit)="onCreateUser()" class="create-user-form">
+      <div class="form-row">
+        <div class="form-field">
+          <app-input
+            label="First Name"
+            type="text"
+            formControlName="firstName"
+            [required]="true"
+            [error]="getFieldError('firstName')">
+          </app-input>
+        </div>
+        <div class="form-field">
+          <app-input
+            label="Last Name"
+            type="text"
+            formControlName="lastName"
+            [required]="true"
+            [error]="getFieldError('lastName')">
+          </app-input>
+        </div>
+      </div>
+
+      <div class="form-field">
+        <app-input
+          label="Email Address"
+          type="email"
+          formControlName="email"
+          [required]="true"
+          [error]="getFieldError('email')">
+        </app-input>
+      </div>
+
+      <div class="form-field">
+        <app-input
+          label="Password"
+          type="password"
+          formControlName="password"
+          [required]="true"
+          [error]="getFieldError('password')">
+        </app-input>
+      </div>
+
+      <div class="form-field">
+        <label class="input-label required">Role</label>
+        <app-dropdown
+          [options]="getRoleOptions()"
+          formControlName="orgRole"
+          [error]="getFieldError('orgRole')">
+        </app-dropdown>
+      </div>
+
+      @if (createError) {
+        <div class="error-message">
+          {{ createError }}
+        </div>
+      }
+    </form>
+
+    <div dialog-footer>
+      <app-button
+        label="Cancel"
+        variant="secondary"
+        type="button"
+        (clicked)="toggleCreateDialog()"
+        [disabled]="creating">
+      </app-button>
+      <app-button
+        label="Create User"
+        variant="primary"
+        type="button"
+        (clicked)="onCreateUser()"
+        [loading]="creating"
+        [disabled]="creating || createUserForm.invalid">
+      </app-button>
+    </div>
+  </app-dialog>
+</div>

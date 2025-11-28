@@ -1,0 +1,32 @@
+<div class="menu-container">
+  <button
+    type="button"
+    class="menu-trigger"
+    #menuTrigger
+    (click)="toggleMenu($event)"
+    aria-label="Open menu">
+    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" [attr.d]="triggerIcon"></path>
+    </svg>
+  </button>
+
+  @if (isOpen) {
+    <div class="menu-content" #menuContent>
+      @for (item of items; track item.label) {
+        <button
+          type="button"
+          class="menu-item"
+          [class.menu-item-danger]="item.variant === 'danger'"
+          (click)="onItemClick(item, $event)">
+          @if (item.icon) {
+            <svg class="menu-item-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" [attr.d]="item.icon"></path>
+            </svg>
+          }
+          <span>{{ item.label }}</span>
+        </button>
+      }
+    </div>
+  }
+</div>
+

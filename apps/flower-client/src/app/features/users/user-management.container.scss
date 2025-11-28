@@ -1,0 +1,52 @@
+// Dashboard header styles are now in components.scss as .dashboard-header
+
+.loading-state,
+.error-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: var(--spacing-6xl) var(--spacing-xl);
+  text-align: center;
+}
+
+.spinner {
+  width: var(--spacing-5xl);
+  height: var(--spacing-5xl);
+  border: 4px solid var(--border);
+  border-top-color: var(--primary);
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin-bottom: var(--spacing-lg);
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.error-banner {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-md);
+  padding: var(--spacing-lg) var(--spacing-xl);
+  background: color-mix(in srgb, var(--destructive) 10%, transparent);
+  color: var(--destructive);
+  border-radius: var(--radius-lg);
+  border-left: 4px solid var(--destructive);
+  box-shadow: var(--shadow-sm);
+  font-weight: var(--font-weight-medium);
+
+  .error-icon {
+    width: 1.5rem;
+    height: 1.5rem;
+    flex-shrink: 0;
+  }
+
+  p {
+    margin: 0;
+    font-size: var(--text-base);
+  }
+}
+

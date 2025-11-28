@@ -1,0 +1,36 @@
+@if (open) {
+  <div 
+    class="dialog-overlay"
+    #dialogOverlay
+    (click)="onOverlayClick($event)">
+    <div 
+      class="dialog-content"
+      #dialogContent
+      (click)="onContentClick($event)">
+      <div class="dialog-header">
+        @if (title) {
+          <h2 class="dialog-title">{{ title }}</h2>
+        }
+        @if (description) {
+          <p class="dialog-description">{{ description }}</p>
+        }
+        <button 
+          type="button"
+          class="dialog-close"
+          (click)="close()"
+          aria-label="Close dialog">
+          <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+          </svg>
+        </button>
+      </div>
+      <div class="dialog-body">
+        <ng-content></ng-content>
+      </div>
+      <div class="dialog-footer">
+        <ng-content select="[dialog-footer]"></ng-content>
+      </div>
+    </div>
+  </div>
+}
+

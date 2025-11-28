@@ -12,10 +12,18 @@ import { AuthService } from './auth.service';
 import { JwtStrategy } from './strategies/jwt.strategy';
 import { JwtRefreshStrategy } from './strategies/jwt-refresh.strategy';
 import { User, UserSchema } from './schemas/user.schema';
+import { Organization, OrganizationSchema } from '../organizations/schemas/organization.schema';
+import { OrgRole } from '../organizations/enums/org-role.enum';
+import { OrganizationIdService } from '../organizations/services/organization-id.service';
+import { OrganizationsModule } from '../organizations/organizations.module';
 
 @Module({
   imports: [
-    MongooseModule.forFeature([{ name: User.name, schema: UserSchema }]),
+    MongooseModule.forFeature([
+      { name: User.name, schema: UserSchema },
+      { name: Organization.name, schema: OrganizationSchema },
+    ]),
+    OrganizationsModule,
     PassportModule.register({ defaultStrategy: 'jwt' }),
     JwtModule.registerAsync({
       imports: [ConfigModule],

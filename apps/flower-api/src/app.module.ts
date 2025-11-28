@@ -5,6 +5,8 @@ import { APP_GUARD } from '@nestjs/core';
 import { WeeksModule } from './modules/weeks/weeks.module';
 import { WithdrawalsModule } from './modules/withdrawals/withdrawals.module';
 import { AuthModule } from './modules/auth/auth.module';
+import { UsersModule } from './modules/users/users.module';
+import { OrganizationsModule } from './modules/organizations/organizations.module';
 import { JwtAuthGuard } from './modules/auth/guards/jwt-auth.guard';
 
 @Module({
@@ -16,6 +18,8 @@ import { JwtAuthGuard } from './modules/auth/guards/jwt-auth.guard';
     AuthModule,
     WeeksModule,
     WithdrawalsModule,
+    UsersModule,
+    OrganizationsModule,
   ],
   providers: [
     {

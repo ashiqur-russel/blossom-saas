@@ -1,0 +1,41 @@
+<div class="dashboard-wrapper">
+  <div class="dashboard-container">
+    <main class="main-content">
+      <!-- Page Header -->
+      <div class="dashboard-header">
+        <h1 class="dashboard-header-title">User Management</h1>
+        <p class="dashboard-header-subtitle">Manage users and assign roles in your organization</p>
+      </div>
+
+      <!-- Loading State -->
+      @if (loading && users.length === 0) {
+        <div class="loading-state">
+          <div class="spinner"></div>
+          <p>Loading users...</p>
+        </div>
+      }
+
+      <!-- Error State -->
+      @if (error) {
+        <div class="error-banner">
+          <svg class="error-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+          </svg>
+          <p>{{ error }}</p>
+        </div>
+      }
+
+      <!-- User Management Content -->
+      @if (isOrgAdmin && (!loading || users.length > 0)) {
+        <app-user-management-presentation
+          [users]="users"
+          [loading]="loading"
+          (userCreated)="onUserCreated()"
+          (userRoleUpdated)="onUserRoleUpdated()"
+          (userDeleted)="onUserDeleted()">
+        </app-user-management-presentation>
+      }
+    </main>
+  </div>
+</div>
+

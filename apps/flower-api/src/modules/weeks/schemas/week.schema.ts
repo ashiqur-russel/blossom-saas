@@ -33,8 +33,13 @@ export const SaleByDaySchema = SchemaFactory.createForClass(SaleByDay);
   },
 })
 export class Week {
+  // User who created/owns this record
   @Prop({ type: String, required: true, ref: 'User', index: true })
   userId: string;
+
+  // Organization this record belongs to (for multi-tenant filtering)
+  @Prop({ type: String, required: true, ref: 'Organization', index: true })
+  organizationId: string;
 
   @Prop({ type: Number, required: true, index: true })
   weekNumber: number;
@@ -83,9 +88,15 @@ export type WeekDocument = Week & Document;
 
 export const WeekSchema = SchemaFactory.createForClass(Week);
 
-// Compound index for unique week/year/userId combination
-WeekSchema.index({ userId: 1, weekNumber: 1, year: 1 }, { unique: true });
+// Compound indexes
+// Unique constraint: one week per organization per year
+WeekSchema.index({ organizationId: 1, weekNumber: 1, year: 1 }, { unique: true });
+// User-based queries
+WeekSchema.index({ userId: 1, weekNumber: 1, year: 1 });
 WeekSchema.index({ userId: 1, year: 1, weekNumber: -1 });
 WeekSchema.index({ userId: 1 });
+// Organization-based queries (primary for multi-tenant)
+WeekSchema.index({ organizationId: 1, year: 1, weekNumber: -1 });
+WeekSchema.index({ organizationId: 1 });
 
 

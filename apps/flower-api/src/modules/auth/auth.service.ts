@@ -9,6 +9,9 @@ import { LoginDto } from './dtos/login.dto';
 import { RegisterDto } from './dtos/register.dto';
 import { User, UserDocument, UserRole } from './schemas/user.schema';
 import { JwtPayload } from './strategies/jwt.strategy';
+import { Organization, OrganizationDocument } from '../organizations/schemas/organization.schema';
+import { OrgRole } from '../organizations/enums/org-role.enum';
+import { OrganizationIdService } from '../organizations/services/organization-id.service';
 
 interface AuthResponse {
   accessToken: string;
@@ -20,6 +23,8 @@ interface AuthResponse {
     lastName: string;
     businessName?: string;
     role: UserRole;
+    organizationId?: string;
+    orgRole: OrgRole;
     isActive: boolean;
     createdAt?: Date;
     updatedAt?: Date;
@@ -30,6 +35,8 @@ interface AuthResponse {
 export class AuthService {
   constructor(
     @InjectModel(User.name) private userModel: Model<UserDocument>,
+    @InjectModel(Organization.name) private organizationModel: Model<OrganizationDocument>,
+    private organizationIdService: OrganizationIdService,
     private jwtService: JwtService,
     private configService: ConfigService,
   ) {}
@@ -44,33 +51,59 @@ export class AuthService {
 
     const hashedPassword = await this.hashPassword(password);
 
-    const userData: Partial<User> & { email: string; password: string; firstName: string; lastName: string; role: UserRole; isActive: boolean } = {
+    // Generate sequential organization ID (org_1, org_2, etc.)
+    const orgId = await this.organizationIdService.generateNextOrgId();
+
+    // Create organization for the new user
+    // Company name: Use businessName if provided, otherwise use "{FirstName} {LastName}'s Organization"
+    const companyName = businessName?.trim() || `${firstName} ${lastName}'s Organization`.trim();
+    const organization = await this.organizationModel.create({
+      orgId, // Sequential ID (org_1, org_2, etc.) - immutable
+      name: companyName, // Company name - can be changed later
+      businessName: businessName?.trim() || companyName,
+      createdBy: null, // Will be set after user is created
+      ownerId: null, // Will be set after user is created
+      isActive: true,
+      settings: {
+        currency: 'EUR',
+        timezone: 'UTC',
+      },
+    });
+
+    const userData: Partial<User> & { email: string; password: string; firstName: string; lastName: string; role: UserRole; isActive: boolean; organizationId: string; orgRole: OrgRole } = {
       email: email.toLowerCase(),
       password: hashedPassword,
       firstName,
       lastName,
       role: UserRole.USER,
       isActive: true,
+      organizationId: organization.orgId, // Use orgId (org_1, org_2, etc.) instead of _id
+      orgRole: OrgRole.ORG_ADMIN, // First user becomes organization admin
     };
 
     if (businessName && businessName.trim()) {
       userData.businessName = businessName.trim();
     }
 
-            const createdUser: any = await this.userModel.create(userData);
-            const user = createdUser as UserDocument;
+    const createdUser: any = await this.userModel.create(userData);
+    const user = createdUser as UserDocument;
 
-            const accessToken = this.generateToken(user);
-            const refreshToken = this.generateRefreshToken(user);
+    // Update organization with user as creator and owner
+    organization.createdBy = user._id.toString();
+    organization.ownerId = user._id.toString();
+    await organization.save();
 
-            user.refreshToken = refreshToken;
-            await user.save();
+    const accessToken = this.generateToken(user);
+    const refreshToken = this.generateRefreshToken(user);
 
-            return {
-              accessToken,
-              refreshToken,
-              user: this.sanitizeUser(user),
-            } as AuthResponse;
+    user.refreshToken = refreshToken;
+    await user.save();
+
+    return {
+      accessToken,
+      refreshToken,
+      user: this.sanitizeUser(user),
+    } as AuthResponse;
   }
 
   async login(loginDto: LoginDto) {
@@ -236,6 +269,8 @@ export class AuthService {
       lastName: userObj.lastName,
       businessName: userObj.businessName,
       role: userObj.role,
+      organizationId: userObj.organizationId,
+      orgRole: userObj.orgRole || OrgRole.ORG_USER,
       isActive: userObj.isActive,
       createdAt: userObj.createdAt,
       updatedAt: userObj.updatedAt,

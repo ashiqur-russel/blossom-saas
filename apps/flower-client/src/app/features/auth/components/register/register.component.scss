@@ -54,6 +54,12 @@
       font-weight: 500;
       color: var(--foreground);
       font-size: 0.9rem;
+
+      .optional-label {
+        font-weight: 400;
+        color: #6b7280;
+        font-size: 0.85rem;
+      }
     }
 
     input {
@@ -81,6 +87,14 @@
       color: #ef4444;
       font-size: 0.875rem;
       margin-top: 0.25rem;
+    }
+
+    .help-text {
+      display: block;
+      color: #6b7280;
+      font-size: 0.75rem;
+      margin-top: 0.25rem;
+      font-style: italic;
     }
   }
 

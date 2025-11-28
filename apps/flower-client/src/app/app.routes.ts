@@ -1,5 +1,6 @@
 import { Routes } from '@angular/router';
 import { authGuard } from './features/auth/guards/auth.guard';
+import { orgAdminGuard } from './features/auth/guards/org-admin.guard';
 
 export const routes: Routes = [
   {
@@ -81,6 +82,14 @@ export const routes: Routes = [
           import('./features/withdrawals/withdrawal.component').then(
             (m) => m.WithdrawalComponent,
           ),
+      },
+      {
+        path: 'dashboard/users',
+        loadComponent: () =>
+          import('./features/users/user-management.container').then(
+            (m) => m.UserManagementContainerComponent,
+          ),
+        canActivate: [orgAdminGuard],
       },
     ],
   },

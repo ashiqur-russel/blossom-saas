@@ -4,6 +4,7 @@
  */
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document } from 'mongoose';
+import { OrgRole } from '../../organizations/enums/org-role.enum';
 
 export enum UserRole {
   USER = 'user',
@@ -43,6 +44,13 @@ export class User {
   @Prop({ type: String, enum: UserRole, default: UserRole.USER })
   role: UserRole;
 
+  // Organization fields
+  @Prop({ type: String, ref: 'Organization', index: true })
+  organizationId?: string; // Optional for backward compatibility during migration
+
+  @Prop({ type: String, enum: OrgRole, default: OrgRole.ORG_USER })
+  orgRole: OrgRole; // Role within the organization
+
   @Prop({ type: Boolean, default: true })
   isActive: boolean;
 
@@ -63,4 +71,7 @@ export const UserSchema = SchemaFactory.createForClass(User);
 // Indexes
 UserSchema.index({ email: 1 }, { unique: true });
 UserSchema.index({ role: 1 });
+UserSchema.index({ organizationId: 1 });
+UserSchema.index({ organizationId: 1, orgRole: 1 });
+UserSchema.index({ organizationId: 1, isActive: 1 });
 
