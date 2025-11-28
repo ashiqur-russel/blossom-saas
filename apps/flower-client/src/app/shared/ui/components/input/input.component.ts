@@ -40,7 +40,10 @@ export class InputComponent implements ControlValueAccessor {
 
   inputMode = computed(() => {
     const t = this.type();
-    return t === 'number' ? 'decimal' : null;
+    if (t === 'number') {
+      return this.step() === 1 ? 'numeric' : 'decimal';
+    }
+    return null;
   });
 
   private onChange = (value: any) => {};
@@ -72,13 +75,32 @@ export class InputComponent implements ControlValueAccessor {
 
   onInput(event: Event): void {
     const target = event.target as HTMLInputElement;
-    const newValue = target.value;
+    let newValue = target.value;
+
+    if (this.type() === 'number' && this.step() === 1) {
+      newValue = newValue.replace(/[^\d-]/g, '');
+      if (newValue.includes('-') && !newValue.startsWith('-')) {
+        newValue = newValue.replace(/-/g, '');
+      }
+      if (newValue !== target.value) {
+        target.value = newValue;
+      }
+    }
+
     this.rawValueSignal.set(newValue);
 
     if (this.type() === 'number') {
       if (newValue === '' || newValue === '-') {
         this.isTypingDecimalSignal.set(false);
         this.onChange(null);
+      } else if (this.step() === 1) {
+        this.isTypingDecimalSignal.set(false);
+        const intValue = parseInt(newValue, 10);
+        if (!isNaN(intValue)) {
+          this.onChange(intValue);
+        } else {
+          this.onChange(newValue);
+        }
       } else if (newValue.includes('.')) {
         this.isTypingDecimalSignal.set(true);
         const numPart = newValue.split('.')[0];
@@ -114,17 +136,23 @@ export class InputComponent implements ControlValueAccessor {
         return;
       }
 
-      if (currentValue.endsWith('.')) {
+      if (this.step() === 1) {
+        const intValue = parseInt(currentValue, 10);
+        if (!isNaN(intValue)) {
+          this.rawValueSignal.set(String(intValue));
+          this.onChange(intValue);
+        }
+      } else if (currentValue.endsWith('.')) {
         const numPart = currentValue.slice(0, -1);
         const numValue = numPart ? parseFloat(numPart) : null;
         this.onChange(numValue);
         return;
-      }
-
-      const numValue = parseFloat(currentValue);
-      if (!isNaN(numValue)) {
-        this.rawValueSignal.set(String(numValue));
-        this.onChange(numValue);
+      } else {
+        const numValue = parseFloat(currentValue);
+        if (!isNaN(numValue)) {
+          this.rawValueSignal.set(String(numValue));
+          this.onChange(numValue);
+        }
       }
     }
   }
