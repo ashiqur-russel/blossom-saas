@@ -1,5 +1,4 @@
-import { Component, signal, computed } from '@angular/core';
-import { toSignal } from '@angular/core/rxjs-interop';
+import { Component, signal, computed, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { DashboardService } from './dashboard.service';
@@ -10,8 +9,8 @@ import { IWithdrawalSummary } from '../../shared/models/withdrawal.model';
 import { ChartConfiguration } from 'chart.js';
 import { DashboardPresentationComponent } from './dashboard.presentation';
 import { extractErrorMessage } from '../../shared/utils/error.util';
-import { catchError, map, startWith } from 'rxjs/operators';
-import { of } from 'rxjs';
+import { catchError, finalize } from 'rxjs/operators';
+import { of, Subject, Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-dashboard-container',
@@ -20,34 +19,23 @@ import { of } from 'rxjs';
   templateUrl: './dashboard.container.html',
   styleUrl: './dashboard.container.scss',
 })
-export class DashboardContainerComponent {
-  private refreshTrigger = signal(0);
+export class DashboardContainerComponent implements OnInit, OnDestroy {
+  private refreshTrigger = new Subject<void>();
+  private subscription?: Subscription;
   activeTab = signal<'weekly' | 'trends'>('weekly');
 
-  // Use toSignal for reactive data fetching
-  private dashboardData$ = computed(() => {
-    this.refreshTrigger(); // Track refresh trigger
-    return this.dashboardService.loadDashboardData().pipe(
-      catchError((err: any) => {
-        const errorMsg = extractErrorMessage(err, 'Failed to load dashboard data');
-        if (err?.isCritical !== false && !errorMsg.toLowerCase().includes('withdrawal')) {
-          throw { ...err, message: errorMsg };
-        }
-        return of({ weeks: [], summary: null, withdrawalSummary: null });
-      })
-    );
-  });
-
-  dashboardData = toSignal(this.dashboardData$(), { 
-    initialValue: { weeks: [], summary: null, withdrawalSummary: null } 
-  });
-
-  loading = signal(false);
+  loading = signal(true);
   error = signal<string | null>(null);
+  
+  dashboardData = signal<{ weeks: IWeek[]; summary: IWeekSummary | null; withdrawalSummary: IWithdrawalSummary | null }>({
+    weeks: [],
+    summary: null,
+    withdrawalSummary: null
+  });
 
-  weeks = computed(() => this.dashboardData()?.weeks || []);
-  summary = computed(() => this.dashboardData()?.summary || null);
-  withdrawalSummary = computed(() => this.dashboardData()?.withdrawalSummary || null);
+  weeks = computed(() => this.dashboardData().weeks);
+  summary = computed(() => this.dashboardData().summary);
+  withdrawalSummary = computed(() => this.dashboardData().withdrawalSummary);
 
   profitChartData = computed<ChartConfiguration<'line'>['data']>(() => 
     this.chartService.createProfitChartData(this.weeks())
@@ -83,9 +71,49 @@ export class DashboardContainerComponent {
     private dashboardService: DashboardService,
     private chartService: ChartService,
     private weekService: WeekService,
-  ) {
+  ) {}
+
+  ngOnInit(): void {
+    // Set up subscription to refresh trigger
+    this.subscription = this.refreshTrigger.subscribe(() => {
+      this.loadData();
+    });
+    
     // Trigger initial load
-    this.refreshTrigger.set(1);
+    this.loadData();
+  }
+
+  ngOnDestroy(): void {
+    this.subscription?.unsubscribe();
+  }
+
+  private loadData(): void {
+    if (!this.dashboardService) {
+      console.error('DashboardService is not initialized');
+      this.loading.set(false);
+      this.error.set('Service initialization error');
+      return;
+    }
+    
+    this.loading.set(true);
+    this.error.set(null);
+    
+    this.dashboardService.loadDashboardData().subscribe({
+      next: (data) => {
+        this.dashboardData.set(data);
+        this.loading.set(false);
+      },
+      error: (err: any) => {
+        this.loading.set(false);
+        const errorMsg = extractErrorMessage(err, 'Failed to load dashboard data');
+        if (err?.isCritical !== false && !errorMsg.toLowerCase().includes('withdrawal')) {
+          this.error.set(errorMsg);
+          console.error('Dashboard load error:', err);
+        }
+        // Set empty data on error
+        this.dashboardData.set({ weeks: [], summary: null, withdrawalSummary: null });
+      }
+    });
   }
 
   setActiveTab(tab: 'weekly' | 'trends'): void {
@@ -118,7 +146,7 @@ export class DashboardContainerComponent {
   refreshData(): void {
     // Only refresh data without showing full-page loading
     this.refreshing.set(true);
-    this.refreshTrigger.update((v: number) => v + 1);
+    this.loadData();
     
     // Reset refreshing after data loads - check loading state periodically
     const checkLoading = setInterval(() => {

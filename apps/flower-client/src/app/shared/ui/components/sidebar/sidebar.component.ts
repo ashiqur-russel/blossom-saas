@@ -90,6 +90,13 @@ export class SidebarComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    // Set initial user from storage immediately
+    const storedUser = this.authService.getCurrentUser();
+    if (storedUser) {
+      this.currentUser = storedUser;
+    }
+    
+    // Subscribe to user changes
     this.authService.currentUser$.subscribe((user: User | null) => {
       this.currentUser = user;
       // If user exists but orgRole is missing, refresh user data immediately
@@ -106,8 +113,7 @@ export class SidebarComponent implements OnInit {
     });
     
     // Also check on initial load
-    const currentUser = this.authService.getCurrentUser();
-    if (currentUser && !currentUser.orgRole) {
+    if (storedUser && !storedUser.orgRole) {
       this.authService.refreshUserProfile().subscribe({
         next: (updatedUser) => {
           this.currentUser = updatedUser;

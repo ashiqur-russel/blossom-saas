@@ -10,7 +10,9 @@
       {{ error() }}
     </div>
 
-    <div *ngIf="summary() && !loading()" class="kpi-grid" [class.refreshing]="refreshing()">
+    @if (!loading()) {
+      @if (summary() || weeks().length > 0) {
+        <div class="kpi-grid" [class.refreshing]="refreshing()">
       <app-card variant="default">
         <div class="kpi-card">
           <div class="kpi-content">
@@ -151,9 +153,12 @@
           </div>
         </div>
       </app-card>
-    </div>
+        </div>
+      }
+    }
 
-    <div *ngIf="!loading()" class="main-grid">
+    @if (!loading()) {
+      <div class="main-grid">
       <div class="left-column">
         <app-sales-form 
           [weekToEdit]="selectedWeekForEdit()"
@@ -199,9 +204,9 @@
           </app-card>
         </div>
       </div>
-    </div>
+      </div>
 
-    <div *ngIf="!loading()" class="tabs-section">
+      <div class="tabs-section">
       <div class="tabs">
         <button 
           [class.active]="activeTab() === 'weekly'"
@@ -298,7 +303,8 @@
           </app-card>
         </div>
       </div>
-    </div>
+      </div>
+    }
   </main>
 </div>
 </div>

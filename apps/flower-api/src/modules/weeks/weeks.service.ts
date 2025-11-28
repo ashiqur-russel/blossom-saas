@@ -27,10 +27,11 @@ export class WeeksService {
       throw new ConflictException('Organization ID is required. Please ensure your user account is associated with an organization.');
     }
 
-    // Check if week already exists for this user
+    // Check if week already exists for this organization (not just user)
+    // This prevents duplicate weeks within the same organization
     const existingWeek = await this.weekModel
       .findOne({
-        userId,
+        organizationId,
         weekNumber: createWeekDto.weekNumber,
         year: createWeekDto.year,
       })
@@ -38,7 +39,7 @@ export class WeeksService {
 
     if (existingWeek) {
       throw new ConflictException(
-        `Week ${createWeekDto.weekNumber} for year ${createWeekDto.year} already exists.`,
+        `Week ${createWeekDto.weekNumber} for year ${createWeekDto.year} already exists for this organization.`,
       );
     }
 
@@ -52,23 +53,38 @@ export class WeeksService {
     avgBuyingPrice = Math.round(avgBuyingPrice * 100) / 100;
     avgSalesPrice = Math.round(avgSalesPrice * 100) / 100;
 
-    const createdWeek = await this.weekModel.create({
-      ...createWeekDto,
+    const weekData: any = {
+      weekNumber: createWeekDto.weekNumber,
+      year: createWeekDto.year,
+      startDate: createWeekDto.startDate,
+      endDate: createWeekDto.endDate,
+      totalFlower: createWeekDto.totalFlower,
+      totalBuyingPrice: createWeekDto.totalBuyingPrice,
+      sale: createWeekDto.sale,
+      totalSale: createWeekDto.totalSale,
+      profit: createWeekDto.profit,
+      revenue: createWeekDto.revenue,
       userId,
       organizationId,
       avgBuyingPrice,
       avgSalesPrice,
       savings: createWeekDto.savings ?? 0,
-    });
-    return this.mapToResponseDto(createdWeek);
+    };
+    const createdWeek = await this.weekModel.create(weekData);
+    return this.mapToResponseDto(createdWeek as any as WeekDocument);
   }
 
   async findAll(userId: string): Promise<WeekResponseDto[]> {
     const weeks = await this.weekModel
       .find({ userId })
       .sort({ year: -1, weekNumber: -1 })
+      .lean()
       .exec();
-    return weeks.map((week) => this.mapToResponseDto(week));
+    const result: WeekResponseDto[] = [];
+    for (const week of weeks) {
+      result.push(this.mapToResponseDto(week as any as WeekDocument));
+    }
+    return result;
   }
 
   async findOne(id: string, userId: string): Promise<WeekResponseDto> {
@@ -76,7 +92,7 @@ export class WeeksService {
     if (!week) {
       throw new NotFoundException(`Week with ID ${id} not found`);
     }
-    return this.mapToResponseDto(week);
+    return this.mapToResponseDto(week as any as WeekDocument);
   }
 
   async update(
@@ -130,7 +146,7 @@ export class WeeksService {
       throw new NotFoundException(`Week with ID ${id} not found`);
     }
 
-    return this.mapToResponseDto(week);
+    return this.mapToResponseDto(week as any as WeekDocument);
   }
 
   async remove(id: string, userId: string): Promise<void> {
@@ -207,7 +223,7 @@ export class WeeksService {
   }
 
   private mapToResponseDto(week: WeekDocument): WeekResponseDto {
-    const plain: any = week.toJSON ? week.toJSON() : week.toObject();
+    const plain: any = (week.toJSON ? week.toJSON() : week.toObject()) as any;
 
     // Handle both old and new data formats
     const totalFlower = plain.totalFlower || plain.quantity || 0;

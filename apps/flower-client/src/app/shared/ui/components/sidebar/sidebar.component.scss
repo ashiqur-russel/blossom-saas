@@ -44,7 +44,8 @@
 
   @media (min-width: 1025px) {
     position: fixed;
-    transform: translateX(0);
+    transform: translateX(0) !important;
+    display: flex !important;
   }
 }
 

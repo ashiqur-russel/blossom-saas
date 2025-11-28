@@ -9,19 +9,42 @@
 
   <nav class="sidebar-nav">
     <ul class="nav-list">
-      <li *ngFor="let item of visibleSidebarItems" class="nav-item">
-        <a
-          [routerLink]="item.route"
-          [class.active]="isActive(item.route)"
-          (click)="navigate(item.route)"
-          class="nav-link">
-          <svg class="nav-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" [attr.d]="item.icon"></path>
-          </svg>
-          <span class="nav-label">{{ item.label }}</span>
-          <span *ngIf="item.badge" class="nav-badge">{{ item.badge }}</span>
-        </a>
-      </li>
+      @for (item of visibleSidebarItems; track item.route) {
+        <li class="nav-item">
+          <a
+            [routerLink]="item.route"
+            [class.active]="isActive(item.route)"
+            (click)="navigate(item.route)"
+            class="nav-link">
+            <svg class="nav-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" [attr.d]="item.icon"></path>
+            </svg>
+            <span class="nav-label">{{ item.label }}</span>
+            @if (item.badge) {
+              <span class="nav-badge">{{ item.badge }}</span>
+            }
+          </a>
+        </li>
+      } @empty {
+        <!-- Fallback: Show default items if list is empty -->
+        @for (item of sidebarItems; track item.route) {
+          <li class="nav-item">
+            <a
+              [routerLink]="item.route"
+              [class.active]="isActive(item.route)"
+              (click)="navigate(item.route)"
+              class="nav-link">
+              <svg class="nav-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" [attr.d]="item.icon"></path>
+              </svg>
+              <span class="nav-label">{{ item.label }}</span>
+              @if (item.badge) {
+                <span class="nav-badge">{{ item.badge }}</span>
+              }
+            </a>
+          </li>
+        }
+      }
     </ul>
   </nav>
 
