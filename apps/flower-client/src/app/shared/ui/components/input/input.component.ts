@@ -50,8 +50,16 @@ export class InputComponent implements ControlValueAccessor {
     this.value = newValue;
     
     if (this.type === 'number') {
-      const numValue = newValue === '' ? null : Number(newValue);
-      this.onChange(numValue);
+      if (newValue === '' || newValue === '-') {
+        this.onChange(null);
+      } else {
+        const numValue = parseFloat(newValue);
+        if (!isNaN(numValue)) {
+          this.onChange(numValue);
+        } else {
+          this.onChange(newValue);
+        }
+      }
     } else {
       this.onChange(newValue);
     }
