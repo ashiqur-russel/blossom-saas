@@ -48,16 +48,36 @@ export class ChartComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   private updateChart(): void {
-    this.chartData = this.data;
-    this.chartOptions = {
-      ...this.options,
+    // Use data directly - don't deep clone as it can break Chart.js structure
+    this.chartData = this.data && Object.keys(this.data).length > 0 
+      ? { ...this.data } 
+      : { labels: [], datasets: [] };
+    
+    // Merge options properly
+    const defaultOptions = {
       responsive: true,
       maintainAspectRatio: false,
       resizeDelay: 0,
+      animation: {
+        duration: 0,
+      },
+      backgroundColor: 'transparent',
+      color: '#2d1b2e',
       interaction: {
         intersect: false,
         mode: 'index' as const,
       },
+      elements: {
+        point: {
+          radius: 3,
+          hoverRadius: 5,
+        },
+      },
+    };
+    
+    this.chartOptions = {
+      ...defaultOptions,
+      ...this.options,
     };
   }
 }

@@ -55,6 +55,13 @@ export const routes: Routes = [
           ),
       },
       {
+        path: 'dashboard/analytics',
+        loadComponent: () =>
+          import('./features/analytics/analytics.container').then(
+            (m) => m.AnalyticsContainerComponent,
+          ),
+      },
+      {
         path: 'weeks/new',
         loadComponent: () =>
           import('./features/weeks/week-sales-editor.container').then(
@@ -73,13 +80,6 @@ export const routes: Routes = [
         loadComponent: () =>
           import('./features/withdrawals/withdrawal.component').then(
             (m) => m.WithdrawalComponent,
-          ),
-      },
-      {
-        path: 'analytics',
-        loadComponent: () =>
-          import('./features/analytics/analytics.container').then(
-            (m) => m.AnalyticsContainerComponent,
           ),
       },
     ],

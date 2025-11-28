@@ -1,112 +1,243 @@
+/**
+ * Theme Variables - Single Source of Truth
+ * 
+ * This file defines all design system variables.
+ * It includes both the new naming convention (--color-*) and legacy aliases (--primary, etc.)
+ * for backward compatibility.
+ * 
+ * New code should use the new naming: --color-primary-500, --color-text, etc.
+ * Legacy code continues to work with: --primary, --foreground, etc.
+ */
 @layer base {
   :root {
-    --background: #fefefe;
-    --foreground: #2d1b2e;
+    /* ============================================
+       NEW DESIGN SYSTEM (Primary Source)
+       ============================================ */
     
-    --card: #ffffff;
-    --card-foreground: #2d1b2e;
+    /* Colors - Primary */
+    --color-primary-50: #fef7ff;
+    --color-primary-100: #fce7f3;
+    --color-primary-500: #e91e63;
+    --color-primary-600: #c2185b;
+    --color-primary-700: #9f1239;
+    --color-primary-hover: #c2185b;
+
+    /* Colors - Semantic */
+    --color-success: #10b981;
+    --color-success-foreground: #ffffff;
+    --color-warning: #f59e0b;
+    --color-warning-foreground: #ffffff;
+    --color-error: #ef4444;
+    --color-error-foreground: #ffffff;
+    --color-info: #3b82f6;
+    --color-info-foreground: #ffffff;
+
+    /* Colors - KPI */
+    --color-kpi-blue: #3b82f6;
+    --color-kpi-blue-light: #eff6ff;
+    --color-kpi-green: #10b981;
+    --color-kpi-green-light: #d1fae5;
+    --color-kpi-purple: #a855f7;
+    --color-kpi-purple-light: #faf5ff;
+    --color-kpi-orange: #f97316;
+    --color-kpi-orange-light: #fff7ed;
+    --color-kpi-pink: #ec4899;
+    --color-kpi-pink-light: #fdf2f8;
+    --color-kpi-indigo: #6366f1;
+    --color-kpi-indigo-light: #eef2ff;
+
+    /* Colors - Background */
+    --color-bg: #fefefe;
+    --color-bg-card: #ffffff;
+    --color-bg-muted: #fce7f3;
+    --color-bg-sidebar: #fef7ff;
+
+    /* Colors - Text */
+    --color-text: #2d1b2e;
+    --color-text-secondary: #6b7280;
+    --color-text-muted: #9f1239;
+    --color-text-inverse: #ffffff;
+
+    /* Colors - Border */
+    --color-border: #fce7f3;
+    --color-border-input: #fce7f3;
+    --color-border-ring: #e91e63;
+
+    /* Spacing */
+    --spacing-xs: 0.25rem;
+    --spacing-sm: 0.5rem;
+    --spacing-md: 1rem;
+    --spacing-lg: 1.5rem;
+    --spacing-xl: 2rem;
+    --spacing-2xl: 3rem;
+    --spacing-3xl: 4rem;
+
+    /* Typography */
+    --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
+    --font-mono: Fira Code, monospace;
     
-    --popover: #ffffff;
-    --popover-foreground: #2d1b2e;
-    
-    --primary: #e91e63;
-    --primary-foreground: #ffffff;
-    
-    --secondary: #f3e8ff;
-    --secondary-foreground: #6b21a8;
-    
-    --muted: #fce7f3;
-    --muted-foreground: #9f1239;
-    
-    --accent: #d1fae5;
-    --accent-foreground: #065f46;
-    
-    --destructive: #ef4444;
-    --destructive-foreground: #ffffff;
-    
-    --success: #10b981;
-    --success-foreground: #ffffff;
-    
-    --border: #fce7f3;
-    --input: #fce7f3;
-    --ring: #e91e63;
-    
-    --radius: 0.75rem;
-    
-    --chart-1: #e91e63;
-    --chart-2: #10b981;
-    --chart-3: #a855f7;
-    --chart-4: #f59e0b;
-    --chart-5: #ec4899;
-    
-    --sidebar: #fef7ff;
-    --sidebar-foreground: #2d1b2e;
-    --sidebar-primary: #e91e63;
-    --sidebar-primary-foreground: #ffffff;
-    --sidebar-accent: #fce7f3;
-    --sidebar-accent-foreground: #9f1239;
-    --sidebar-border: #fce7f3;
-    --sidebar-ring: #e91e63;
-    
+    --text-xs: 0.75rem;
+    --text-sm: 0.875rem;
+    --text-base: 1rem;
+    --text-lg: 1.125rem;
+    --text-xl: 1.25rem;
+    --text-2xl: 1.5rem;
+    --text-3xl: 1.875rem;
+    --text-4xl: 2.25rem;
+    --text-5xl: 3rem;
+
+    --font-weight-normal: 400;
+    --font-weight-medium: 500;
+    --font-weight-semibold: 600;
+    --font-weight-bold: 700;
+    --font-weight-extrabold: 800;
+
+    --line-height-tight: 1.25;
+    --line-height-normal: 1.5;
+    --line-height-relaxed: 1.75;
+
+    /* Shadows */
+    --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+    --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -1px rgb(0 0 0 / 0.06);
+    --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -2px rgb(0 0 0 / 0.05);
+    --shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 10px 10px -5px rgb(0 0 0 / 0.04);
+    --shadow-inner: inset 0 2px 4px 0 rgb(0 0 0 / 0.05);
+    --shadow-none: none;
+
+    /* Transitions */
+    --transition-fast: 150ms ease;
+    --transition-base: 200ms ease;
+    --transition-slow: 300ms ease;
+
+    /* Border Radius */
+    --radius-sm: 0.375rem;
+    --radius-md: 0.5rem;
+    --radius-lg: 0.75rem;
+    --radius-xl: 1rem;
+
+    /* Dashboard Gradients */
     --dashboard-gradient-start: #fef7ff;
     --dashboard-gradient-middle: #f3e8ff;
     --dashboard-gradient-end: #ecfdf5;
+
+    /* ============================================
+       LEGACY ALIASES (Backward Compatibility)
+       ============================================ */
     
-    --kpi-blue: #3b82f6;
-    --kpi-green: #10b981;
-    --kpi-purple: #a855f7;
-    --kpi-orange: #f97316;
-    --kpi-pink: #ec4899;
-    --kpi-indigo: #6366f1;
+    --background: var(--color-bg);
+    --foreground: var(--color-text);
     
-    --kpi-pink-light: #fdf2f8;
-    --kpi-purple-light: #faf5ff;
-    --kpi-blue-light: #eff6ff;
+    --card: var(--color-bg-card);
+    --card-foreground: var(--color-text);
+    
+    --popover: var(--color-bg-card);
+    --popover-foreground: var(--color-text);
+    
+    --primary: var(--color-primary-500);
+    --primary-foreground: var(--color-text-inverse);
+    
+    --secondary: var(--color-kpi-purple-light);
+    --secondary-foreground: var(--color-text);
+    
+    --muted: var(--color-bg-muted);
+    --muted-foreground: var(--color-text-muted);
+    
+    --accent: var(--color-kpi-green-light);
+    --accent-foreground: var(--color-text);
+    
+    --destructive: var(--color-error);
+    --destructive-foreground: var(--color-error-foreground);
+    
+    --success: var(--color-success);
+    --success-foreground: var(--color-success-foreground);
+    
+    --border: var(--color-border);
+    --input: var(--color-border-input);
+    --ring: var(--color-border-ring);
+    
+    --radius: var(--radius-lg);
+    
+    --chart-1: var(--color-primary-500);
+    --chart-2: var(--color-success);
+    --chart-3: var(--color-kpi-purple);
+    --chart-4: var(--color-kpi-orange);
+    --chart-5: var(--color-kpi-pink);
+    
+    --sidebar: var(--color-bg-sidebar);
+    --sidebar-foreground: var(--color-text);
+    --sidebar-primary: var(--color-primary-500);
+    --sidebar-primary-foreground: var(--color-text-inverse);
+    --sidebar-accent: var(--color-bg-muted);
+    --sidebar-accent-foreground: var(--color-text-muted);
+    --sidebar-border: var(--color-border);
+    --sidebar-ring: var(--color-border-ring);
+    
+    --kpi-blue: var(--color-kpi-blue);
+    --kpi-green: var(--color-kpi-green);
+    --kpi-purple: var(--color-kpi-purple);
+    --kpi-orange: var(--color-kpi-orange);
+    --kpi-pink: var(--color-kpi-pink);
+    --kpi-indigo: var(--color-kpi-indigo);
+    
+    --kpi-pink-light: var(--color-kpi-pink-light);
+    --kpi-purple-light: var(--color-kpi-purple-light);
+    --kpi-blue-light: var(--color-kpi-blue-light);
   }
 
+  /* Dark theme */
   .dark {
-    --background: #1a0f1c;
-    --foreground: #fef7ff;
+    /* New design system - dark theme */
+    --color-primary-500: #f472b6;
+    --color-primary-600: #ec4899;
+    --color-bg: #1a0f1c;
+    --color-bg-card: #2d1b2e;
+    --color-text: #fef7ff;
+    --color-text-secondary: #c084fc;
+    --color-border: #4c1d95;
+
+    /* Legacy aliases - dark theme */
+    --background: var(--color-bg);
+    --foreground: var(--color-text);
     
-    --card: #2d1b2e;
-    --card-foreground: #fef7ff;
+    --card: var(--color-bg-card);
+    --card-foreground: var(--color-text);
     
-    --popover: #2d1b2e;
-    --popover-foreground: #fef7ff;
+    --popover: var(--color-bg-card);
+    --popover-foreground: var(--color-text);
     
-    --primary: #f472b6;
-    --primary-foreground: #1a0f1c;
+    --primary: var(--color-primary-500);
+    --primary-foreground: var(--color-text);
     
-    --secondary: #4c1d95;
-    --secondary-foreground: #fef7ff;
+    --secondary: var(--color-kpi-purple-light);
+    --secondary-foreground: var(--color-text);
     
-    --muted: #4c1d95;
-    --muted-foreground: #c084fc;
+    --muted: var(--color-bg-muted);
+    --muted-foreground: var(--color-text-secondary);
     
-    --accent: #065f46;
-    --accent-foreground: #d1fae5;
+    --accent: var(--color-kpi-green-light);
+    --accent-foreground: var(--color-text);
     
-    --destructive: #dc2626;
-    --destructive-foreground: #fef2f2;
+    --destructive: var(--color-error);
+    --destructive-foreground: var(--color-error-foreground);
     
-    --border: #4c1d95;
-    --input: #4c1d95;
-    --ring: #f472b6;
+    --border: var(--color-border);
+    --input: var(--color-border);
+    --ring: var(--color-border-ring);
     
-    --chart-1: #f472b6;
-    --chart-2: #10b981;
-    --chart-3: #a855f7;
-    --chart-4: #f59e0b;
-    --chart-5: #ec4899;
+    --chart-1: var(--color-primary-500);
+    --chart-2: var(--color-success);
+    --chart-3: var(--color-kpi-purple);
+    --chart-4: var(--color-kpi-orange);
+    --chart-5: var(--color-kpi-pink);
     
-    --sidebar: #2d1b2e;
-    --sidebar-foreground: #fef7ff;
-    --sidebar-primary: #f472b6;
-    --sidebar-primary-foreground: #1a0f1c;
-    --sidebar-accent: #4c1d95;
-    --sidebar-accent-foreground: #fef7ff;
-    --sidebar-border: #4c1d95;
-    --sidebar-ring: #f472b6;
+    --sidebar: var(--color-bg-sidebar);
+    --sidebar-foreground: var(--color-text);
+    --sidebar-primary: var(--color-primary-500);
+    --sidebar-primary-foreground: var(--color-text);
+    --sidebar-accent: var(--color-bg-muted);
+    --sidebar-accent-foreground: var(--color-text);
+    --sidebar-border: var(--color-border);
+    --sidebar-ring: var(--color-border-ring);
   }
 }
 

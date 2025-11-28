@@ -249,6 +249,9 @@ export class ChartService {
       responsive: true,
       maintainAspectRatio: false,
       resizeDelay: 0,
+      color: '#2d1b2e',
+      backgroundColor: 'transparent',
+      devicePixelRatio: 1,
       plugins: {
         legend: {
           display: true,
@@ -259,25 +262,52 @@ export class ChartService {
             font: {
               size: 12,
             },
+            color: '#2d1b2e',
+            usePointStyle: true,
           },
+        },
+        tooltip: {
+          backgroundColor: 'rgba(255, 255, 255, 0.95)',
+          titleColor: '#2d1b2e',
+          bodyColor: '#2d1b2e',
+          borderColor: '#fce7f3',
+          borderWidth: 1,
+          padding: 12,
+          displayColors: true,
         },
       },
       scales: {
         y: {
           beginAtZero: true,
           type: 'linear',
+          grid: {
+            color: 'rgba(252, 231, 243, 0.5)',
+          },
+          border: {
+            display: false,
+          },
           ticks: {
             font: {
               size: 11,
             },
+            color: '#2d1b2e',
           },
+          backgroundColor: 'transparent',
         },
         x: {
+          grid: {
+            color: 'rgba(252, 231, 243, 0.5)',
+          },
+          border: {
+            display: false,
+          },
           ticks: {
             font: {
               size: 11,
             },
+            color: '#2d1b2e',
           },
+          backgroundColor: 'transparent',
         },
       },
     };
@@ -288,6 +318,9 @@ export class ChartService {
       responsive: true,
       maintainAspectRatio: false,
       resizeDelay: 0,
+      color: '#2d1b2e',
+      backgroundColor: 'transparent',
+      devicePixelRatio: 1,
       plugins: {
         legend: {
           display: true,
@@ -298,25 +331,52 @@ export class ChartService {
             font: {
               size: 12,
             },
+            color: '#2d1b2e',
+            usePointStyle: true,
           },
+        },
+        tooltip: {
+          backgroundColor: 'rgba(255, 255, 255, 0.95)',
+          titleColor: '#2d1b2e',
+          bodyColor: '#2d1b2e',
+          borderColor: '#fce7f3',
+          borderWidth: 1,
+          padding: 12,
+          displayColors: true,
         },
       },
       scales: {
         y: {
           beginAtZero: true,
           type: 'linear',
+          grid: {
+            color: 'rgba(252, 231, 243, 0.5)',
+          },
+          border: {
+            display: false,
+          },
           ticks: {
             font: {
               size: 11,
             },
+            color: '#2d1b2e',
           },
+          backgroundColor: 'transparent',
         },
         x: {
+          grid: {
+            display: false,
+          },
+          border: {
+            display: false,
+          },
           ticks: {
             font: {
               size: 11,
             },
+            color: '#2d1b2e',
           },
+          backgroundColor: 'transparent',
         },
       },
     };
