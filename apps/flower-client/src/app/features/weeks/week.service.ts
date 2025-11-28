@@ -34,6 +34,13 @@ export class WeekService extends BaseCrudService<IWeek, ICreateWeek, IUpdateWeek
     const revenue = this.normalizeNumber(week.revenue || totalSale);
     const savings = this.normalizeNumber(week.savings);
 
+    const avgBuyingPrice = totalFlower > 0 
+      ? this.normalizeNumber(week.avgBuyingPrice ?? (totalBuyingPrice / totalFlower))
+      : 0;
+    const avgSalesPrice = totalFlower > 0 
+      ? this.normalizeNumber(week.avgSalesPrice ?? (totalSale / totalFlower))
+      : 0;
+
     return {
       id: this.normalizeId(week),
       weekNumber: this.normalizeNumber(week.weekNumber),
@@ -47,6 +54,8 @@ export class WeekService extends BaseCrudService<IWeek, ICreateWeek, IUpdateWeek
       profit,
       revenue,
       savings,
+      avgBuyingPrice,
+      avgSalesPrice,
       createdAt: this.normalizeDate(week.createdAt),
       updatedAt: this.normalizeDate(week.updatedAt),
     };

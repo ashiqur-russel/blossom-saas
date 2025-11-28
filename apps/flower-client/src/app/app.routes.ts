@@ -75,6 +75,13 @@ export const routes: Routes = [
             (m) => m.WithdrawalComponent,
           ),
       },
+      {
+        path: 'analytics',
+        loadComponent: () =>
+          import('./features/analytics/analytics.container').then(
+            (m) => m.AnalyticsContainerComponent,
+          ),
+      },
     ],
   },
 ];

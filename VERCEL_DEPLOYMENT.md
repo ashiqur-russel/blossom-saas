@@ -138,6 +138,12 @@ flower-business/
 |----------|-------------|---------|
 | `API_URL` | Backend API URL | `https://flower-api.vercel.app` |
 
+**Note:** The API URL will be visible in the client-side JavaScript bundle. This is normal and expected for frontend applications - the browser needs to know where to make API requests. Security is handled on the API side through:
+- JWT authentication (tokens are required for protected routes)
+- CORS configuration (only allowed origins can make requests)
+- API secrets (JWT_SECRET, etc.) are stored server-side only, never in the client
+- Role-based access control (guards protect sensitive endpoints)
+
 ## Custom Domains
 
 To add custom domains:

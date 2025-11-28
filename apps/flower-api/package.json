@@ -15,9 +15,10 @@
     "start:debug": "nest start --debug --watch",
     "start:prod": "node dist/main",
     "lint": "eslint \"{src,apps,libs,test}/**/*.ts\" --fix",
-    "seed": "npx ts-node -r tsconfig-paths/register src/scripts/seed-data.ts",
-    "seed:admin": "npx ts-node -r tsconfig-paths/register src/scripts/seed-admin.ts",
-    "seed:user": "npx ts-node -r tsconfig-paths/register src/scripts/seed-user-data.ts"
+        "seed": "npx ts-node -r tsconfig-paths/register src/scripts/seed-data.ts",
+        "seed:admin": "npx ts-node -r tsconfig-paths/register src/scripts/seed-admin.ts",
+        "seed:user": "npx ts-node -r tsconfig-paths/register src/scripts/seed-user-data.ts",
+        "fix:indexes": "npx ts-node -r tsconfig-paths/register src/scripts/fix-week-indexes.ts"
   },
   "dependencies": {
     "@nestjs/common": "^10.3.0",

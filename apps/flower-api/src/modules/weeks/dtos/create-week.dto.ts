@@ -7,6 +7,7 @@ import {
   IsDate,
   IsInt,
   IsNumber,
+  IsOptional,
   Min,
   ValidateNested,
 } from 'class-validator';
@@ -79,10 +80,11 @@ export class CreateWeekDto {
   @Min(0)
   revenue: number;
 
-  @ApiProperty({ example: 500, description: 'Savings' })
+  @ApiProperty({ example: 500, description: 'Savings', required: false })
   @IsNumber()
   @Min(0)
-  savings: number;
+  @IsOptional()
+  savings?: number;
 }
 
 

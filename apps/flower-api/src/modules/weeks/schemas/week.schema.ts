@@ -66,8 +66,14 @@ export class Week {
   @Prop({ type: Number, required: true, min: 0 })
   revenue: number;
 
-  @Prop({ type: Number, required: true, min: 0 })
+  @Prop({ type: Number, required: false, min: 0, default: 0 })
   savings: number;
+
+  @Prop({ type: Number, required: true, min: 0 })
+  avgBuyingPrice: number;
+
+  @Prop({ type: Number, required: true, min: 0 })
+  avgSalesPrice: number;
 
   createdAt?: Date;
   updatedAt?: Date;

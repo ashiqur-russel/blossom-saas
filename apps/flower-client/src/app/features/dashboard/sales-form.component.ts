@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
-import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { AbstractControl, FormBuilder, FormGroup, ReactiveFormsModule, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
 import { ICreateWeek, IUpdateWeek, IWeek } from '../../shared/models/week.model';
 import { ButtonComponent } from '../../shared/ui/components/button/button.component';
 import { CardComponent } from '../../shared/ui/components/card/card.component';
@@ -34,6 +34,19 @@ export class SalesFormComponent implements OnInit, OnChanges {
     private weekService: WeekService,
   ) {}
 
+  optionalMinValidator(min: number): ValidatorFn {
+    return (control: AbstractControl): ValidationErrors | null => {
+      if (control.value === null || control.value === undefined || control.value === '') {
+        return null;
+      }
+      const value = Number(control.value);
+      if (isNaN(value)) {
+        return null;
+      }
+      return value < min ? { min: { min, actual: value } } : null;
+    };
+  }
+
   initializeForm(): void {
     const today = new Date();
     this.weekday = getWeekdayName(today);
@@ -41,12 +54,12 @@ export class SalesFormComponent implements OnInit, OnChanges {
     this.form = this.fb.group({
       date: [today.toISOString().split('T')[0], [Validators.required]],
       weekday: [this.weekday],
-      flowerAmount: [null, [Validators.required, Validators.min(1)]],
+      flowerAmount: [null, [Validators.required, Validators.min(1), Validators.pattern(/^\d+$/)]],
       buyingAmount: [null, [Validators.required, Validators.min(0)]],
-      salesThursday: [null, [Validators.min(0)]],
-      salesFriday: [null, [Validators.min(0)]],
-      salesSaturday: [null, [Validators.min(0)]],
-      savings: [null, [Validators.required, Validators.min(0)]],
+      salesThursday: [null, [this.optionalMinValidator(0)]],
+      salesFriday: [null, [this.optionalMinValidator(0)]],
+      salesSaturday: [null, [this.optionalMinValidator(0)]],
+      savings: [null, [this.optionalMinValidator(0)]],
     });
 
         this.form.get('date')?.valueChanges.subscribe((date: string) => {
@@ -192,7 +205,7 @@ export class SalesFormComponent implements OnInit, OnChanges {
       return;
     }
     
-    if (formValue.savings === null || formValue.savings < 0) {
+    if (formValue.savings !== null && formValue.savings !== undefined && formValue.savings < 0) {
       this.error = 'Savings must be 0 or greater.';
       this.form.get('savings')?.setErrors({ min: true });
       return;
@@ -229,7 +242,9 @@ export class SalesFormComponent implements OnInit, OnChanges {
           totalSale,
           profit,
           revenue: totalSale,
-          savings: Number(formValue.savings || 0),
+          savings: formValue.savings !== null && formValue.savings !== undefined && formValue.savings !== '' 
+            ? Number(formValue.savings) 
+            : 0,
         };
 
         this.weekService.update(this.weekToEdit.id, updateData).subscribe({
@@ -260,7 +275,9 @@ export class SalesFormComponent implements OnInit, OnChanges {
           totalSale,
           profit,
           revenue: totalSale,
-          savings: Number(formValue.savings || 0),
+          savings: formValue.savings !== null && formValue.savings !== undefined && formValue.savings !== '' 
+            ? Number(formValue.savings) 
+            : 0,
         };
 
         this.weekService.create(weekData).subscribe({

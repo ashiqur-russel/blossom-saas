@@ -1,0 +1,63 @@
+<div class="analytics-page">
+  <div class="page-header">
+    <h1 class="page-title">Price Analytics</h1>
+    <p class="page-subtitle">Analyze average buying and sales prices over time</p>
+  </div>
+
+  @if (loading) {
+    <div class="loading-state">
+      <div class="spinner"></div>
+      <p>Loading analytics data...</p>
+    </div>
+  }
+
+  @if (error) {
+    <div class="error-state">
+      <p>{{ error }}</p>
+    </div>
+  }
+
+  @if (!loading && !error) {
+    <div class="stats-grid">
+      <app-card title="Average Buying Price" subtitle="Per unit across all weeks">
+        <div class="stat-value">${{ getAverageBuyingPrice().toFixed(2) }}</div>
+      </app-card>
+
+      <app-card title="Average Sales Price" subtitle="Per unit across all weeks">
+        <div class="stat-value">${{ getAverageSalesPrice().toFixed(2) }}</div>
+      </app-card>
+
+      <app-card title="Average Profit Margin" subtitle="Per unit profit">
+        <div class="stat-value">${{ getAverageProfitMargin().toFixed(2) }}</div>
+        <div class="stat-percentage">{{ getProfitMarginPercentage().toFixed(1) }}%</div>
+      </app-card>
+    </div>
+
+    <div class="charts-section">
+      <app-card title="Price Trends Over Time" subtitle="Average buying vs sales price trends">
+        <app-chart
+          type="line"
+          [data]="avgPriceTrendsData"
+          [options]="chartService.getLineChartOptions()">
+        </app-chart>
+      </app-card>
+
+      <app-card title="Price Comparison" subtitle="Side-by-side comparison of buying and sales prices">
+        <app-chart
+          type="bar"
+          [data]="priceComparisonData"
+          [options]="chartService.getBarChartOptions()">
+        </app-chart>
+      </app-card>
+
+      <app-card title="Profit Margin Trend" subtitle="Profit margin per unit over time">
+        <app-chart
+          type="line"
+          [data]="priceDistributionData"
+          [options]="chartService.getLineChartOptions()">
+        </app-chart>
+      </app-card>
+    </div>
+  }
+</div>
+

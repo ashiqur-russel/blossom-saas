@@ -73,6 +73,18 @@ export class UpdateWeekDto extends PartialType(CreateWeekDto) {
   @IsNumber()
   @Min(0)
   savings?: number;
+
+  @ApiProperty({ required: false })
+  @IsOptional()
+  @IsNumber()
+  @Min(0)
+  avgBuyingPrice?: number;
+
+  @ApiProperty({ required: false })
+  @IsOptional()
+  @IsNumber()
+  @Min(0)
+  avgSalesPrice?: number;
 }
 
 

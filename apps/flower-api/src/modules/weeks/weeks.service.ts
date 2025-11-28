@@ -38,9 +38,22 @@ export class WeeksService {
       );
     }
 
+    let avgBuyingPrice = createWeekDto.totalFlower > 0 
+      ? createWeekDto.totalBuyingPrice / createWeekDto.totalFlower 
+      : 0;
+    let avgSalesPrice = createWeekDto.totalFlower > 0 
+      ? createWeekDto.totalSale / createWeekDto.totalFlower 
+      : 0;
+
+    avgBuyingPrice = Math.round(avgBuyingPrice * 100) / 100;
+    avgSalesPrice = Math.round(avgSalesPrice * 100) / 100;
+
     const createdWeek = await this.weekModel.create({
       ...createWeekDto,
       userId,
+      avgBuyingPrice,
+      avgSalesPrice,
+      savings: createWeekDto.savings ?? 0,
     });
     return this.mapToResponseDto(createdWeek);
   }
@@ -75,6 +88,33 @@ export class WeeksService {
           ...updateWeekDto.sale,
         };
       }
+    }
+
+    // Get existing week to calculate averages
+    const existingWeek = await this.weekModel.findOne({ _id: id, userId }).exec();
+    if (!existingWeek) {
+      throw new NotFoundException(`Week with ID ${id} not found`);
+    }
+
+    // Recalculate averages if relevant fields were updated
+    const needsRecalculation = 
+      updateWeekDto.totalFlower !== undefined || 
+      updateWeekDto.totalBuyingPrice !== undefined || 
+      updateWeekDto.totalSale !== undefined;
+
+    if (needsRecalculation) {
+      const totalFlower = updateWeekDto.totalFlower ?? existingWeek.totalFlower;
+      const totalBuyingPrice = updateWeekDto.totalBuyingPrice ?? existingWeek.totalBuyingPrice;
+      const totalSale = updateWeekDto.totalSale ?? existingWeek.totalSale;
+
+      let avgBuyingPrice = totalFlower > 0 ? totalBuyingPrice / totalFlower : 0;
+      let avgSalesPrice = totalFlower > 0 ? totalSale / totalFlower : 0;
+
+      avgBuyingPrice = Math.round(avgBuyingPrice * 100) / 100;
+      avgSalesPrice = Math.round(avgSalesPrice * 100) / 100;
+
+      updateWeekDto.avgBuyingPrice = avgBuyingPrice;
+      updateWeekDto.avgSalesPrice = avgSalesPrice;
     }
 
     const week = await this.weekModel
@@ -174,6 +214,15 @@ export class WeeksService {
     const savings = plain.savings || 0;
     const id = plain.id || (plain._id ? plain._id.toString() : week._id.toString());
 
+    let avgBuyingPrice = totalFlower > 0 ? totalBuyingPrice / totalFlower : 0;
+    let avgSalesPrice = totalFlower > 0 ? totalSale / totalFlower : 0;
+
+    avgBuyingPrice = plain.avgBuyingPrice ?? avgBuyingPrice;
+    avgSalesPrice = plain.avgSalesPrice ?? avgSalesPrice;
+
+    avgBuyingPrice = Math.round(avgBuyingPrice * 100) / 100;
+    avgSalesPrice = Math.round(avgSalesPrice * 100) / 100;
+
     return {
       id,
       weekNumber: plain.weekNumber,
@@ -187,6 +236,8 @@ export class WeeksService {
       profit,
       revenue,
       savings,
+      avgBuyingPrice,
+      avgSalesPrice,
       createdAt: plain.createdAt,
       updatedAt: plain.updatedAt,
     };

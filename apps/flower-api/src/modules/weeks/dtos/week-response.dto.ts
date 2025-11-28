@@ -52,6 +52,12 @@ export class WeekResponseDto {
   @ApiProperty({ example: 500 })
   savings: number;
 
+  @ApiProperty({ example: 17.86, description: 'Average buying price per unit' })
+  avgBuyingPrice: number;
+
+  @ApiProperty({ example: 28.57, description: 'Average sales price per unit' })
+  avgSalesPrice: number;
+
   @ApiProperty({ example: '2025-01-01T10:00:00.000Z' })
   createdAt: Date;
 

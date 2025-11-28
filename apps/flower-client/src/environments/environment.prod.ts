@@ -3,6 +3,6 @@
 // For Vercel: Set API_URL environment variable in dashboard
 export const environment = {
   production: true,
-  apiUrl: 'https://blossom-api-2.vercel.app', // This gets replaced during build
+  apiUrl: 'https://blossom-api-2.vercel.app',
 };
 

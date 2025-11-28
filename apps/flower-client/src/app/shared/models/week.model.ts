@@ -17,6 +17,8 @@ export interface IWeek {
   profit: number;
   revenue: number;
   savings: number;
+  avgBuyingPrice: number;
+  avgSalesPrice: number;
   createdAt: Date;
   updatedAt: Date;
 }
