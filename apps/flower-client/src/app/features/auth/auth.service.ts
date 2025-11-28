@@ -66,6 +66,10 @@ export class AuthService {
         this.setToken(response.accessToken);
         this.setUser(response.user);
         this.currentUserSubject.next(response.user);
+        // Ensure orgRole is present, if not refresh profile
+        if (!response.user.orgRole) {
+          this.refreshUserProfile().subscribe();
+        }
       }),
     );
   }

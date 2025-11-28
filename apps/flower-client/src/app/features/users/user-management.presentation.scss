@@ -2,34 +2,25 @@
   display: flex;
   flex-direction: column;
   gap: var(--spacing-xl);
-  padding: var(--spacing-lg) ;
+  padding: var(--spacing-lg);
 }
 
-// Actions Bar: Search and Create Button
 .actions-bar {
   display: flex;
   flex-direction: column;
   gap: var(--spacing-md);
-
   @media (min-width: 640px) {
     flex-direction: row;
     align-items: center;
     gap: var(--spacing-lg);
   }
-
-  ::ng-deep app-button {
-    button {
-      padding: 0.75rem 1.5rem !important;
-      font-size: var(--text-base) !important;
-      font-weight: var(--font-weight-semibold) !important;
-      min-height: 2.75rem !important;
-      gap: var(--spacing-sm) !important;
-      
-      span {
-        padding: 0 !important;
-        margin: 0 !important;
-      }
-    }
+  ::ng-deep app-button button {
+    padding: 0.75rem 1.5rem !important;
+    font-size: var(--text-base) !important;
+    font-weight: var(--font-weight-semibold) !important;
+    min-height: 2.75rem !important;
+    gap: var(--spacing-sm) !important;
+    span { padding: 0 !important; margin: 0 !important; }
   }
 }
 
@@ -63,17 +54,14 @@
   line-height: 1.5;
   box-shadow: 0 1px 2px 0 color-mix(in srgb, var(--foreground) 3%, transparent);
   transition: all var(--transition-base);
-
   &:hover:not(:disabled) {
     border-color: color-mix(in srgb, var(--primary) 30%, transparent);
   }
-
   &:focus {
     outline: none;
     border-color: var(--primary);
     box-shadow: 0 0 0 3px color-mix(in srgb, var(--primary) 12%, transparent);
   }
-
   &::placeholder {
     color: var(--muted-foreground);
     opacity: 0.6;
@@ -94,26 +82,17 @@
   justify-content: center;
   border-radius: var(--radius-sm);
   transition: all var(--transition-fast);
-
   &:hover {
     background: var(--muted);
     color: var(--foreground);
   }
-
-  svg {
-    width: 1rem;
-    height: 1rem;
-  }
+  svg { width: 1rem; height: 1rem; }
 }
 
-// Users Grid
 .users-grid {
   display: grid;
   grid-template-columns: 1fr;
   gap: var(--spacing-lg);
-  margin: 0;
-  padding: 0;
-
   @media (min-width: 1024px) {
     grid-template-columns: repeat(2, 1fr);
   }
@@ -123,17 +102,11 @@
   transition: all var(--transition-base);
   position: relative;
   overflow: visible;
-  margin: 0;
-
   &:hover {
     box-shadow: var(--shadow-lg);
     transform: translateY(-2px);
   }
-
-  &.dropdown-open {
-    z-index: 9999;
-  }
-
+  &.dropdown-open { z-index: 9999; }
   ::ng-deep .card {
     margin: 0;
     padding: var(--spacing-xl);
@@ -153,9 +126,6 @@
   justify-content: space-between;
   gap: var(--spacing-md);
   width: 100%;
-  margin: 0;
-  padding: 0;
-
   ::ng-deep app-menu {
     flex-shrink: 0;
     margin-left: auto;
@@ -245,9 +215,7 @@
   gap: var(--spacing-md);
   padding-top: var(--spacing-md);
   border-top: 1px solid var(--border);
-  margin: 0;
   width: 100%;
-
   ::ng-deep app-dropdown {
     flex: 1;
     min-width: 0;
@@ -286,53 +254,38 @@
   text-transform: uppercase;
   letter-spacing: 0.05em;
   white-space: nowrap;
-
   &.role-badge-admin {
     background: color-mix(in srgb, var(--primary) 15%, transparent);
     color: var(--primary);
   }
-
   &.role-badge-manager {
     background: color-mix(in srgb, var(--kpi-blue) 15%, transparent);
     color: var(--kpi-blue);
   }
-
   &.role-badge-supervisor {
     background: color-mix(in srgb, var(--kpi-orange) 15%, transparent);
     color: var(--kpi-orange);
   }
-
   &.role-badge-sales {
     background: color-mix(in srgb, var(--success) 15%, transparent);
     color: var(--success);
   }
-
   &.role-badge-user {
     background: var(--muted);
     color: var(--muted-foreground);
   }
 }
 
-::ng-deep .user-card {
-  app-dropdown {
-    flex: 1;
-    min-width: 0;
-
-    .dropdown-container {
-      z-index: 1;
-
-      &.open {
-        z-index: 10000;
-      }
-    }
-
-    .dropdown-menu {
-      z-index: 10001 !important;
-    }
+::ng-deep .user-card app-dropdown {
+  flex: 1;
+  min-width: 0;
+  .dropdown-container {
+    z-index: 1;
+    &.open { z-index: 10000; }
   }
+  .dropdown-menu { z-index: 10001 !important; }
 }
 
-// Empty State
 .empty-state-card {
   text-align: center;
 }
@@ -377,41 +330,32 @@
   line-height: var(--line-height-relaxed);
 }
 
-// Stats Grid
 .stats-grid {
   display: grid;
   grid-template-columns: repeat(1, 1fr);
   gap: var(--spacing-md);
   margin-top: var(--spacing-xl);
-
   @media (min-width: 640px) {
     grid-template-columns: repeat(3, 1fr);
   }
-
-  ::ng-deep .card {
-    margin: 0;
-  }
+  ::ng-deep .card { margin: 0; }
 }
 
 .stat-card {
   border-radius: var(--radius-lg);
   transition: all var(--transition-base);
-
   &:hover {
     transform: translateY(-2px);
     box-shadow: var(--shadow-md);
   }
-
   &.stat-card-blue {
     background: linear-gradient(135deg, color-mix(in srgb, var(--kpi-blue) 10%, transparent) 0%, color-mix(in srgb, var(--kpi-blue) 5%, transparent) 100%);
     border-color: color-mix(in srgb, var(--kpi-blue) 30%, transparent);
   }
-
   &.stat-card-pink {
     background: linear-gradient(135deg, color-mix(in srgb, var(--primary) 10%, transparent) 0%, color-mix(in srgb, var(--primary) 5%, transparent) 100%);
     border-color: color-mix(in srgb, var(--primary) 30%, transparent);
   }
-
   &.stat-card-purple {
     background: linear-gradient(135deg, color-mix(in srgb, var(--kpi-purple) 10%, transparent) 0%, color-mix(in srgb, var(--kpi-purple) 5%, transparent) 100%);
     border-color: color-mix(in srgb, var(--kpi-purple) 30%, transparent);
@@ -422,7 +366,6 @@
   display: flex;
   flex-direction: column;
   gap: var(--spacing-xs);
-  margin: 0;
   padding: var(--spacing-sm);
 }
 
@@ -430,39 +373,20 @@
   font-size: var(--text-sm);
   font-weight: var(--font-weight-medium);
   margin: 0;
-  
-  .stat-card-blue & {
-    color: var(--kpi-blue);
-  }
-
-  .stat-card-pink & {
-    color: var(--primary);
-  }
-
-  .stat-card-purple & {
-    color: var(--kpi-purple);
-  }
+  .stat-card-blue & { color: var(--kpi-blue); }
+  .stat-card-pink & { color: var(--primary); }
+  .stat-card-purple & { color: var(--kpi-purple); }
 }
 
 .stat-value {
   font-size: var(--text-2xl);
   font-weight: var(--font-weight-bold);
   margin: 0;
-  
-  .stat-card-blue & {
-    color: var(--kpi-blue);
-  }
-
-  .stat-card-pink & {
-    color: var(--primary);
-  }
-
-  .stat-card-purple & {
-    color: var(--kpi-purple);
-  }
+  .stat-card-blue & { color: var(--kpi-blue); }
+  .stat-card-pink & { color: var(--primary); }
+  .stat-card-purple & { color: var(--kpi-purple); }
 }
 
-// Create User Form (in Dialog)
 .create-user-form {
   display: flex;
   flex-direction: column;
@@ -473,7 +397,6 @@
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: var(--spacing-lg);
-
   @media (max-width: 768px) {
     grid-template-columns: 1fr;
     gap: var(--spacing-md);
@@ -484,14 +407,7 @@
   display: flex;
   flex-direction: column;
   gap: var(--spacing-sm);
-
-  ::ng-deep app-input {
-    width: 100%;
-  }
-
-  ::ng-deep app-dropdown {
-    width: 100%;
-  }
+  ::ng-deep app-input, ::ng-deep app-dropdown { width: 100%; }
 }
 
 .error-message {
@@ -505,7 +421,6 @@
   font-size: var(--text-sm);
   font-weight: var(--font-weight-medium);
   border-left: 4px solid var(--destructive);
-  
   &::before {
     content: '⚠';
     font-size: var(--text-lg);
@@ -521,7 +436,6 @@
   letter-spacing: 0.01em;
   transition: color var(--transition-base);
   line-height: 1.4;
-
   &.required::after {
     content: ' *';
     color: var(--destructive);

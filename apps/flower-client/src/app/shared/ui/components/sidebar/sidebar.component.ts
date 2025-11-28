@@ -67,8 +67,10 @@ export class SidebarComponent implements OnInit {
       return this.sidebarItems.filter(item => item.route !== '/dashboard/users');
     }
 
-    // Only show Users link for ORG_ADMIN
-    if (this.currentUser.orgRole !== OrgRole.ORG_ADMIN) {
+    const isOrgAdmin = this.currentUser.orgRole === OrgRole.ORG_ADMIN || 
+                      this.currentUser.orgRole === 'org_admin';
+    
+    if (!isOrgAdmin) {
       return this.sidebarItems.filter(item => item.route !== '/dashboard/users');
     }
 
@@ -90,11 +92,31 @@ export class SidebarComponent implements OnInit {
   ngOnInit(): void {
     this.authService.currentUser$.subscribe((user: User | null) => {
       this.currentUser = user;
-      // If user exists but orgRole is missing, refresh user data
+      // If user exists but orgRole is missing, refresh user data immediately
       if (user && !user.orgRole) {
-        this.authService.refreshUserProfile().subscribe();
+        this.authService.refreshUserProfile().subscribe({
+          next: (updatedUser) => {
+            this.currentUser = updatedUser;
+          },
+          error: (err) => {
+            console.error('Failed to refresh user profile:', err);
+          }
+        });
       }
     });
+    
+    // Also check on initial load
+    const currentUser = this.authService.getCurrentUser();
+    if (currentUser && !currentUser.orgRole) {
+      this.authService.refreshUserProfile().subscribe({
+        next: (updatedUser) => {
+          this.currentUser = updatedUser;
+        },
+        error: (err) => {
+          console.error('Failed to refresh user profile on init:', err);
+        }
+      });
+    }
   }
 
   logout(): void {

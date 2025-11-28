@@ -23,13 +23,15 @@ export const orgAdminGuard: CanActivateFn = (route, state) => {
   // If orgRole is missing, try to refresh user profile
   if (!currentUser.orgRole) {
     return authService.refreshUserProfile().pipe(
-      map((updatedUser) => {
-        if (updatedUser.orgRole === OrgRole.ORG_ADMIN) {
-          return true;
-        }
-        router.navigate(['/dashboard']);
-        return false;
-      }),
+        map((updatedUser) => {
+          const isOrgAdmin = updatedUser.orgRole === OrgRole.ORG_ADMIN || 
+                            updatedUser.orgRole === 'org_admin';
+          if (isOrgAdmin) {
+            return true;
+          }
+          router.navigate(['/dashboard']);
+          return false;
+        }),
       catchError(() => {
         router.navigate(['/dashboard']);
         return of(false);
@@ -37,12 +39,16 @@ export const orgAdminGuard: CanActivateFn = (route, state) => {
     );
   }
 
-  // Only ORG_ADMIN can access
-  if (currentUser.orgRole !== OrgRole.ORG_ADMIN) {
-    router.navigate(['/dashboard']);
-    return false;
-  }
+      // Only ORG_ADMIN can access
+      // Check both string and enum value for compatibility
+      const isOrgAdmin = currentUser.orgRole === OrgRole.ORG_ADMIN || 
+                        currentUser.orgRole === 'org_admin';
+      
+      if (!isOrgAdmin) {
+        router.navigate(['/dashboard']);
+        return false;
+      }
 
-  return true;
+      return true;
 };
 

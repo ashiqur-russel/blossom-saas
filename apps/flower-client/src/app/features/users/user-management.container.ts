@@ -52,7 +52,11 @@ export class UserManagementContainerComponent implements OnInit {
 
   private checkAndLoadUsers(user: any): void {
     // Only ORG_ADMIN can access user management
-    this.isOrgAdmin = user.orgRole === OrgRole.ORG_ADMIN;
+    // Check both string and enum value for compatibility
+    const isOrgAdmin = user.orgRole === OrgRole.ORG_ADMIN || 
+                      user.orgRole === 'org_admin';
+    this.isOrgAdmin = isOrgAdmin;
+    
     if (!this.isOrgAdmin) {
       this.router.navigate(['/dashboard']);
       return;
