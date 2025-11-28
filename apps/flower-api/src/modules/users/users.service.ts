@@ -1,6 +1,6 @@
 import { Injectable, ConflictException, NotFoundException, ForbiddenException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { Model } from 'mongoose';
+import { Model, Types } from 'mongoose';
 import * as bcrypt from 'bcrypt';
 import { User, UserDocument, UserRole } from '../auth/schemas/user.schema';
 import { CreateUserDto } from './dtos/create-user.dto';
@@ -60,8 +60,17 @@ export class UsersService {
       throw new ForbiddenException('You do not have permission to view users');
     }
 
+    // Convert organizationId to ObjectId if it's a valid string
+    // This ensures proper matching even if stored as string or ObjectId
+    const orgIdQuery = Types.ObjectId.isValid(organizationId) 
+      ? new Types.ObjectId(organizationId) 
+      : organizationId;
+
     const users = await this.userModel
-      .find({ organizationId, isActive: true })
+      .find({ 
+        organizationId: orgIdQuery, 
+        isActive: true 
+      })
       .select('-password -refreshToken')
       .sort({ createdAt: -1 })
       .exec();

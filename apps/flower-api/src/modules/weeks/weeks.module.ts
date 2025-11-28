@@ -8,6 +8,7 @@ import { WeeksController } from './weeks.controller';
 import { WeeksService } from './weeks.service';
 import { Week, WeekSchema } from './schemas/week.schema';
 import { Withdrawal, WithdrawalSchema } from '../withdrawals/schemas/withdrawal.schema';
+import { Organization, OrganizationSchema } from '../organizations/schemas/organization.schema';
 import { AuthModule } from '../auth/auth.module';
 
 @Module({
@@ -15,6 +16,7 @@ import { AuthModule } from '../auth/auth.module';
     MongooseModule.forFeature([
       { name: Week.name, schema: WeekSchema },
       { name: Withdrawal.name, schema: WithdrawalSchema },
+      { name: Organization.name, schema: OrganizationSchema },
     ]),
     AuthModule,
   ],

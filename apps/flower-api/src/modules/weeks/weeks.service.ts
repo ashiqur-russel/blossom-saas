@@ -8,7 +8,7 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { Model } from 'mongoose';
+import { Model, Types } from 'mongoose';
 import { Week, WeekDocument } from './schemas/week.schema';
 import { CreateWeekDto } from './dtos/create-week.dto';
 import { UpdateWeekDto } from './dtos/update-week.dto';
@@ -17,6 +17,7 @@ import { WeekSummaryDto } from './dtos/week-summary.dto';
 import { DashboardResponseDto } from './dtos/dashboard-response.dto';
 import { WithdrawalSummaryDto } from '../withdrawals/dtos/withdrawal-summary.dto';
 import { Withdrawal, WithdrawalDocument } from '../withdrawals/schemas/withdrawal.schema';
+import { Organization, OrganizationDocument } from '../organizations/schemas/organization.schema';
 
 @Injectable()
 export class WeeksService {
@@ -25,6 +26,8 @@ export class WeeksService {
     private readonly weekModel: Model<WeekDocument>,
     @InjectModel(Withdrawal.name)
     private readonly withdrawalModel: Model<WithdrawalDocument>,
+    @InjectModel(Organization.name)
+    private readonly organizationModel: Model<OrganizationDocument>,
   ) {}
 
   async create(createWeekDto: CreateWeekDto, userId: string, organizationId?: string): Promise<WeekResponseDto> {
@@ -229,8 +232,34 @@ export class WeeksService {
 
   async getDashboardData(userId: string, organizationId?: string): Promise<DashboardResponseDto> {
     // Fetch weeks once - use .lean() for better performance
+    // Query by organizationId to show all weeks in the organization (multi-tenant)
+    // Handle backward compatibility: old weeks have organizationId as string "org_1", new ones have ObjectId
+    let query: any = {};
+    
+    if (organizationId && Types.ObjectId.isValid(organizationId)) {
+      // Get organization to find its orgId (for matching old string format)
+      const org = await this.organizationModel.findOne({ _id: new Types.ObjectId(organizationId) }).lean().exec();
+      
+      if (org && org.orgId) {
+        // Match weeks with either ObjectId or string orgId format
+        query.$or = [
+          { organizationId: new Types.ObjectId(organizationId) },
+          { organizationId: org.orgId }
+        ];
+      } else {
+        // Fallback: just match ObjectId
+        query.organizationId = new Types.ObjectId(organizationId);
+      }
+    } else if (organizationId) {
+      // organizationId is already a string (like "org_1")
+      query.organizationId = organizationId;
+    } else {
+      // Fallback: query by userId if no organizationId
+      query.userId = userId;
+    }
+    
     const weeks = await this.weekModel
-      .find({ userId, ...(organizationId ? { organizationId } : {}) })
+      .find(query)
       .sort({ year: -1, weekNumber: -1 })
       .lean()
       .exec();
