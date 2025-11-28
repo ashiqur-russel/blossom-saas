@@ -213,12 +213,33 @@
   padding-right: 0;
   align-items: start;
   width: 100%;
+  min-width: 0;
+  max-width: 100%;
+  box-sizing: border-box;
 }
 
 .left-column {
   display: flex;
   flex-direction: column;
   margin-left: 0;
+  min-width: 0;
+  max-width: 100%;
+  width: 100%;
+  
+  ::ng-deep app-card {
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+    
+    .card {
+      padding: 20px !important;
+    }
+    
+    .card-header {
+      padding: 20px !important;
+      margin: 0 !important;
+    }
+  }
 }
 
 .right-column {
@@ -227,9 +248,34 @@
   gap: 2rem;
   margin-left: 0;
   padding-left: 0;
+  min-width: 0;
+  max-width: 100%;
+  width: 100%;
   
-  ::ng-deep app-card .card {
-    padding: 1.5rem !important;
+  ::ng-deep app-card {
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+    
+    .card {
+      padding: 1.5rem !important;
+      width: 100%;
+      max-width: 100%;
+      min-width: 0;
+    }
+  }
+  
+  ::ng-deep app-chart {
+    width: 100% !important;
+    max-width: 100% !important;
+    min-width: 0;
+    display: block;
+    
+    canvas {
+      max-width: 100% !important;
+      width: 100% !important;
+      height: auto !important;
+    }
   }
 }
 
@@ -237,6 +283,38 @@
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 2rem;
+  min-width: 0;
+  max-width: 100%;
+  width: 100%;
+  
+  ::ng-deep app-card {
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+    overflow: hidden;
+    
+    .card {
+      width: 100%;
+      max-width: 100%;
+      min-width: 0;
+      overflow: hidden;
+    }
+  }
+  
+  ::ng-deep app-chart {
+    width: 100% !important;
+    max-width: 100% !important;
+    min-width: 0;
+    display: block;
+    overflow: hidden;
+    
+    canvas {
+      max-width: 100% !important;
+      width: 100% !important;
+      height: auto !important;
+      max-height: 300px !important;
+    }
+  }
 }
 
 .tabs-section {

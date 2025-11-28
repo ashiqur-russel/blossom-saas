@@ -73,6 +73,14 @@ export class ChartComponent implements OnInit, OnChanges, OnDestroy {
           hoverRadius: 5,
         },
       },
+      layout: {
+        padding: {
+          top: 10,
+          bottom: 10,
+          left: 10,
+          right: 10,
+        },
+      },
     };
     
     this.chartOptions = {

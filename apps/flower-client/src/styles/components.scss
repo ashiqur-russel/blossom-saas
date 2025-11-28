@@ -212,14 +212,16 @@
   }
   
   .card-header {
-    margin-bottom: var(--spacing-md);
-    padding-bottom: var(--spacing-sm);
+    margin: 0;
+    padding: var(--spacing-lg) var(--spacing-lg) var(--spacing-md) var(--spacing-lg);
     border-bottom: 1px solid var(--border);
   }
   
   .card-title {
-    font-size: var(--text-lg);
+    font-size: var(--text-xl);
     font-weight: var(--font-weight-semibold);
+    margin: 0;
+    padding: 0;
     margin-bottom: var(--spacing-xs);
     color: var(--foreground);
     line-height: var(--line-height-tight);
@@ -229,12 +231,14 @@
     font-size: var(--text-sm);
     color: var(--muted-foreground);
     line-height: var(--line-height-normal);
-    
-
+    margin: 0;
+    padding: 0;
   }
   
   .card-content {
     color: var(--foreground);
+    padding: var(--spacing-lg);
+    margin: 0;
   }
   
   .input-group {

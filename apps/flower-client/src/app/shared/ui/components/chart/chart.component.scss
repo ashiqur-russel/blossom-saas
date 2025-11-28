@@ -1,21 +1,25 @@
 .chart-container {
   position: relative;
   width: 100%;
-  height: 100%;
+  max-width: 100%;
+  height: 300px;
   min-height: 250px;
+  max-height: 400px;
   background: transparent !important;
   overflow: hidden;
+  box-sizing: border-box;
   
   canvas {
     display: block !important;
     width: 100% !important;
-    height: 100% !important;
     max-width: 100% !important;
+    height: 100% !important;
     max-height: 100% !important;
     background: transparent !important;
     background-color: transparent !important;
     position: relative !important;
     z-index: 1 !important;
+    box-sizing: border-box;
   }
 }
 
