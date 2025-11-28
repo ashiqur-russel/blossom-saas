@@ -77,7 +77,7 @@ export class AuthService {
       lastName,
       role: UserRole.USER,
       isActive: true,
-      organizationId: organization.orgId, // Use orgId (org_1, org_2, etc.) instead of _id
+      organizationId: organization._id.toString(), // Use MongoDB ObjectId reference
       orgRole: OrgRole.ORG_ADMIN, // First user becomes organization admin
     };
 

@@ -38,8 +38,8 @@ export class Week {
   userId: string;
 
   // Organization this record belongs to (for multi-tenant filtering)
-  @Prop({ type: String, required: true, ref: 'Organization', index: true })
-  organizationId: string;
+  @Prop({ type: 'ObjectId', required: true, ref: 'Organization', index: true })
+  organizationId: string; // MongoDB ObjectId reference to Organization
 
   @Prop({ type: Number, required: true, index: true })
   weekNumber: number;

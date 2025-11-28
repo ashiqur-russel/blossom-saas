@@ -45,8 +45,8 @@ export class User {
   role: UserRole;
 
   // Organization fields
-  @Prop({ type: String, ref: 'Organization', index: true })
-  organizationId?: string; // Optional for backward compatibility during migration
+  @Prop({ type: 'ObjectId', ref: 'Organization', required: true, index: true })
+  organizationId: string; // MongoDB ObjectId reference to Organization
 
   @Prop({ type: String, enum: OrgRole, default: OrgRole.ORG_USER })
   orgRole: OrgRole; // Role within the organization
