@@ -42,7 +42,7 @@ export class SalesFormComponent implements OnInit, OnChanges {
       date: [today.toISOString().split('T')[0], [Validators.required]],
       weekday: [this.weekday],
       flowerAmount: [null, [Validators.required, Validators.min(1)]],
-      buyingAmount: [null, [Validators.required, Validators.min(0.01)]],
+      buyingAmount: [null, [Validators.required, Validators.min(0)]],
       salesThursday: [null, [Validators.min(0)]],
       salesFriday: [null, [Validators.min(0)]],
       salesSaturday: [null, [Validators.min(0)]],
@@ -186,8 +186,8 @@ export class SalesFormComponent implements OnInit, OnChanges {
       return;
     }
     
-    if (!formValue.buyingAmount || formValue.buyingAmount <= 0) {
-      this.error = 'Total Buying Amount must be greater than 0.';
+    if (formValue.buyingAmount === null || formValue.buyingAmount === undefined || formValue.buyingAmount < 0) {
+      this.error = 'Total Buying Amount must be 0 or greater.';
       this.form.get('buyingAmount')?.setErrors({ min: true });
       return;
     }
