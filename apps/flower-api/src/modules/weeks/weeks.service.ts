@@ -234,35 +234,59 @@ export class WeeksService {
     // Fetch weeks once - use .lean() for better performance
     // Query by organizationId to show all weeks in the organization (multi-tenant)
     // Handle backward compatibility: old weeks have organizationId as string "org_1", new ones have ObjectId
-    let query: any = {};
+    let weeks: any[] = [];
     
     if (organizationId && Types.ObjectId.isValid(organizationId)) {
       // Get organization to find its orgId (for matching old string format)
       const org = await this.organizationModel.findOne({ _id: new Types.ObjectId(organizationId) }).lean().exec();
       
       if (org && org.orgId) {
-        // Match weeks with either ObjectId or string orgId format
-        query.$or = [
-          { organizationId: new Types.ObjectId(organizationId) },
-          { organizationId: org.orgId }
-        ];
+        // Query for both ObjectId and string formats separately to avoid Mongoose casting issues
+        const [weeksWithObjectId, weeksWithString] = await Promise.all([
+          // Query for ObjectId format (new data)
+          this.weekModel
+            .find({ organizationId: new Types.ObjectId(organizationId) })
+            .sort({ year: -1, weekNumber: -1 })
+            .lean()
+            .exec(),
+          // Query for string format (old data) - use $where to avoid ObjectId cast
+          this.weekModel
+            .find({ $where: `this.organizationId === "${org.orgId}"` })
+            .sort({ year: -1, weekNumber: -1 })
+            .lean()
+            .exec(),
+        ]);
+        
+        // Combine and deduplicate by _id
+        const weekMap = new Map();
+        [...weeksWithObjectId, ...weeksWithString].forEach(week => {
+          weekMap.set(week._id.toString(), week);
+        });
+        weeks = Array.from(weekMap.values());
       } else {
         // Fallback: just match ObjectId
-        query.organizationId = new Types.ObjectId(organizationId);
+        weeks = await this.weekModel
+          .find({ organizationId: new Types.ObjectId(organizationId) })
+          .sort({ year: -1, weekNumber: -1 })
+          .lean()
+          .exec();
       }
     } else if (organizationId) {
       // organizationId is already a string (like "org_1")
-      query.organizationId = organizationId;
+      // Use $where to avoid ObjectId cast error
+      weeks = await this.weekModel
+        .find({ $where: `this.organizationId === "${organizationId}"` })
+        .sort({ year: -1, weekNumber: -1 })
+        .lean()
+        .exec();
     } else {
       // Fallback: query by userId if no organizationId
-      query.userId = userId;
+      weeks = await this.weekModel
+        .find({ userId })
+        .sort({ year: -1, weekNumber: -1 })
+        .lean()
+        .exec();
     }
-    
-    const weeks = await this.weekModel
-      .find(query)
-      .sort({ year: -1, weekNumber: -1 })
-      .lean()
-      .exec();
 
     // Map weeks to DTOs
     const weeksDto: WeekResponseDto[] = weeks.map((week) => this.mapToResponseDto(week as any as WeekDocument));
