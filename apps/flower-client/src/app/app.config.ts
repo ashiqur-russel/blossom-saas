@@ -5,12 +5,14 @@ import { provideAnimations } from '@angular/platform-browser/animations';
 
 import { routes } from './app.routes';
 import { authInterceptor } from './features/auth/interceptors/auth.interceptor';
+import { cacheInterceptor } from './shared/interceptors/cache.interceptor';
 
 export const appConfig: ApplicationConfig = {
   providers: [
     provideBrowserGlobalErrorListeners(),
     provideRouter(routes),
-    provideHttpClient(withInterceptors([authInterceptor])),
+    // Order matters: cache interceptor should be first, then auth
+    provideHttpClient(withInterceptors([cacheInterceptor, authInterceptor])),
     provideAnimations(),
   ]
 };

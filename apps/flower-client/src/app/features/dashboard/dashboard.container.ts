@@ -87,7 +87,7 @@ export class DashboardContainerComponent implements OnInit, OnDestroy {
     this.subscription?.unsubscribe();
   }
 
-  private loadData(): void {
+  private loadData(forceRefresh: boolean = false): void {
     if (!this.dashboardService) {
       console.error('DashboardService is not initialized');
       this.loading.set(false);
@@ -95,10 +95,14 @@ export class DashboardContainerComponent implements OnInit, OnDestroy {
       return;
     }
     
-    this.loading.set(true);
+    // Only show loading if we don't have cached data
+    const hasCachedData = this.dashboardData().weeks.length > 0 || this.dashboardData().summary !== null;
+    if (!hasCachedData || forceRefresh) {
+      this.loading.set(true);
+    }
     this.error.set(null);
     
-    this.dashboardService.loadDashboardData().subscribe({
+    this.dashboardService.loadDashboardData(forceRefresh).subscribe({
       next: (data) => {
         this.dashboardData.set(data);
         this.loading.set(false);
@@ -110,8 +114,10 @@ export class DashboardContainerComponent implements OnInit, OnDestroy {
           this.error.set(errorMsg);
           console.error('Dashboard load error:', err);
         }
-        // Set empty data on error
-        this.dashboardData.set({ weeks: [], summary: null, withdrawalSummary: null });
+        // Set empty data on error only if we don't have cached data
+        if (!hasCachedData) {
+          this.dashboardData.set({ weeks: [], summary: null, withdrawalSummary: null });
+        }
       }
     });
   }
@@ -125,6 +131,8 @@ export class DashboardContainerComponent implements OnInit, OnDestroy {
       this.refreshing.set(true);
       this.weekService.delete(id).subscribe({
         next: () => {
+          // Invalidate cache and refresh
+          this.dashboardService.invalidateCache();
           this.refreshData();
         },
         error: (err: any) => {
@@ -136,17 +144,22 @@ export class DashboardContainerComponent implements OnInit, OnDestroy {
   }
 
   onWeekAdded(): void {
+    // Invalidate cache and refresh
+    this.dashboardService.invalidateCache();
     this.refreshData();
   }
 
   onWeekUpdated(): void {
+    // Invalidate cache and refresh
+    this.dashboardService.invalidateCache();
     this.refreshData();
   }
 
   refreshData(): void {
-    // Only refresh data without showing full-page loading
+    // Force refresh and invalidate cache
+    this.dashboardService.invalidateCache();
     this.refreshing.set(true);
-    this.loadData();
+    this.loadData(true); // Force refresh
     
     // Reset refreshing after data loads - check loading state periodically
     const checkLoading = setInterval(() => {
@@ -177,4 +190,5 @@ export class DashboardContainerComponent implements OnInit, OnDestroy {
     return 'bg-gray-50 border-gray-200';
   }
 }
+
 

@@ -66,33 +66,37 @@ export class UserManagementContainerComponent implements OnInit {
     this.loadUsers();
   }
 
-  loadUsers(): void {
-    this.loading = true;
+  loadUsers(forceRefresh: boolean = false): void {
+    // Only show loading if we don't have cached data
+    const hasCachedData = this.users.length > 0;
+    if (!hasCachedData || forceRefresh) {
+      this.loading = true;
+    }
     this.error = null;
 
-    this.userService.getAll().subscribe({
+    this.userService.getAll(forceRefresh).subscribe({
       next: (users: IUser[]) => {
         this.users = users;
         this.loading = false;
       },
       error: (err: any) => {
-        this.error = extractErrorMessage(err, 'Failed to load users');
         this.loading = false;
+        this.error = extractErrorMessage(err, 'Failed to load users');
         console.error('Error loading users:', err);
       },
     });
   }
 
   onUserCreated(): void {
-    this.loadUsers();
+    this.loadUsers(true); // Force refresh after mutation
   }
 
   onUserRoleUpdated(): void {
-    this.loadUsers();
+    this.loadUsers(true); // Force refresh after mutation
   }
 
   onUserDeleted(): void {
-    this.loadUsers();
+    this.loadUsers(true); // Force refresh after mutation
   }
 }
 
