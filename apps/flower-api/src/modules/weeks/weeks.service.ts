@@ -231,9 +231,7 @@ export class WeeksService {
   }
 
   async getDashboardData(userId: string, organizationId?: string): Promise<DashboardResponseDto> {
-    // Fetch weeks once - use .lean() for better performance
-    // Query by organizationId to show all weeks in the organization (multi-tenant)
-    // Handle backward compatibility: old weeks have organizationId as string "org_1", new ones have ObjectId
+
     let weeks: any[] = [];
     
     if (organizationId && Types.ObjectId.isValid(organizationId)) {
@@ -241,28 +239,45 @@ export class WeeksService {
       const org = await this.organizationModel.findOne({ _id: new Types.ObjectId(organizationId) }).lean().exec();
       
       if (org && org.orgId) {
-        // Query for both ObjectId and string formats separately to avoid Mongoose casting issues
-        const [weeksWithObjectId, weeksWithString] = await Promise.all([
-          // Query for ObjectId format (new data)
-          this.weekModel
-            .find({ organizationId: new Types.ObjectId(organizationId) })
-            .sort({ year: -1, weekNumber: -1 })
-            .lean()
-            .exec(),
-          // Query for string format (old data) - use $where to avoid ObjectId cast
-          this.weekModel
-            .find({ $where: `this.organizationId === "${org.orgId}"` })
-            .sort({ year: -1, weekNumber: -1 })
-            .lean()
-            .exec(),
+        // Use aggregation pipeline to match both ObjectId and string formats
+        // Convert organizationId to string for comparison to handle both formats
+        weeks = await this.weekModel.aggregate([
+          {
+            $addFields: {
+              orgIdString: {
+                $cond: {
+                  if: { $eq: [{ $type: '$organizationId' }, 'string'] },
+                  then: '$organizationId',
+                  else: { $toString: '$organizationId' }
+                }
+              },
+              orgIdObjectId: {
+                $cond: {
+                  if: { $eq: [{ $type: '$organizationId' }, 'objectId'] },
+                  then: '$organizationId',
+                  else: null
+                }
+              }
+            }
+          },
+          {
+            $match: {
+              $or: [
+                { orgIdObjectId: new Types.ObjectId(organizationId) },
+                { orgIdString: org.orgId }
+              ]
+            }
+          },
+          {
+            $sort: { year: -1, weekNumber: -1 }
+          },
+          {
+            $project: {
+              orgIdString: 0,
+              orgIdObjectId: 0
+            }
+          }
         ]);
-        
-        // Combine and deduplicate by _id
-        const weekMap = new Map();
-        [...weeksWithObjectId, ...weeksWithString].forEach(week => {
-          weekMap.set(week._id.toString(), week);
-        });
-        weeks = Array.from(weekMap.values());
       } else {
         // Fallback: just match ObjectId
         weeks = await this.weekModel
@@ -273,12 +288,31 @@ export class WeeksService {
       }
     } else if (organizationId) {
       // organizationId is already a string (like "org_1")
-      // Use $where to avoid ObjectId cast error
-      weeks = await this.weekModel
-        .find({ $where: `this.organizationId === "${organizationId}"` })
-        .sort({ year: -1, weekNumber: -1 })
-        .lean()
-        .exec();
+      // Use aggregation to match string format without ObjectId cast
+      weeks = await this.weekModel.aggregate([
+        {
+          $addFields: {
+            orgIdString: {
+              $cond: {
+                if: { $eq: [{ $type: '$organizationId' }, 'string'] },
+                then: '$organizationId',
+                else: { $toString: '$organizationId' }
+              }
+            }
+          }
+        },
+        {
+          $match: { orgIdString: organizationId }
+        },
+        {
+          $sort: { year: -1, weekNumber: -1 }
+        },
+        {
+          $project: {
+            orgIdString: 0
+          }
+        }
+      ]);
     } else {
       // Fallback: query by userId if no organizationId
       weeks = await this.weekModel
