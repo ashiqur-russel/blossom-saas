@@ -34,17 +34,17 @@ export const SaleByDaySchema = SchemaFactory.createForClass(SaleByDay);
 })
 export class Week {
   // User who created/owns this record
-  @Prop({ type: String, required: true, ref: 'User', index: true })
+  @Prop({ type: String, required: true, ref: 'User' })
   userId: string;
 
   // Organization this record belongs to (for multi-tenant filtering)
-  @Prop({ type: 'ObjectId', required: true, ref: 'Organization', index: true })
+  @Prop({ type: 'ObjectId', required: true, ref: 'Organization' })
   organizationId: string; // MongoDB ObjectId reference to Organization
 
-  @Prop({ type: Number, required: true, index: true })
+  @Prop({ type: Number, required: true })
   weekNumber: number;
 
-  @Prop({ type: Number, required: true, index: true })
+  @Prop({ type: Number, required: true })
   year: number;
 
   @Prop({ type: Date, required: true })
